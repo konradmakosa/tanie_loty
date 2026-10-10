@@ -28,7 +28,7 @@ Potem otwórz http://localhost:8000 w przeglądarce.
 4. Workflow `Szukaj tanich lotów` uruchamia się co 6 h (oraz ręcznie przez
    „Run workflow") i commituje `docs/deals.json` + historię cen.
 
-Strona będzie pod `https://<użytkownik>.github.io/<repo>/`.
+Strona będzie pod `https://<użytkownik>.github.io/<repo>/` (tu: własna domena `loty.makosa.org` przez plik `docs/CNAME`).
 
 ## Drugie źródło: Aviasales (Travelpayouts)
 
