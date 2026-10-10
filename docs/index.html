@@ -120,7 +120,7 @@ function render() {
     return;
   }
 
-  const noce = n => n === 1 ? "1 noc" : n + " noce";
+  const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
   list.innerHTML = items.map(d => `
     <a class="card" href="${d.link}" target="_blank" rel="noopener">
       <div class="row">
