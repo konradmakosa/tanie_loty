@@ -28,6 +28,9 @@ jobs:
           python-version: "3.12"
 
       - name: Pobierz okazje
+        env:
+          TRAVELPAYOUTS_TOKEN: ${{ secrets.TRAVELPAYOUTS_TOKEN }}
+          TRAVELPAYOUTS_MARKER: ${{ secrets.TRAVELPAYOUTS_MARKER }}
         run: python search.py
 
       - name: Zapisz wyniki

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T09:59:18+00:00",
+  "generated_at": "2026-10-10T10:05:52+00:00",
   "config": {
     "airports": [
       "WMI",
@@ -12,6 +12,9 @@
     "record_low_ratio": 0.8,
     "record_low_min_samples": 5
   },
+  "sources": [
+    "ryanair"
+  ],
   "deals": [
     {
       "id": "WMI-BGY-2026-12-05-2026-12-10",
@@ -28,7 +31,10 @@
       "price": 135.47,
       "price_out": 69.92,
       "price_in": 65.55,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-12-05&dateIn=2026-12-10&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=BGY&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-12-05&tpEndDate=2026-12-10&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=BGY",
       "record_low": false,
       "median_price": 135.47
@@ -48,7 +54,10 @@
       "price": 143.81,
       "price_out": 66.44,
       "price_in": 77.37,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-28&dateIn=2026-11-30&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=LPL&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-28&tpEndDate=2026-11-30&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=LPL",
       "record_low": false,
       "median_price": 143.81
@@ -68,7 +77,10 @@
       "price": 148.0,
       "price_out": 74.0,
       "price_in": 74.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-27&dateIn=2026-10-29&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=BLQ&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-27&tpEndDate=2026-10-29&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=BLQ",
       "record_low": false,
       "median_price": 148.0
@@ -88,7 +100,10 @@
       "price": 152.55,
       "price_out": 65.55,
       "price_in": 87.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-26&dateIn=2026-11-29&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=LBA&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-26&tpEndDate=2026-11-29&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=LBA",
       "record_low": false,
       "median_price": 152.55
@@ -108,7 +123,10 @@
       "price": 156.79,
       "price_out": 91.79,
       "price_in": 65.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-27&dateIn=2026-11-29&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=ARN&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-27&tpEndDate=2026-11-29&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=ARN",
       "record_low": false,
       "median_price": 156.79
@@ -128,7 +146,10 @@
       "price": 164.92,
       "price_out": 95.0,
       "price_in": 69.92,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-20&dateIn=2026-11-23&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CRL&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-20&tpEndDate=2026-11-23&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CRL",
       "record_low": false,
       "median_price": 164.92
@@ -148,7 +169,10 @@
       "price": 174.7,
       "price_out": 87.0,
       "price_in": 87.7,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-21&dateIn=2026-11-23&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=BHX&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-21&tpEndDate=2026-11-23&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=BHX",
       "record_low": false,
       "median_price": 174.7
@@ -168,7 +192,10 @@
       "price": 190.0,
       "price_out": 95.0,
       "price_in": 95.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-25&dateIn=2026-10-29&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CTA&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-25&tpEndDate=2026-10-29&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CTA",
       "record_low": false,
       "median_price": 190.0
@@ -188,7 +215,10 @@
       "price": 199.79,
       "price_out": 91.79,
       "price_in": 108.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-23&dateIn=2026-11-28&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=BCN&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-23&tpEndDate=2026-11-28&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=BCN",
       "record_low": false,
       "median_price": 199.79
@@ -208,7 +238,10 @@
       "price": 221.36,
       "price_out": 133.94,
       "price_in": 87.42,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-12-15&dateIn=2026-12-17&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=ALC&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-12-15&tpEndDate=2026-12-17&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=ALC",
       "record_low": false,
       "median_price": 221.36
@@ -228,7 +261,10 @@
       "price": 226.37,
       "price_out": 115.37,
       "price_in": 111.0,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2027-01-08&dateIn=2027-01-13&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=BRI&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2027-01-08&tpEndDate=2027-01-13&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=BRI",
       "record_low": false,
       "median_price": 226.37
@@ -248,7 +284,10 @@
       "price": 234.91,
       "price_out": 130.0,
       "price_in": 104.91,
+      "airline_code": "FR",
       "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-12-16&dateIn=2026-12-21&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=AGP&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-12-16&tpEndDate=2026-12-21&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=AGP",
       "record_low": false,
       "median_price": 234.91

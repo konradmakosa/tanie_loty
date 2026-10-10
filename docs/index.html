@@ -58,6 +58,7 @@
   .route { font-weight: 600; font-size: 1.05rem; }
   .city { font-size: 1.1rem; font-weight: 600; }
   .country, .times, .airline { color: var(--muted); font-size: 0.9rem; }
+  .note { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
   .badge {
     display: inline-block; background: var(--badge); color: #fff;
     font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
@@ -75,6 +76,7 @@
   <h1>Tanie loty z Warszawy</h1>
   <p class="updated" id="updated"></p>
   <p class="desc" id="desc"></p>
+  <p class="desc" id="srcwarn"></p>
 </header>
 
 <div class="controls">
@@ -83,6 +85,11 @@
     <select id="sort">
       <option value="price">po cenie</option>
       <option value="date">po dacie</option>
+    </select>
+  </label>
+  <label>Linia:
+    <select id="airline">
+      <option value="">wszystkie linie</option>
     </select>
   </label>
 </div>
@@ -108,9 +115,11 @@ let deals = [], cfg = null;
 function render() {
   const onlyLow = document.getElementById("onlyLow").checked;
   const sort = document.getElementById("sort").value;
+  const airline = document.getElementById("airline").value;
   const list = document.getElementById("list");
 
-  let items = deals.filter(d => !onlyLow || d.record_low);
+  let items = deals.filter(d => (!onlyLow || d.record_low) &&
+                                (!airline || d.airline === airline));
   items.sort((a, b) => sort === "date"
     ? a.date_out.localeCompare(b.date_out) || a.price - b.price
     : a.price - b.price);
@@ -133,8 +142,9 @@ function render() {
       </div>
       <div class="row">
         <span class="times">${d.time_out} – ${d.time_in}</span>
-        <span class="airline">${d.airline}</span>
+        <span class="airline">${d.airline} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
       </div>
+      ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
       ${d.record_low ? '<span class="badge">REKORDOWO TANIO' +
         (d.median_price ? ' <small>· mediana ' + fmtCena(d.median_price) + '</small>' : '') +
         '</span>' : ''}
@@ -143,6 +153,7 @@ function render() {
 
 document.getElementById("onlyLow").addEventListener("change", render);
 document.getElementById("sort").addEventListener("change", render);
+document.getElementById("airline").addEventListener("change", render);
 
 fetch("deals.json", { cache: "no-store" })
   .then(r => {
@@ -158,6 +169,17 @@ fetch("deals.json", { cache: "no-store" })
       "Loty w dwie strony do " + cfg.max_price_pln + " zł, " +
       cfg.min_nights + "–" + cfg.max_nights + " nocy, najbliższe " +
       cfg.days_ahead + " dni";
+    if (!(data.sources || []).includes("aviasales")) {
+      document.getElementById("srcwarn").textContent =
+        "Źródło: tylko Ryanair (Aviasales nieaktywne — brak tokena)";
+    }
+    const sel = document.getElementById("airline");
+    [...new Set(deals.map(d => d.airline).filter(Boolean))].sort()
+      .forEach(a => {
+        const o = document.createElement("option");
+        o.value = a; o.textContent = a;
+        sel.appendChild(o);
+      });
     render();
   })
   .catch(e => {

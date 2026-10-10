@@ -30,6 +30,24 @@ Potem otwórz http://localhost:8000 w przeglądarce.
 
 Strona będzie pod `https://<użytkownik>.github.io/<repo>/`.
 
+## Drugie źródło: Aviasales (Travelpayouts)
+
+Oprócz Ryanaira skrypt potrafi pobierać ceny wszystkich linii (Wizz Air,
+LOT, easyJet itd.) z darmowego API Travelpayouts/Aviasales.
+
+1. Załóż darmowe konto na [travelpayouts.com](https://www.travelpayouts.com).
+2. Token znajdziesz w **Narzędzia → API**
+   (`travelpayouts.com/programs/100/tools/api`); marker (ID partnera) — w panelu.
+3. **Lokalnie:** skopiuj `.env.example` do `.env` i wklej token
+   (`.env` jest ignorowane przez git).
+4. **Na GitHubu:** Settings → Secrets and variables → Actions →
+   New repository secret `TRAVELPAYOUTS_TOKEN`
+   (opcjonalnie też `TRAVELPAYOUTS_MARKER`).
+
+Bez tokena źródło jest po prostu pomijane (działa sam Ryanair).
+Uwaga: ceny Aviasales pochodzą z cache z ostatnich 48 h — warto je
+sprawdzić ponownie przy zakupie.
+
 ## Konfiguracja — `config.json`
 
 | Klucz | Znaczenie |
