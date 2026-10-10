@@ -68,6 +68,19 @@
   .city { font-size: 1.1rem; font-weight: 600; }
   .country, .times, .airline { color: var(--muted); font-size: 0.9rem; }
   .note { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+  .group { display: block; margin-bottom: 12px; }
+  .group .card { margin-bottom: 0; }
+  details summary {
+    color: var(--muted); font-size: 0.85rem; cursor: pointer;
+    padding: 8px 4px 0; list-style-position: inside;
+  }
+  .alt {
+    display: block; text-decoration: none; color: var(--text);
+    font-size: 0.9rem; padding: 7px 4px;
+    border-bottom: 1px solid rgba(128,128,128,.15);
+  }
+  .alt:last-child { border-bottom: none; }
+  .alt .muted { color: var(--muted); }
   .badge {
     display: inline-block; background: var(--badge); color: #fff;
     font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
@@ -101,6 +114,7 @@
       <option value="">wszystkie linie</option>
     </select>
   </label>
+  <label><input type="checkbox" id="groupBy" checked> Grupuj po kierunku</label>
 </div>
 
 <main id="list"></main>
@@ -121,25 +135,11 @@ function fmtCena(v) {
 
 let deals = [], cfg = null;
 
-function render() {
-  const onlyLow = document.getElementById("onlyLow").checked;
-  const sort = document.getElementById("sort").value;
-  const airline = document.getElementById("airline").value;
-  const list = document.getElementById("list");
+const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
 
-  let items = deals.filter(d => (!onlyLow || d.record_low) &&
-                                (!airline || d.airline === airline));
-  items.sort((a, b) => sort === "date"
-    ? a.date_out.localeCompare(b.date_out) || a.price - b.price
-    : a.price - b.price);
-
-  if (!items.length) {
-    list.innerHTML = '<p class="empty">Brak okazji poniżej progu — sprawdź później</p>';
-    return;
-  }
-
-  const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
-  list.innerHTML = items.map(d => `
+function kartaHtml(d, showBadge) {
+  const low = showBadge !== undefined ? showBadge : d.record_low;
+  return `
     <a class="card" href="${d.link}" target="_blank" rel="noopener">
       <div class="row">
         <span class="price">${fmtCena(d.price)}</span>
@@ -154,15 +154,71 @@ function render() {
         <span class="airline">${d.airline} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
       </div>
       ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
-      ${d.record_low ? '<span class="badge">REKORDOWO TANIO' +
+      ${low ? '<span class="badge">REKORDOWO TANIO' +
         (d.median_price ? ' <small>· mediana ' + fmtCena(d.median_price) + '</small>' : '') +
         '</span>' : ''}
-    </a>`).join("");
+    </a>`;
+}
+
+function render() {
+  const onlyLow = document.getElementById("onlyLow").checked;
+  const sort = document.getElementById("sort").value;
+  const airline = document.getElementById("airline").value;
+  const groupBy = document.getElementById("groupBy").checked;
+  const list = document.getElementById("list");
+
+  let items = deals.filter(d => (!onlyLow || d.record_low) &&
+                                (!airline || d.airline === airline));
+  items.sort((a, b) => sort === "date"
+    ? a.date_out.localeCompare(b.date_out) || a.price - b.price
+    : a.price - b.price);
+
+  if (!items.length) {
+    list.innerHTML = '<p class="empty">Brak okazji poniżej progu — sprawdź później</p>';
+    return;
+  }
+
+  if (!groupBy) {
+    list.innerHTML = items.map(d => kartaHtml(d)).join("");
+    return;
+  }
+
+  // Grupy po mieście docelowym (kilka lotnisk jednego miasta = jedna grupa).
+  const groups = new Map();
+  for (const d of items) {
+    const key = (d.dest_city || d.dest) + "|" + (d.dest_country || "");
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(d);
+  }
+  let gr = [...groups.values()];
+  // Reprezentant grupy = najtańsza oferta; reszta po cenie.
+  gr.forEach(g => g.sort((a, b) => a.price - b.price));
+  gr.sort((a, b) => sort === "date"
+    ? a[0].date_out.localeCompare(b[0].date_out) || a[0].price - b[0].price
+    : a[0].price - b[0].price);
+
+  list.innerHTML = gr.map(g => {
+    const [main, ...rest] = g;
+    const anyLow = g.some(d => d.record_low);
+    const alts = rest.length
+      ? `<details><summary>+${rest.length} ` +
+        (rest.length === 1 ? "inny termin" : rest.length <= 4 ? "inne terminy" : "innych terminów") +
+        ` (od ${fmtCena(rest[0].price)})</summary>` +
+        rest.map(d => `
+          <a class="alt" href="${d.link}" target="_blank" rel="noopener">
+            ${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
+            · <strong>${fmtCena(d.price)}</strong>
+            · ${d.airline} <span class="muted">· ${d.dest}</span>
+          </a>`).join("") + "</details>"
+      : "";
+    return '<div class="group">' + kartaHtml(main, anyLow) + alts + "</div>";
+  }).join("");
 }
 
 document.getElementById("onlyLow").addEventListener("change", render);
 document.getElementById("sort").addEventListener("change", render);
 document.getElementById("airline").addEventListener("change", render);
+document.getElementById("groupBy").addEventListener("change", render);
 
 fetch("deals.json", { cache: "no-store" })
   .then(r => {

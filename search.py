@@ -59,11 +59,20 @@ AIRLINE_NAMES = {
     "TP": "TAP", "IB": "Iberia", "BA": "British Airways",
     "AZ": "ITA Airways", "NO": "Neos", "0B": "Blue Air",
     "FB": "Bulgaria Air",
+    "RR": "Buzz (Ryanair)", "MW": "Malta Air (Ryanair)",
 }
 
 
-def airline_name(code):
-    return AIRLINE_NAMES.get(code, code) if code else ""
+def airline_name(code, tp_airlines=None):
+    """Nazwa linii: najpierw mapa statyczna, potem airlines.json
+    z Travelpayouts, na końcu sam kod."""
+    if not code:
+        return ""
+    if code in AIRLINE_NAMES:
+        return AIRLINE_NAMES[code]
+    if tp_airlines and code in tp_airlines:
+        return tp_airlines[code]
+    return code
 
 
 def load_env():
@@ -263,6 +272,8 @@ def fetch_aviasales(cfg, token, marker):
         "countries.json", TP_DATA + "/countries.json")}
     airports = {a.get("code"): a for a in cached_json(
         "airports.json", TP_DATA + "/airports.json")}
+    tp_airlines = {a.get("code"): a.get("name") for a in cached_json(
+        "airlines.json", "https://api.travelpayouts.com/data/en/airlines.json")}
 
     def city_name(code):
         c = cities.get(code)
@@ -321,7 +332,7 @@ def fetch_aviasales(cfg, token, marker):
         for r in data:
             try:
                 d = aviasales_deal(r, cfg, marker, city_name, country_name,
-                                   airports, jutro, koniec)
+                                   airports, tp_airlines, jutro, koniec)
             except (KeyError, TypeError, ValueError) as e:
                 print("Aviasales: pominięto niekompletny wpis (%s)" % e)
                 continue
@@ -334,7 +345,7 @@ def fetch_aviasales(cfg, token, marker):
 
 
 def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
-                   jutro, koniec):
+                   tp_airlines, jutro, koniec):
     """Surowy rekord Aviasales -> rekord deal albo None gdy odfiltrowany."""
     price = r.get("price")
     dep_at = r.get("departure_at") or ""
@@ -393,7 +404,7 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "price_out": None,
         "price_in": None,
         "airline_code": code,
-        "airline": airline_name(code),
+        "airline": airline_name(code, tp_airlines),
         "source": "aviasales",
         "note": NOTE_AVIASALES,
         "link": url,
