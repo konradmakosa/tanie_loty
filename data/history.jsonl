@@ -34,3 +34,15 @@
 {"ts": "2026-10-10T10:05:52+00:00", "origin": "WAW", "dest": "ALC", "price": 221.36, "source": "ryanair"}
 {"ts": "2026-10-10T10:05:52+00:00", "origin": "WAW", "dest": "BRI", "price": 226.37, "source": "ryanair"}
 {"ts": "2026-10-10T10:05:52+00:00", "origin": "WAW", "dest": "AGP", "price": 234.91, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WMI", "dest": "BGY", "price": 135.47, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WMI", "dest": "BLQ", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WMI", "dest": "ARN", "price": 156.79, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WMI", "dest": "BHX", "price": 174.7, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WMI", "dest": "BCN", "price": 199.79, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "LPL", "price": 143.81, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "LBA", "price": 152.55, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "CRL", "price": 164.92, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "CTA", "price": 190.0, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "ALC", "price": 221.36, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "BRI", "price": 226.37, "source": "ryanair"}
+{"ts": "2026-10-10T10:08:06+00:00", "origin": "WAW", "dest": "AGP", "price": 234.91, "source": "ryanair"}
