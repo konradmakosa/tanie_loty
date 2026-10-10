@@ -56,6 +56,10 @@ w `localStorage` — czyli per urządzenie i przeglądarka, bez serwera.
 `config.json` pełni rolę „koperty" wyszukiwania: skrypt zbiera szerszy
 zestaw ofert, a strona zawęża go do preferencji użytkownika.
 
+Strona ma wpięte Google Analytics 4 (ID w `docs/index.html`, zdarzenia:
+kliknięcie oferty, zapis ustawień, zmiana zakładki) — by je usunąć lub
+zmienić, wystarczy skasować/podmienić blok `gtag` w `<head>`.
+
 ## Konfiguracja — `config.json`
 
 | Klucz | Znaczenie |

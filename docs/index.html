@@ -13,6 +13,13 @@
       document.head.appendChild(script);
   })();
 </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CTFYNF714B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
+</script>
 <style>
   :root {
     --bg: #f4f5f7;
@@ -259,6 +266,11 @@ const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " no
 
 let deals = [], cfg = {}, settings = null;
 
+/* GA4 — bez awarii przy zablokowanym skrypcie. */
+function track(name, params) {
+  if (typeof gtag === "function") gtag("event", name, params);
+}
+
 /* ---------- ustawienia ---------- */
 
 function defaults() {
@@ -348,7 +360,7 @@ function allCountries() {
 function kartaHtml(d, showBadge) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
   return `
-    <a class="card" href="${d.link}" target="_blank" rel="noopener">
+    <a class="card" href="${d.link}" target="_blank" rel="noopener" data-id="${d.id}">
       <div class="row">
         <span class="price">${fmtCena(d.price)}</span>
         <span class="route">${d.origin} → ${d.dest}</span>
@@ -417,7 +429,7 @@ function render() {
         (rest.length === 1 ? "inny termin" : rest.length <= 4 ? "inne terminy" : "innych terminów") +
         ` (od ${fmtCena(rest[0].price)})</summary>` +
         rest.map(d => `
-          <a class="alt" href="${d.link}" target="_blank" rel="noopener">
+          <a class="alt" href="${d.link}" target="_blank" rel="noopener" data-id="${d.id}">
             ${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}</span>
@@ -430,6 +442,7 @@ function render() {
 /* ---------- zakładki ---------- */
 
 function showTab(ustawienia) {
+  track("view_tab", { tab: ustawienia ? "ustawienia" : "okazje" });
   document.getElementById("tabOkazje").classList.toggle("active", !ustawienia);
   document.getElementById("tabUstawienia").classList.toggle("active", ustawienia);
   document.getElementById("viewOkazje").style.display = ustawienia ? "none" : "";
@@ -521,6 +534,13 @@ document.getElementById("sSave").onclick = () => {
     .map(cb => cb.dataset.origin);
   settings.origins = checked.length === allOrigins().length ? null : checked;
   saveSettings(settings);
+  track("save_settings", {
+    max_price: settings.maxPrice,
+    nights: settings.nightsMin + "-" + settings.nightsMax,
+    days_out: settings.daysOut.length,
+    excluded_countries: (settings.excludedCountries || []).length,
+    direct_only: settings.directOnly
+  });
   document.getElementById("settingsLine").textContent = settingsSummary(settings);
   const t = document.getElementById("toast");
   t.classList.add("show");
@@ -541,6 +561,17 @@ document.getElementById("onlyLow").addEventListener("change", render);
 document.getElementById("sort").addEventListener("change", render);
 document.getElementById("airline").addEventListener("change", render);
 document.getElementById("groupBy").addEventListener("change", render);
+
+// Kliknięcia w oferty (delegacja na całą listę).
+document.getElementById("list").addEventListener("click", e => {
+  const a = e.target.closest("a[data-id]");
+  if (!a) return;
+  const d = deals.find(x => x.id === a.dataset.id);
+  if (d) track("select_deal", {
+    deal_id: d.id, destination: d.dest_city, country: d.dest_country,
+    price: d.price, airline: d.airline, source: d.source, nights: d.nights
+  });
+});
 
 fetch("deals.json", { cache: "no-store" })
   .then(r => {
