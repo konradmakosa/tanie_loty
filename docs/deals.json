@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T10:36:02+00:00",
+  "generated_at": "2026-10-10T10:36:24+00:00",
   "config": {
     "airports": [
       "WMI",
@@ -153,7 +153,7 @@
       "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-12-05&dateIn=2026-12-10&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=BGY&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-12-05&tpEndDate=2026-12-10&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=BGY",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-VCE-2026-10-26-2026-10-28",
@@ -245,7 +245,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1611MIL19111?t=FR17948109001794818400000125WMIBGY17950812001795088700000125MXPWMI_a447fd15b4b0efa725161c6aa51d8967_3053&search_date=07102026&expected_price_uuid=01a115f9-72e7-8030-242d-e27ca3985bb1&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=TGPcYY101ELUSjaPo7POtg&expected_price_source=share&expected_price_currency=pln&expected_price=140&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-MXP-2026-11-27-2026-11-30",
@@ -590,7 +590,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3110MIL04111?t=FR17934744001793481900000125WMIBGY17938296001793836500000115BGYWMI_41dd2207f4bcfaa5c29520753d7e9ccb_3174&search_date=09102026&expected_price_uuid=01a1219c-7ec4-8030-6dc7-e3a7a653ee34&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=coAVBJ3E3aYWIMdU2acI4w&expected_price_source=share&expected_price_currency=pln&expected_price=146&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-BGY-2027-01-01-2027-01-06",
@@ -682,7 +682,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3110MIL05111?t=FR17934744001793481900000125WMIBGY17938752001793882100000115BGYWMI_46657469301486f83ae22bf04ea1b509_3231&search_date=07102026&expected_price_uuid=01a11606-c463-8030-a687-9c18c07f3d18&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=8-PWYMDfasJZig3eEBXfBw&expected_price_source=share&expected_price_currency=pln&expected_price=148&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-MXP-2026-10-26-2026-10-29",
@@ -843,7 +843,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0512MIL07121?t=W417964984001796505900000125WMIBGY17966268001796634600000130MXPWAW_a889944b4ce5cca5ef045d82c9a99f7b_3266&search_date=09102026&expected_price_uuid=01a12166-f36e-8030-2f55-2d46178b310b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=NtVPHVOxtZ0ZsebMJZWREg&expected_price_source=share&expected_price_currency=pln&expected_price=151&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-MXP-2026-10-30-2026-11-03",
@@ -889,7 +889,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2611MIL28111?t=FR17956980001795705500000125WMIBGY17958846001795892100000125MXPWMI_ba078d0a450c0cb8acbba94ead74e291_3308&search_date=09102026&expected_price_uuid=01a11f74-2ce8-8030-e4ee-5729fc1094d2&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=z8cn_YW1v7oU0EcHeJAOMQ&expected_price_source=share&expected_price_currency=pln&expected_price=152&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-LBA-2026-11-26-2026-11-29",
@@ -935,7 +935,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1210MIL15101?t=FR17918436001791851100000125WMIBGY17920530001792060200000120BGYWMI_ef13e92648b7ed2b1598321ed8beeaa5_3382&search_date=06102026&expected_price_uuid=01a110cf-4a74-8030-a7d1-d2d631872470&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=cW8LkfGr1183ABSK9lOnkg&expected_price_source=share&expected_price_currency=pln&expected_price=153&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-11-17-2026-11-21",
@@ -958,7 +958,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1711MIL21111?t=FR17949219001794929400000125WMIBGY17952408001795247700000115BGYWMI_aabffb1468b2e634cfa7d0a600afc830_3399&search_date=06102026&expected_price_uuid=01a1109d-8b0a-8030-ed3e-158a4075582b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=7F7qim-AUr5lBhkl3kfOTw&expected_price_source=share&expected_price_currency=pln&expected_price=154&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-BGY-2026-11-01-2026-11-06",
@@ -1073,7 +1073,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2711MIL29111?t=FR17957604001795767900000125WMIBGY17959413001795948800000125MXPWMI_d62cb27141b149797f32c6aff2593b76_3435&search_date=07102026&expected_price_uuid=01a117c3-b0d6-8030-a071-4774cb1f380b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fUroRqORN66_OQ3o6BgBXA&expected_price_source=share&expected_price_currency=pln&expected_price=157&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-TSF-2026-11-15-2026-11-18",
@@ -1211,7 +1211,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2011BRU24111?t=W617951547001795162800000135WAWCRL17955105001795517700000120CRLWAW_8ebf22c95665d52f5ab378f5348cfb64_3462&search_date=05102026&expected_price_uuid=01a10b43-bf4c-8030-ea9a-6f9096714509&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=160&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-BUD-2026-10-12-2026-10-14",
@@ -1280,7 +1280,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0512MIL08121?t=W417964984001796505900000125WMIBGY17967132001796721000000130MXPWAW_85a1b92e70aa437210dab0c666a8bd3c_3493&search_date=09102026&expected_price_uuid=01a11faa-3472-8030-2641-1082e0ef9903&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=TGnurjocm45QYZEo1Da3MQ&expected_price_source=share&expected_price_currency=pln&expected_price=161&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-BGY-2026-11-24-2026-11-26",
@@ -1326,7 +1326,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1311MIL16111?t=FR17945508001794558300000125WMIBGY17948193001794826800000125MXPWMI_17bbe2f173b2965ffad87b57c0cbd595_3547&search_date=08102026&expected_price_uuid=01a1195f-ffae-8030-2e8c-64d6b4fc905e&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=97BUVE3WaipO2_l4iSXA7g&expected_price_source=share&expected_price_currency=pln&expected_price=162&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-12-19-2026-12-21",
@@ -1349,7 +1349,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1912MIL21121?t=W417977080001797715500000125WMIBGY17978364001797844200000130MXPWAW_795b46e0203348df9176b6350a629528_3526&search_date=10102026&expected_price_uuid=01a12534-a1d0-8031-6fbf-94515c3030cb&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=NtVPHVOxtZ0ZsebMJZWREg&expected_price_source=share&expected_price_currency=pln&expected_price=162&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-10-27-2026-10-29",
@@ -1372,7 +1372,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2710MIL29101?t=FR17931075001793115000000125WMIBGY17932668001793274300000125MXPWMI_2c8a2c94f45f63f917afcb04f918b3f7_3548&search_date=05102026&expected_price_uuid=01a10d98-b783-8030-2819-d2a23a4d7e11&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=kjc80_6UyT3gX_T-7VBcwg&expected_price_source=share&expected_price_currency=pln&expected_price=163&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-11-19-2026-11-21",
@@ -1395,7 +1395,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1911MIL21111?t=FR17950932001795100700000125WMIBGY17952798001795287300000125MXPWMI_c35adb61372a540b26786697d85d25a8_3559&search_date=09102026&expected_price_uuid=01a11fc2-26cc-8030-e8e1-545ec4f85b6a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=z8cn_YW1v7oU0EcHeJAOMQ&expected_price_source=share&expected_price_currency=pln&expected_price=164&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-VCE-2026-11-23-2026-11-27",
@@ -1464,7 +1464,7 @@
       "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-20&dateIn=2026-11-23&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CRL&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-20&tpEndDate=2026-11-23&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CRL",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-VCE-2026-12-18-2026-12-21",
@@ -1625,7 +1625,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0711MIL09111?t=FR17940792001794086700000125WMIBGY17942151001794222000000115BGYWMI_1e2689d74f7f908385f5479a23d3a906_3620&search_date=05102026&expected_price_uuid=01a10b12-4ca9-8030-a1fc-228c064767a9&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3wBObTt9K790eeuVqbk9-A&expected_price_source=share&expected_price_currency=pln&expected_price=167&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-MXP-2026-11-14-2026-11-16",
@@ -1855,7 +1855,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1112MIL14121?t=FR17969700001796977500000125WMIBGY17972385001797246000000125MXPWMI_ace826a60231732adc373f644a274086_3781&search_date=08102026&expected_price_uuid=01a11bb0-7e78-8031-6a38-54bd9987f5ad&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=97BUVE3WaipO2_l4iSXA7g&expected_price_source=share&expected_price_currency=pln&expected_price=173&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BHX-2026-11-21-2026-11-23",
@@ -1901,7 +1901,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3110MIL03111?t=FR17934744001793481900000125WMIBGY17937327001793739600000115BGYWMI_f58462e9590368d057a9adbc3d663168_3796&search_date=10102026&expected_price_uuid=01a12558-db97-8030-25e5-82cfc98fc5b7&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ZcFN9-a_xdnHSUDsLXWkMw&expected_price_source=share&expected_price_currency=pln&expected_price=175&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BOJ-2026-10-23-2026-10-27",
@@ -2085,7 +2085,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0411MIL08111?t=W417938206001793828100000125WMIBGY17941212001794129000000130MXPWAW_1c04cfed85bfeadf4dd4fe9b9ea91757_3847&search_date=04102026&expected_price_uuid=01a10642-c1a1-8030-af90-b0f5bf5b29f0&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=phYCTYOfZplRU1WenGiS4g&expected_price_source=share&expected_price_currency=pln&expected_price=180&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-CRL-2026-11-18-2026-11-23",
@@ -2108,7 +2108,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1811BRU23111?t=W617949819001794990000000135WAWCRL17954583001795465500000120CRLWAW_94e293c63e19c37ff56a73aa85204745_3909&search_date=09102026&expected_price_uuid=01a12209-4fe7-8030-69ed-67f73843e468&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=WLdCdy2-8Q00_hnTPBYIpA&expected_price_source=share&expected_price_currency=pln&expected_price=180&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-NYO-2026-11-06-2026-11-08",
@@ -2154,7 +2154,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0912BRU13121?t=W617967963001796804400000135WAWCRL17971521001797159300000120CRLWAW_b72ba1f5a2fe1b08f76c281599523c63_3851&search_date=04102026&expected_price_uuid=01a108da-dc1f-8030-6c22-e1f28c4228ca&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=180&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-NYO-2026-12-04-2026-12-06",
@@ -2200,7 +2200,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2710MIL30101?t=FR17931075001793115000000125WMIBGY17933985001793406000000125MXPWMI_fc6ac94b54dfe6922bfa230c310f98e7_3971&search_date=08102026&expected_price_uuid=01a11b15-caca-8030-63cd-0a01bfa331c8&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=UM1O6gAUZKNIUchfs27dkw&expected_price_source=share&expected_price_currency=pln&expected_price=181&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-CRL-2026-11-27-2026-12-01",
@@ -2223,7 +2223,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2711BRU01121?t=W617957595001795767600000135WAWCRL17961153001796122500000120CRLWAW_6c6a5ef540dcbd3d7f3ce2365e84eb32_3883&search_date=04102026&expected_price_uuid=01a10876-07c4-8030-e297-a4af1e04a0bf&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=181&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-CRL-2026-12-06-2026-12-08",
@@ -2246,7 +2246,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0612BRU08121?t=W617965371001796545200000135WAWCRL17967201001796727300000120CRLWAW_4c62945c518b96a4c741b02f022737d1_4005&search_date=06102026&expected_price_uuid=01a110fc-7cf5-8030-68e7-4519ebf845b2&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=LqCAuPmexaKGOjsGLDZwXA&expected_price_source=share&expected_price_currency=pln&expected_price=181&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-VCE-2026-12-04-2026-12-09",
@@ -2338,7 +2338,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0212BRU06121?t=W617961915001796199600000135WAWCRL17965473001796554500000120CRLWAW_a793eb8759fb367be87ff35d63ee0dfc_4024&search_date=09102026&expected_price_uuid=01a1220e-3d20-8030-6574-f0c3f41d6d89&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=185&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-BGY-2026-12-19-2026-12-23",
@@ -2361,7 +2361,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1912MIL23121?t=FR17977080001797715500000125WMIBGY17980158001798023300000125MXPWMI_8c5ee8a11d0b272a8903521ffb186f58_4087&search_date=08102026&expected_price_uuid=01a11a8a-5a1c-8030-6292-f08654d227f6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=DEYg3CYcINe-XKwErZ9Z2A&expected_price_source=share&expected_price_currency=pln&expected_price=187&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-10-28-2026-11-01",
@@ -2384,7 +2384,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2810MIL01111?t=FR17931927001793200200000125WMIBGY17935221001793529600000125MXPWMI_d50b746ad94b4aed4c43b3bf7c70a5b2_4080&search_date=09102026&expected_price_uuid=01a12258-59ce-8031-289f-127a1db267e5&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=jaGRw0CkKgPn5K6s6S-bFA&expected_price_source=share&expected_price_currency=pln&expected_price=188&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-BGY-2026-11-04-2026-11-09",
@@ -2407,7 +2407,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0411MIL09111?t=FR17938206001793828100000125WMIBGY17942145001794222000000125MXPWMI_fa86622f70ecebaed6297bf35391865b_4072&search_date=09102026&expected_price_uuid=01a12091-5120-8030-6c79-96c7abbd5a54&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=cTf2YtiRrK-BdZeKV3XhhQ&expected_price_source=share&expected_price_currency=pln&expected_price=188&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-CIA-2026-11-30-2026-12-02",
@@ -2499,7 +2499,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2911BRU03121?t=W617959323001795940400000135WAWCRL17962881001796295300000120CRLWAW_20c719a3cce8218fd1459f6fb75bd39e_4179&search_date=06102026&expected_price_uuid=01a112c0-f0a1-8030-ab7d-4244818b5083&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=191&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-ARN-2026-10-17-2026-10-19",
@@ -2568,7 +2568,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3011BRU03121?t=W617960187001796026800000135WAWCRL17962881001796295300000120CRLWAW_6e4dabb984ddc3a1c0a920e97c698fbb_4219&search_date=06102026&expected_price_uuid=01a112c1-153f-8030-2cba-0be00cdaca88&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=MaE0C3pzS5GMx5xRIzFXMA&expected_price_source=share&expected_price_currency=pln&expected_price=193&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-FCO-2026-11-21-2026-11-24",
@@ -2683,7 +2683,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1711BRU22111?t=W617948955001794903600000135WAWCRL17953377001795344900000120CRLWAW_0cd56dd1781ec888cde5dd39189736a3_4277&search_date=07102026&expected_price_uuid=01a115e6-a24d-8030-6ef8-1af24e35bc8e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-E5XAqqP5EJr1niCak_f5g&expected_price_source=share&expected_price_currency=pln&expected_price=196&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-VCE-2026-11-02-2026-11-04",
@@ -2936,7 +2936,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2810MIL31101?t=FR17931927001793200200000125WMIBGY17934264001793433300000115BGYWMI_f9239df57773e878c1cfaa9407319429_4385&search_date=06102026&expected_price_uuid=01a10ffc-33fa-8030-60fc-69898bf0306e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=VWExICsXWgyzQMnH6q8RGA&expected_price_source=share&expected_price_currency=pln&expected_price=201&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-NYO-2026-12-03-2026-12-05",
@@ -3028,7 +3028,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0411MIL06111?t=W417938206001793828100000125WMIBGY17939484001793956200000130MXPWAW_25e9003f332f244958389388e5d9768f_4420&search_date=09102026&expected_price_uuid=01a1229e-3b32-8030-201d-f75d10f95e8b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=xmBmjOYQJNy345CZjDAOqQ&expected_price_source=share&expected_price_currency=pln&expected_price=203&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-SOF-2026-11-07-2026-11-12",
@@ -3097,7 +3097,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0511MIL08111?t=W417938836001793891100000125WMIBGY17941212001794129000000130MXPWAW_0bdcccfa3606ddb796e4c8c87638cff1_4493&search_date=08102026&expected_price_uuid=01a11b2c-35a1-8031-23f7-671864d025bb&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=H0oTKjAIMNsijpxx7T368g&expected_price_source=share&expected_price_currency=pln&expected_price=205&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-NYO-2026-12-22-2026-12-25",
@@ -3281,7 +3281,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2311BRU26111?t=FR17954670001795474500000125WAWCRL17957061001795713300000120CRLWAW_8f91d0d68b04624d784b605458967bb5_4471&search_date=04102026&expected_price_uuid=01a107d1-dc36-8030-e814-8f2fd2199f4d&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=sEv2RrzaTaj-dwTEguuV2w&expected_price_source=share&expected_price_currency=pln&expected_price=209&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-FCO-2026-11-19-2026-11-24",
@@ -3557,7 +3557,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1211BRU16111?t=FR17945088001794516300000125WAWCRL17948535001794860700000120CRLWAW_7fcec93332f1b3ce0a05f775f91d4655_4792&search_date=07102026&expected_price_uuid=01a11756-6caf-8030-6531-3b499155df5e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=FwLcyaX6TXVzMhe2e4CBOw&expected_price_source=share&expected_price_currency=pln&expected_price=219&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-RMO-2026-12-17-2026-12-20",
@@ -3649,7 +3649,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0812BRU12121?t=W617967099001796718000000135WAWCRL17970657001797072900000120CRLWAW_8967689b5cf4c3f2b5d800b9be6c8051_4738&search_date=04102026&expected_price_uuid=01a108db-8d71-8030-e68e-7d450bb8eb1c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ay4GRRQ-w1P3Y_qd1Rw4lQ&expected_price_source=share&expected_price_currency=pln&expected_price=221&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WAW-ALC-2026-12-15-2026-12-17",
@@ -3695,7 +3695,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2810BRU02111?t=W617931675001793175600000135WAWCRL17936439001793651100000120CRLWAW_c74930076e3197eaaf7357acc23d4163_4761&search_date=04102026&expected_price_uuid=01a10873-f23b-8030-2397-1456f0d34c8a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=WLdCdy2-8Q00_hnTPBYIpA&expected_price_source=share&expected_price_currency=pln&expected_price=222&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-BGY-2026-10-16-2026-10-20",
@@ -3718,7 +3718,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1610MIL20101?t=FR17921541001792161600000125WMIBGY17924778001792485300000125MXPWAW_060c4568f7645d0ff0b07ee9828b5312_4877&search_date=07102026&expected_price_uuid=01a115a8-f1fe-8030-2cdd-0d7250fe25ce&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=iRnhHREhxp9hI-3jD0hTgg&expected_price_source=share&expected_price_currency=pln&expected_price=223&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-CRL-2026-12-10-2026-12-15",
@@ -3741,7 +3741,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1012BRU15121?t=W617968827001796890800000135WAWCRL17973249001797332100000120CRLWAW_755ee0487bc220fa33e1555aff4037a4_4765&search_date=04102026&expected_price_uuid=01a108db-282e-8030-69c3-c36711d7869d&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-E5XAqqP5EJr1niCak_f5g&expected_price_source=share&expected_price_currency=pln&expected_price=223&marker=787990",
       "record_low": false,
-      "median_price": 181.0
+      "median_price": 185.0
     },
     {
       "id": "WMI-BGY-2026-12-17-2026-12-19",
@@ -3764,7 +3764,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1712MIL19121?t=FR17975373001797544800000125WMIBGY17976600001797666900000115BGYWMI_6bda01b936d84bf13a680c6bcb86bbd0_4845&search_date=09102026&expected_price_uuid=01a121bc-67b0-8030-afd5-d891ec3d9e31&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=XrlyAxcJf2fgvuX5is4sUg&expected_price_source=share&expected_price_currency=pln&expected_price=223&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-CIA-2026-11-17-2026-11-19",
@@ -3879,7 +3879,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2210MIL26101?t=FR17926488001792656300000125WMIBGY17930049001793012400000125MXPWMI_197a790548a5ee90a221e0a0dbe7ff98_4943&search_date=05102026&expected_price_uuid=01a10cda-98a3-8030-e0d6-ba2b16b3fcff&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=xmI3MKyb2acsTerQv3BvMQ&expected_price_source=share&expected_price_currency=pln&expected_price=228&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WMI-MXP-2026-12-28-2027-01-02",
@@ -4017,7 +4017,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1610MIL21101?t=FR17921790001792186500000125WMIBGY17925648001792572600000130MXPWMI_967fdc2918e012ba7c28c89d6913978f_5061&search_date=10102026&expected_price_uuid=01a124f1-5eab-8030-669a-7c226765eac4&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=2hW8IgfgKGciY3D68XXluQ&expected_price_source=share&expected_price_currency=pln&expected_price=233&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-AGP-2026-12-16-2026-12-21",
@@ -4155,7 +4155,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1810MIL23101?t=FR17923233001792330800000125WMIBGY17927928001792799940000119BGYWMI_40bb052d073e2e005d45affc723c0c6b_5084&search_date=04102026&expected_price_uuid=01a105cf-e1a1-8030-6a4f-f6b755a616b8&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=8ErRXano-eSuCEOkvNIIsA&expected_price_source=share&expected_price_currency=pln&expected_price=237&marker=787990",
       "record_low": false,
-      "median_price": 163.0
+      "median_price": 164.0
     },
     {
       "id": "WAW-TRF-2026-10-23-2026-10-25",
