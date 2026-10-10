@@ -48,6 +48,14 @@ Bez tokena źródło jest po prostu pomijane (działa sam Ryanair).
 Uwaga: ceny Aviasales pochodzą z cache z ostatnich 48 h — warto je
 sprawdzić ponownie przy zakupie.
 
+## Ustawienia w przeglądarce
+
+Strona ma zakładkę **Ustawienia** (cena, liczba nocy, dni wylotu/powrotu,
+horyzont, lotniska, kraje, tylko bezpośrednie). Filtry zapisują się
+w `localStorage` — czyli per urządzenie i przeglądarka, bez serwera.
+`config.json` pełni rolę „koperty" wyszukiwania: skrypt zbiera szerszy
+zestaw ofert, a strona zawęża go do preferencji użytkownika.
+
 ## Konfiguracja — `config.json`
 
 | Klucz | Znaczenie |

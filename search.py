@@ -27,6 +27,10 @@ TP_DATA = "https://api.travelpayouts.com/data/pl"
 HISTORY_DAYS = 180
 CACHE_MAX_AGE_DAYS = 30
 
+# Polskie nazwy krajów, których brakuje w pliku countries.json Travelpayouts
+# (tam "GB" ma name="GB").
+COUNTRY_PL = {"GB": "Wielka Brytania"}
+
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
     "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -249,6 +253,9 @@ def ryanair_deal(fare):
         "price": fare["summary"]["price"]["value"],
         "price_out": out.get("price", {}).get("value"),
         "price_in": inn.get("price", {}).get("value"),
+        "transfers": 0,
+        "weekday_out": date.fromisoformat(date_out).weekday(),
+        "weekday_in": date.fromisoformat(date_in).weekday(),
         "airline_code": "FR",
         "airline": "Ryanair",
         "source": "ryanair",
@@ -284,8 +291,12 @@ def fetch_aviasales(cfg, token, marker):
             code = cities[code]["country_code"]
         elif code in airports and airports[code].get("country_code"):
             code = airports[code]["country_code"]
-        c = countries.get(code)
-        return (c or {}).get("name") or ""
+        c = countries.get(code) or {}
+        name = c.get("name")
+        if not name or name == code:
+            tr = c.get("name_translations") or {}
+            name = COUNTRY_PL.get(code) or tr.get("en") or name or ""
+        return name
 
     jutro = date.today() + timedelta(days=1)
     koniec = jutro + timedelta(days=cfg["days_ahead"])
@@ -403,6 +414,9 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "price": float(price),
         "price_out": None,
         "price_in": None,
+        "transfers": (r.get("transfers") or 0) + (r.get("return_transfers") or 0),
+        "weekday_out": d_out.weekday(),
+        "weekday_in": date.fromisoformat(date_in).weekday(),
         "airline_code": code,
         "airline": airline_name(code, tp_airlines),
         "source": "aviasales",

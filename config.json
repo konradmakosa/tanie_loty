@@ -1,9 +1,9 @@
 {
   "airports": ["WMI", "WAW"],
-  "max_price_pln": 250,
-  "min_nights": 2,
-  "max_nights": 5,
-  "days_ahead": 90,
+  "max_price_pln": 400,
+  "min_nights": 1,
+  "max_nights": 14,
+  "days_ahead": 120,
   "record_low_ratio": 0.8,
   "record_low_min_samples": 5
 }
