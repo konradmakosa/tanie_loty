@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10T20:52:34+00:00",
+  "generated_at": "2026-10-11T02:53:56+00:00",
   "config": {
     "airports": [
       "WMI",
@@ -18,28 +18,28 @@
   ],
   "deals": [
     {
-      "id": "WMI-ARN-2026-10-22-2026-10-31",
+      "id": "WMI-ARN-2026-10-19-2026-10-31",
       "origin": "WMI",
       "origin_name": "Warszawa-Modlin",
       "dest": "ARN",
       "dest_city": "Sztokholm",
       "dest_country": "Szwecja",
-      "date_out": "2026-10-22",
-      "time_out": "22:45",
+      "date_out": "2026-10-19",
+      "time_out": "22:50",
       "date_in": "2026-10-31",
       "time_in": "20:55",
-      "nights": 9,
+      "nights": 12,
       "price": 130.0,
       "price_out": 65.0,
       "price_in": 65.0,
       "transfers": 0,
-      "weekday_out": 3,
+      "weekday_out": 0,
       "weekday_in": 5,
       "airline_code": "FR",
       "airline": "Ryanair",
       "source": "ryanair",
       "note": "cena bez bagażu rejestrowanego",
-      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-22&dateIn=2026-10-31&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=ARN&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-22&tpEndDate=2026-10-31&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=ARN",
+      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-19&dateIn=2026-10-31&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=ARN&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-19&tpEndDate=2026-10-31&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=ARN",
       "record_low": false,
       "median_price": 157.0
     },
@@ -197,33 +197,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0312MIL11121?t=W617962761001796283900000130WAWBGY17969724001796980200000130MXPWAW_7f1f8b7098f0a94eb1ec19df414882f7_2919&search_date=09102026&expected_price_uuid=01a11fc5-2cf5-8030-68ff-778839c7d4eb&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=FiKk2bzKLM9FyA-5iSkPrw&expected_price_source=share&expected_price_currency=pln&expected_price=134&marker=787990",
       "record_low": true,
-      "median_price": 169.0
-    },
-    {
-      "id": "WMI-MXP-2026-10-20-2026-10-22",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "MXP",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-20",
-      "time_out": "22:55",
-      "date_in": "2026-10-22",
-      "time_in": "10:35",
-      "nights": 2,
-      "price": 135.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 3,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2010MIL22101?t=FR17925369001792545300000140WMIMXP17926653001792673100000130MXPWMI_67b35261dfe8748dce7406b40512b4cf_2899&search_date=03102026&expected_price_uuid=01a103b8-f92a-8030-eae6-6de2383e069e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=LPFJlhc6kJTC8G8riJoawA&expected_price_source=share&expected_price_currency=pln&expected_price=135&marker=787990",
-      "record_low": false,
-      "median_price": 167.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-11-16-2026-11-19",
@@ -275,7 +249,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1611SOF20111?t=FR17948424001794853200000120WMISOF17951733001795176600000115SOFWMI_bcd25238b510f4259bf0837197fb13f1_2949&search_date=06102026&expected_price_uuid=01a112a1-90f4-8030-e1a7-f721228f2ab6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=2GcWtAyXWyqXaBtOQfC-MA&expected_price_source=share&expected_price_currency=pln&expected_price=135&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WAW-BGY-2027-01-09-2027-01-18",
@@ -301,7 +275,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0901MIL18011?t=W617995167001799524500000130WAWBGY18002556001800263400000130MXPWAW_06b8cae482a42ca908076b738c4c97ea_2956&search_date=08102026&expected_price_uuid=01a11a1d-9ccf-8030-ae3d-be8595d132a6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=FIikmvyF8oO8ZCRlAWmsGw&expected_price_source=share&expected_price_currency=pln&expected_price=135&marker=787990",
       "record_low": true,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BTS-2026-12-10-2026-12-12",
@@ -408,58 +382,6 @@
       "median_price": 167.0
     },
     {
-      "id": "WMI-SOF-2026-10-30-2026-11-01",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "SOF",
-      "dest_city": "Sofia",
-      "dest_country": "Bułgaria",
-      "date_out": "2026-10-30",
-      "time_out": "07:50",
-      "date_in": "2026-11-01",
-      "time_in": "22:55",
-      "nights": 2,
-      "price": 141.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 6,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW3010SOF01111?t=FR17933466001793357400000120WMISOF17935737001793577000000115SOFWMI_ebba6f81a15b27893aed752857d98cc0_3066&search_date=10102026&expected_price_uuid=01a124d4-a294-8031-6548-c2f7562ea172&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=UVi6EgjfzHzqxjH_xHCmrw&expected_price_source=share&expected_price_currency=pln&expected_price=141&marker=787990",
-      "record_low": false,
-      "median_price": 146.0
-    },
-    {
-      "id": "WMI-SOF-2026-10-31-2026-11-01",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "SOF",
-      "dest_city": "Sofia",
-      "dest_country": "Bułgaria",
-      "date_out": "2026-10-31",
-      "time_out": "06:30",
-      "date_in": "2026-11-01",
-      "time_in": "22:55",
-      "nights": 1,
-      "price": 141.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 5,
-      "weekday_in": 6,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW3110SOF01111?t=FR17934282001793439000000120WMISOF17935737001793577000000115SOFWMI_204b284dab5efe5d98039181adc80047_3066&search_date=10102026&expected_price_uuid=01a124d5-1b13-8031-6c4d-d355d25c6c38&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=qA218mfzQ9kQe6YHu5yZrQ&expected_price_source=share&expected_price_currency=pln&expected_price=141&marker=787990",
-      "record_low": false,
-      "median_price": 146.0
-    },
-    {
       "id": "WMI-BTS-2026-10-24-2026-10-25",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -535,7 +457,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1910VCE21101?t=FR17923911001792398000000115WMITSF17925756001792582200000110TSFWMI_3f603e1afab78b82e1617972c1bd5392_3124&search_date=06102026&expected_price_uuid=01a1121d-d742-8030-2949-3a7ecefa2bb4&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-KS1gZUZTuFFdbTNp0FxCQ&expected_price_source=share&expected_price_currency=pln&expected_price=142&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-MXP-2026-11-20-2026-11-22",
@@ -587,7 +509,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1511SOF20111?t=FR17947710001794781800000120WMISOF17951733001795176600000115SOFWMI_1412cc722dd78d6bc24d960010cb2730_3109&search_date=07102026&expected_price_uuid=01a11785-6bd0-8030-65e9-6f17fc962bea&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=tEPGdMrPVubUOruoyx2BDQ&expected_price_source=share&expected_price_currency=pln&expected_price=142&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-BGY-2026-10-19-2026-10-30",
@@ -616,32 +538,6 @@
       "median_price": 173.0
     },
     {
-      "id": "WMI-BTS-2026-10-19-2026-10-22",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BTS",
-      "dest_city": "Bratysława",
-      "dest_country": "Słowacja",
-      "date_out": "2026-10-19",
-      "time_out": "13:50",
-      "date_in": "2026-10-22",
-      "time_in": "20:45",
-      "nights": 3,
-      "price": 143.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 0,
-      "weekday_in": 3,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1910BTS22101?t=FR17924178001792422900000085WMIBTS17927019001792707000000085BTSWMI_5305002e971ea5e61439560002e4cfce_3108&search_date=09102026&expected_price_uuid=01a11fa6-11db-8030-2ab3-f0d14ba4da70&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=jB9cy7zzoOB64-Em34hmeQ&expected_price_source=share&expected_price_currency=pln&expected_price=143&marker=787990",
-      "record_low": false,
-      "median_price": 148.0
-    },
-    {
       "id": "WMI-SOF-2026-11-15-2026-11-21",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -665,7 +561,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1511SOF21111?t=FR17947710001794781800000120WMISOF17952798001795283100000115SOFWMI_ba651bfb54b27e27a788c18dfbafb672_3121&search_date=07102026&expected_price_uuid=01a11784-ea3d-8030-ecb3-d9b4187d159a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=9M4uABETVwtjf6uzg0YJGA&expected_price_source=share&expected_price_currency=pln&expected_price=143&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-MXP-2026-11-09-2026-11-12",
@@ -717,7 +613,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1012SOF13121?t=FR17969259001796936700000120WMISOF17972025001797205800000115SOFWMI_0b98909e3e3c8e345b214fbe7583eca6_3102&search_date=05102026&expected_price_uuid=01a10cb8-1869-8030-aaa0-8c030141162c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=dToql-BClEYB0LzbG02PuQ&expected_price_source=share&expected_price_currency=pln&expected_price=143&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WAW-MXP-2026-12-11-2026-12-20",
@@ -769,7 +665,33 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0102MIL15021?t=W618015039001801511700000130WAWBGY18026748001802682600000130MXPWAW_99df76d4f041f809eb6ea94abea80ddc_3168&search_date=06102026&expected_price_uuid=01a1112f-14d4-8030-a308-8db888c5600e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ny-z5boPrFbEDGK2N8__6g&expected_price_source=share&expected_price_currency=pln&expected_price=143&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
+    },
+    {
+      "id": "WMI-SOF-2026-10-19-2026-10-22",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "SOF",
+      "dest_city": "Sofia",
+      "dest_country": "Bułgaria",
+      "date_out": "2026-10-19",
+      "time_out": "13:40",
+      "date_in": "2026-10-22",
+      "time_in": "14:40",
+      "nights": 3,
+      "price": 144.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 0,
+      "weekday_in": 3,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1910SOF22101?t=FR17924172001792427700000115WMISOF17926800001792683300000115SOFWMI_f63f2ce29c5bf8d2d67894a089a72865_3122&search_date=10102026&expected_price_uuid=01a1278b-de21-8031-61d9-d38420aaac50&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Prhz43V-33F2WWFx9xrYCw&expected_price_source=share&expected_price_currency=pln&expected_price=144&marker=787990",
+      "record_low": false,
+      "median_price": 147.0
     },
     {
       "id": "WMI-BTS-2026-10-15-2026-10-18",
@@ -794,6 +716,32 @@
       "source": "aviasales",
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1510BTS18101?t=FR17920902001792095300000085WMIBTS17923224001792327500000085BTSWMI_077267eb1ce7e4af334bd30963bac67b_3183&search_date=06102026&expected_price_uuid=01a110d5-34b1-8030-e6fc-46d0120fbf55&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=o8UNpFey07_EKGXusQmobg&expected_price_source=share&expected_price_currency=pln&expected_price=144&marker=787990",
+      "record_low": false,
+      "median_price": 148.0
+    },
+    {
+      "id": "WMI-BTS-2026-10-20-2026-10-22",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "BTS",
+      "dest_city": "Bratysława",
+      "dest_country": "Słowacja",
+      "date_out": "2026-10-20",
+      "time_out": "21:15",
+      "date_in": "2026-10-22",
+      "time_in": "20:45",
+      "nights": 2,
+      "price": 144.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 1,
+      "weekday_in": 3,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW2010BTS22101?t=FR17925309001792536000000085WMIBTS17927019001792707000000085BTSWMI_f8b6f1e0215912edf61d377c3881df00_3148&search_date=08102026&expected_price_uuid=01a11a7b-2763-8030-237d-4ce803b7338b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=1SKc0tfXH33gbKrj2xa5lQ&expected_price_source=share&expected_price_currency=pln&expected_price=144&marker=787990",
       "record_low": false,
       "median_price": 148.0
     },
@@ -847,7 +795,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3011STO08121?t=W617960172001796023500000105WAWNYO17967186001796724000000090NYOWAW_26427f55842f9ebe4ee2a0d35f9d7dc9_3113&search_date=05102026&expected_price_uuid=01a10b71-cc3c-8030-ada1-4279baf3bfda&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fG9YN4NYMA84ilcdWPUCLw&expected_price_source=share&expected_price_currency=pln&expected_price=144&marker=787990",
       "record_low": true,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WMI-BTS-2026-11-02-2026-11-05",
@@ -925,7 +873,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2210SOF29101?t=FR17926848001792695300000115WMISOF17933094001793312700000115SOFWMI_9fab13e882c9de924a95e07c08c98e9b_3189&search_date=06102026&expected_price_uuid=01a11194-9112-8050-a487-3cd6205fa3f3&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=uUDk2lr9l8TthBFvz9umJQ&expected_price_source=share&expected_price_currency=pln&expected_price=145&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-MXP-2026-10-30-2026-11-05",
@@ -1032,32 +980,6 @@
       "median_price": 167.0
     },
     {
-      "id": "WMI-BGY-2026-11-13-2026-11-19",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BGY",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-11-13",
-      "time_out": "16:20",
-      "date_in": "2026-11-19",
-      "time_in": "09:40",
-      "nights": 6,
-      "price": 145.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 3,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1311MIL19111?t=FR17945868001794594300000125WMIBGY17950812001795088700000125MXPWMI_7c1037166769ae5a40e93ef9b94dd01a_3107&search_date=03102026&expected_price_uuid=01a103eb-91eb-8030-6d72-b3be0cea9bb7&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=bAUM9B03qnoRB2Lz5bdLQA&expected_price_source=share&expected_price_currency=pln&expected_price=145&marker=787990",
-      "record_low": false,
-      "median_price": 173.0
-    },
-    {
       "id": "WMI-BGY-2026-10-31-2026-11-04",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -1107,7 +1029,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3010SOF07111?t=FR17933466001793357400000120WMISOF17940702001794073500000115SOFWMI_b8bbe57e8609b6a3611d5589726f29a9_3199&search_date=06102026&expected_price_uuid=01a1128e-1a4e-8030-abe9-73fd11c6763f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=MmLjzcDEv0-d-jetR7GTHA&expected_price_source=share&expected_price_currency=pln&expected_price=147&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-SOF-2026-10-30-2026-11-08",
@@ -1133,7 +1055,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3010SOF08111?t=FR17933466001793357400000120WMISOF17941785001794181800000115SOFWMI_558e81e08fa795cb839211d9e2c97c51_3199&search_date=06102026&expected_price_uuid=01a11252-a425-8030-ed74-525d61e660ee&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=xV4aRXQUrYaQHNlOReNBWw&expected_price_source=share&expected_price_currency=pln&expected_price=147&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-SOF-2026-10-31-2026-11-07",
@@ -1159,7 +1081,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3110SOF07111?t=FR17934531001793463900000120WMISOF17940702001794073500000115SOFWMI_b0b63a3f7a07e15ccf42506c84305c83_3199&search_date=06102026&expected_price_uuid=01a11255-4f36-8030-a70c-bd94d828a352&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=KachwjWrGw0rxUEXThXeVw&expected_price_source=share&expected_price_currency=pln&expected_price=147&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-TSF-2026-11-27-2026-11-30",
@@ -1185,7 +1107,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2711VCE30111?t=FR17957880001795794900000115WMITSF17960193001796026500000120VCEWAW_bd5d685ba6f73449fc4d4cfdd7ec62ad_3182&search_date=09102026&expected_price_uuid=01a1200c-8c98-8031-65fb-a77c35b1ae34&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3124kH6yf3F5EIBhRHoAxQ&expected_price_source=share&expected_price_currency=pln&expected_price=147&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-BTS-2026-10-14-2026-10-17",
@@ -1419,7 +1341,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2412MIL07011?t=W617981343001798142100000130WAWBGY17993052001799313000000130MXPWAW_ac68f9b0fe3874364a0504351b91670e_3190&search_date=04102026&expected_price_uuid=01a1080a-644b-8030-6aaa-fa3047829d63&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ny-z5boPrFbEDGK2N8__6g&expected_price_source=share&expected_price_currency=pln&expected_price=149&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-SOF-2026-10-31-2026-11-08",
@@ -1445,7 +1367,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3110SOF08111?t=FR17934282001793439000000120WMISOF17941785001794181800000115SOFWMI_ab579375df7ddb40441591d345bb93ee_3285&search_date=06102026&expected_price_uuid=01a11255-cc14-8030-2f4b-8e938c8ac547&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gVb1Gj0_Y6i_75aFQqPf3g&expected_price_source=share&expected_price_currency=pln&expected_price=151&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-MXP-2026-10-24-2026-10-30",
@@ -1497,7 +1419,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1611VCE18111?t=FR17948334001794840300000115WMITSF17949825001794989700000120VCEWAW_2e0031b323bd6840420076c4bda122fd_3261&search_date=09102026&expected_price_uuid=01a120c2-aec3-8030-2b16-67e939bd4b32&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=pme0FAk8ySTGDoVokwSxFQ&expected_price_source=share&expected_price_currency=pln&expected_price=151&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-VCE-2026-11-02-2026-11-06",
@@ -1835,7 +1757,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0111MIL06111?t=W617935113001793519100000130WAWBGY17939991001794006900000130MXPWAW_4b6fa3d7954c29a01620aa6aa5888ca5_3405&search_date=06102026&expected_price_uuid=01a110ed-d1b0-8030-6c63-b1e96e3249af&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gurjdM34-388l9ssfreWVg&expected_price_source=share&expected_price_currency=pln&expected_price=154&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-BGY-2027-01-28-2027-02-01",
@@ -1861,7 +1783,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2801MIL01021?t=W618011145001801122300000130WAWBGY18015159001801523700000130MXPWAW_d9827c25b14549463a676cd1dadf37a7_3297&search_date=04102026&expected_price_uuid=01a108f8-e125-8030-e51c-031c000808bc&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ksHhO1r2h_FeyPGrUT1rTQ&expected_price_source=share&expected_price_currency=pln&expected_price=154&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-TSF-2026-10-19-2026-10-26",
@@ -1887,7 +1809,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1910VCE26101?t=FR17923911001792398000000115WMITSF17929953001793002500000120VCEWAW_3f209edbe2adec332213f6f85845df9b_3398&search_date=06102026&expected_price_uuid=01a1120a-406d-8030-290f-1aab57ea802f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=KbHM-ri9zWOuQl0dFFkrUQ&expected_price_source=share&expected_price_currency=pln&expected_price=154&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-CPH-2026-11-27-2026-11-29",
@@ -2017,7 +1939,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2011VCE23111?t=FR17951832001795190100000115WMITSF17954466001795452900000105TSFWMI_7fb842253eb2f224bc07c22ea9f49fa3_3401&search_date=07102026&expected_price_uuid=01a1169a-a9d5-8030-6efb-bc3767fd9286&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=IlkiuQ5ikGTCO7PmXfWfJA&expected_price_source=share&expected_price_currency=pln&expected_price=156&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-TSF-2026-11-01-2026-11-02",
@@ -2043,7 +1965,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0111VCE02111?t=FR17935311001793538000000115WMITSF17936001001793607300000120VCEWAW_e5ac881a18de2c1517e757ba562e8e6c_3402&search_date=08102026&expected_price_uuid=01a11d0a-f627-8031-22bf-281ce815d0ff&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=RpQ7iA_cND6-AMOtzP8aKA&expected_price_source=share&expected_price_currency=pln&expected_price=156&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-MXP-2026-11-01-2026-11-08",
@@ -2173,7 +2095,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1511VCE18111?t=FR17947407001794747600000115WMITSF17949825001794989700000120VCEWAW_362f3e3cccde66a2a39bcd9e1e564003_3506&search_date=06102026&expected_price_uuid=01a1109b-9581-8030-a954-0eb6e6b92ae3&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=HC456dSMJuLBGh9CgwjK6g&expected_price_source=share&expected_price_currency=pln&expected_price=158&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-MXP-2026-12-10-2026-12-18",
@@ -2225,7 +2147,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0101MIL05011?t=W617987817001798789500000130WAWBGY17991324001799140200000130MXPWAW_dea5c453b8ff2a79dd93719d903c03e6_3431&search_date=10102026&expected_price_uuid=01a126bd-07f7-8030-2897-183ea32c2bbe&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fqJk8cHqIktSqTYyoWRqow&expected_price_source=share&expected_price_currency=pln&expected_price=158&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BGY-2026-10-19-2026-10-29",
@@ -2329,7 +2251,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0811MIL13111?t=W617941161001794123900000130WAWBGY17945532001794561000000130MXPWAW_ff6db5b46b4453c710a809805596a3e7_3461&search_date=09102026&expected_price_uuid=01a121b5-899f-8031-25e3-b0255c89f921&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=aYflqX9tqHy0uhaXhHbo0g&expected_price_source=share&expected_price_currency=pln&expected_price=159&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BGY-2026-11-04-2026-11-05",
@@ -2511,7 +2433,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1911MIL22111?t=W617950665001795074300000130WAWBGY17953308001795338600000130MXPWAW_58725f2e6df74d4d28564ea71840bf8e_3489&search_date=09102026&expected_price_uuid=01a12252-96b3-8030-2a9e-d716ab188ee9&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=XW3vlJemwVo51MsoMuE9ew&expected_price_source=share&expected_price_currency=pln&expected_price=161&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BGY-2026-12-05-2026-12-08",
@@ -2540,28 +2462,28 @@
       "median_price": 173.0
     },
     {
-      "id": "WAW-BLQ-2026-11-16-2026-11-22",
+      "id": "WAW-BLQ-2026-11-15-2026-11-22",
       "origin": "WAW",
       "origin_name": "Warszawa-Chopina",
       "dest": "BLQ",
       "dest_city": "Bolonia",
       "dest_country": "Włochy",
-      "date_out": "2026-11-16",
-      "time_out": "19:35",
+      "date_out": "2026-11-15",
+      "time_out": "12:35",
       "date_in": "2026-11-22",
       "time_in": "10:00",
-      "nights": 6,
+      "nights": 7,
       "price": 161.3,
       "price_out": 87.0,
       "price_in": 74.3,
       "transfers": 0,
-      "weekday_out": 0,
+      "weekday_out": 6,
       "weekday_in": 6,
       "airline_code": "FR",
       "airline": "Ryanair",
       "source": "ryanair",
       "note": "cena bez bagażu rejestrowanego",
-      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-16&dateIn=2026-11-22&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=BLQ&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-16&tpEndDate=2026-11-22&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=BLQ",
+      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-15&dateIn=2026-11-22&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=BLQ&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-15&tpEndDate=2026-11-22&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=BLQ",
       "record_low": true,
       "median_price": 249.0
     },
@@ -2589,7 +2511,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2411MIL26111?t=W617954985001795506300000130WAWBGY17956764001795684200000130MXPWAW_ae67eb5ca86cfff64b93553274fa43ea_3517&search_date=09102026&expected_price_uuid=01a12269-1958-8031-6df4-2107a3b60a46&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=apj5h08NvglAK4s-gsIMJA&expected_price_source=share&expected_price_currency=pln&expected_price=162&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BGY-2026-11-13-2026-11-16",
@@ -2745,7 +2667,33 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1801STO24011?t=W618002508001800257100000105WAWNYO18007776001800783000000090NYOWAW_308af7906782c7257313f01449563bf5_3509&search_date=05102026&expected_price_uuid=01a10a8d-d23b-8030-26b7-911ba232effd&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=UvH3O-hQcybmaZvd4McjFQ&expected_price_source=share&expected_price_currency=pln&expected_price=163&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
+    },
+    {
+      "id": "WMI-SOF-2026-10-31-2026-11-01",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "SOF",
+      "dest_city": "Sofia",
+      "dest_country": "Bułgaria",
+      "date_out": "2026-10-31",
+      "time_out": "06:30",
+      "date_in": "2026-11-01",
+      "time_in": "22:55",
+      "nights": 1,
+      "price": 164.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 5,
+      "weekday_in": 6,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW3110SOF01111?t=FR17934282001793439000000120WMISOF17935737001793577000000115SOFWMI_204b284dab5efe5d98039181adc80047_3566&search_date=11102026&expected_price_uuid=01a12873-0c16-8030-63a8-fd4a36c832de&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=qA218mfzQ9kQe6YHu5yZrQ&expected_price_source=share&expected_price_currency=pln&expected_price=164&marker=787990",
+      "record_low": false,
+      "median_price": 147.0
     },
     {
       "id": "WMI-BGY-2026-11-13-2026-11-20",
@@ -2979,7 +2927,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1312MIL21121?t=W617971401001797147900000130WAWBGY17978364001797844200000130MXPWAW_1e2cd302018ec60cee1593619f84ae55_3593&search_date=10102026&expected_price_uuid=01a12561-d72a-8031-26ac-0a4652dd9564&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=FiKk2bzKLM9FyA-5iSkPrw&expected_price_source=share&expected_price_currency=pln&expected_price=165&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-12-14-2026-12-22",
@@ -3086,6 +3034,32 @@
       "median_price": 166.0
     },
     {
+      "id": "WMI-SOF-2026-10-30-2026-11-01",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "SOF",
+      "dest_city": "Sofia",
+      "dest_country": "Bułgaria",
+      "date_out": "2026-10-30",
+      "time_out": "07:50",
+      "date_in": "2026-11-01",
+      "time_in": "22:55",
+      "nights": 2,
+      "price": 166.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 4,
+      "weekday_in": 6,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW3010SOF01111?t=FR17933466001793357400000120WMISOF17935737001793577000000115SOFWMI_ebba6f81a15b27893aed752857d98cc0_3615&search_date=10102026&expected_price_uuid=01a127cb-6b77-8030-afcb-bdc161780c1e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=UVi6EgjfzHzqxjH_xHCmrw&expected_price_source=share&expected_price_currency=pln&expected_price=166&marker=787990",
+      "record_low": false,
+      "median_price": 147.0
+    },
+    {
       "id": "WMI-BGY-2026-11-28-2026-11-29",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -3161,33 +3135,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1101MIL15011?t=W617996895001799697300000130WAWBGY18000471001800054900000130MXPWAW_9f0d65f7eb9169103271317579296b7c_3630&search_date=08102026&expected_price_uuid=01a11ac7-bacc-8030-a944-f68dd91f5ded&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=G3-2QbDDkNUjtZ0_vu5vgg&expected_price_source=share&expected_price_currency=pln&expected_price=166&marker=787990",
       "record_low": false,
-      "median_price": 169.0
-    },
-    {
-      "id": "WMI-MXP-2026-10-25-2026-11-03",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "MXP",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-25",
-      "time_out": "06:00",
-      "date_in": "2026-11-03",
-      "time_in": "19:05",
-      "nights": 9,
-      "price": 167.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 1,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2510MIL03111?t=FR17929080001792915800000130WMIMXP17937327001793739600000115BGYWMI_bff7a2ca20ed78551ba7f7e3af1a8d26_3578&search_date=03102026&expected_price_uuid=01a10405-4752-8030-28c4-8086e2234013&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=77sqUpRcq0Ue8H6ke5a_Xw&expected_price_source=share&expected_price_currency=pln&expected_price=167&marker=787990",
-      "record_low": false,
-      "median_price": 167.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-10-13-2026-10-15",
@@ -3317,7 +3265,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0901MIL22011?t=W617995167001799524500000130WAWBGY18006519001800659700000130MXPWAW_08bd65882a75c4317e6b2822f12111ca_3624&search_date=10102026&expected_price_uuid=01a12698-0d22-8030-e43b-bb8c39c5ea2e&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=BoGWdfao8gSTTRc07uD9_w&expected_price_source=share&expected_price_currency=pln&expected_price=167&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-10-26-2026-10-29",
@@ -3421,33 +3369,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1801STO22011?t=W618002508001800257100000105WAWNYO18006048001800610200000090NYOWAW_516e8e4e5228766ad7b33da3a3f678f9_3689&search_date=08102026&expected_price_uuid=01a11af6-0230-8031-6da0-13fbf878c041&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ee2wpvxXCTaD0UN6ljOB8g&expected_price_source=share&expected_price_currency=pln&expected_price=168&marker=787990",
       "record_low": false,
-      "median_price": 191.5
-    },
-    {
-      "id": "WMI-BTS-2026-10-11-2026-10-14",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BTS",
-      "dest_city": "Bratysława",
-      "dest_country": "Słowacja",
-      "date_out": "2026-10-11",
-      "time_out": "13:10",
-      "date_in": "2026-10-14",
-      "time_in": "18:25",
-      "nights": 3,
-      "price": 169.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 2,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110BTS14101?t=FR17917242001791729300000085WMIBTS17920023001792007400000085BTSWMI_de86d0753d849725407498f22bf32a14_3680&search_date=08102026&expected_price_uuid=01a11cee-311f-8030-251e-0664a31edb94&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=OnyQ5D-ufBy7bXtGX9aLUg&expected_price_source=share&expected_price_currency=pln&expected_price=169&marker=787990",
-      "record_low": false,
-      "median_price": 148.0
+      "median_price": 182.0
     },
     {
       "id": "WMI-BTS-2026-10-23-2026-10-26",
@@ -3499,7 +3421,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2411MIL27111?t=W617954985001795506300000130WAWBGY17957676001795774800000120BGYWAW_645265d101464334b3e020208d67f977_3673&search_date=09102026&expected_price_uuid=01a1226a-bf99-8030-2714-1151d580caba&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=TBgSJsUjILXnNr4igsivBQ&expected_price_source=share&expected_price_currency=pln&expected_price=169&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BTS-2026-12-11-2026-12-13",
@@ -3528,30 +3450,30 @@
       "median_price": 148.0
     },
     {
-      "id": "WAW-CTA-2026-10-27-2026-11-05",
+      "id": "WAW-CRL-2026-11-20-2026-11-23",
       "origin": "WAW",
       "origin_name": "Warszawa-Chopina",
-      "dest": "CTA",
-      "dest_city": "Katania",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-27",
-      "time_out": "12:35",
-      "date_in": "2026-11-05",
-      "time_in": "05:45",
-      "nights": 9,
+      "dest": "CRL",
+      "dest_city": "Charleroi",
+      "dest_country": "Belgia",
+      "date_out": "2026-11-20",
+      "time_out": "20:10",
+      "date_in": "2026-11-23",
+      "time_in": "18:25",
+      "nights": 3,
       "price": 169.3,
       "price_out": 95.0,
       "price_in": 74.3,
       "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 3,
+      "weekday_out": 4,
+      "weekday_in": 0,
       "airline_code": "FR",
       "airline": "Ryanair",
       "source": "ryanair",
       "note": "cena bez bagażu rejestrowanego",
-      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-27&dateIn=2026-11-05&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CTA&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-27&tpEndDate=2026-11-05&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CTA",
+      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-20&dateIn=2026-11-23&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CRL&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-20&tpEndDate=2026-11-23&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CRL",
       "record_low": false,
-      "median_price": 190.0
+      "median_price": 196.0
     },
     {
       "id": "WMI-MXP-2026-11-01-2026-11-04",
@@ -3655,7 +3577,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2111MIL22111?t=W617952831001795290900000130WAWBGY17953308001795338600000130MXPWAW_00858e8e2af351ad477d9d658aff3033_3734&search_date=06102026&expected_price_uuid=01a112b7-87cc-8030-2fdc-bb13d6aa0f23&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3JFeYJI699ZhyEwxchE7cA&expected_price_source=share&expected_price_currency=pln&expected_price=171&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-MXP-2026-12-15-2026-12-18",
@@ -3759,7 +3681,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2601MIL29011?t=W618009417001800949500000130WAWBGY18012567001801264500000130MXPWAW_7b6ac90dd5498d9027542594dd6d637a_3712&search_date=05102026&expected_price_uuid=01a10b0f-0c3e-8050-e120-58822860f479&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=rQo14LOrFdyZF5lTb02eAw&expected_price_source=share&expected_price_currency=pln&expected_price=172&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-NYO-2027-02-07-2027-02-11",
@@ -3785,7 +3707,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0702STO11021?t=W618019788001801985100000105WAWNYO18023328001802338200000090NYOWAW_c3804d1d0dd5b62e2887c98b0801a9c6_3736&search_date=10102026&expected_price_uuid=01a12570-b277-8030-2d59-4e162ed5cef3&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Ee2wpvxXCTaD0UN6ljOB8g&expected_price_source=share&expected_price_currency=pln&expected_price=172&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WMI-BGY-2026-11-02-2026-11-03",
@@ -3838,32 +3760,6 @@
       "link": "https://www.aviasales.com/search/WAW1112MIL14121?t=FR17969700001796977500000125WMIBGY17972385001797246000000125MXPWMI_ace826a60231732adc373f644a274086_3781&search_date=08102026&expected_price_uuid=01a11bb0-7e78-8031-6a38-54bd9987f5ad&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=97BUVE3WaipO2_l4iSXA7g&expected_price_source=share&expected_price_currency=pln&expected_price=173&marker=787990",
       "record_low": false,
       "median_price": 173.0
-    },
-    {
-      "id": "WAW-CRL-2026-11-20-2026-11-23",
-      "origin": "WAW",
-      "origin_name": "Warszawa-Chopina",
-      "dest": "CRL",
-      "dest_city": "Charleroi",
-      "dest_country": "Belgia",
-      "date_out": "2026-11-20",
-      "time_out": "20:10",
-      "date_in": "2026-11-23",
-      "time_in": "18:25",
-      "nights": 3,
-      "price": 173.67,
-      "price_out": 95.0,
-      "price_in": 78.67,
-      "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 0,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "ryanair",
-      "note": "cena bez bagażu rejestrowanego",
-      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-11-20&dateIn=2026-11-23&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CRL&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-11-20&tpEndDate=2026-11-23&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CRL",
-      "record_low": false,
-      "median_price": 196.0
     },
     {
       "id": "WMI-MXP-2026-10-26-2026-10-30",
@@ -3941,7 +3837,33 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2812MIL08011?t=W617984361001798443900000130WAWBGY17993916001799399400000130MXPWAW_ced8ac8a455fa371c0a78298b19042c4_3819&search_date=08102026&expected_price_uuid=01a11b5e-266f-8031-6b95-ad2ac0b15393&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=M1hAgoGMc9ux6bVfAc_BWw&expected_price_source=share&expected_price_currency=pln&expected_price=174&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
+    },
+    {
+      "id": "WAW-CTA-2027-01-17-2027-01-25",
+      "origin": "WAW",
+      "origin_name": "Warszawa-Chopina",
+      "dest": "CTA",
+      "dest_city": "Katania",
+      "dest_country": "Włochy",
+      "date_out": "2027-01-17",
+      "time_out": "21:10",
+      "date_in": "2027-01-25",
+      "time_in": "06:15",
+      "nights": 8,
+      "price": 174.84,
+      "price_out": 87.42,
+      "price_in": 87.42,
+      "transfers": 0,
+      "weekday_out": 6,
+      "weekday_in": 0,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "ryanair",
+      "note": "cena bez bagażu rejestrowanego",
+      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2027-01-17&dateIn=2027-01-25&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=CTA&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2027-01-17&tpEndDate=2027-01-25&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=CTA",
+      "record_low": false,
+      "median_price": 190.0
     },
     {
       "id": "WMI-BGY-2026-10-31-2026-11-03",
@@ -4175,7 +4097,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1112MIL18121?t=W617970111001797018900000130WAWBGY17975772001797585000000130MXPWAW_2a7fcd88c4bd95f1e240de1e5da53a9d_3850&search_date=09102026&expected_price_uuid=01a1221b-ca65-8030-636d-399f654e792c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ARSGYPvZ09uCeL_C3RAfhQ&expected_price_source=share&expected_price_currency=pln&expected_price=177&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-NYO-2026-12-04-2026-12-07",
@@ -4201,7 +4123,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0412STO07121?t=W617963628001796369100000105WAWNYO17966304001796635800000090NYOWAW_8785b769d6f2a9cf318fc39c15937ee0_3871&search_date=06102026&expected_price_uuid=01a11291-c0c9-8030-e39c-4bfdfc36540a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=GEhqGuVK_IMPk61MRfHFUg&expected_price_source=share&expected_price_currency=pln&expected_price=177&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-FCO-2026-12-31-2027-01-09",
@@ -4253,7 +4175,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2010SOF23101?t=FR17925003001792510800000115WMISOF17927736001792776900000115SOFWMI_dcd26407cb9b6234da43deb0926624fc_3885&search_date=10102026&expected_price_uuid=01a126c7-d0e3-8030-665e-5110f27e11ca&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gaG_IMDKIGL9PRjunpGa7Q&expected_price_source=share&expected_price_currency=pln&expected_price=179&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-BGY-2026-10-24-2026-10-31",
@@ -4435,7 +4357,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0611STO08111?t=W617939436001793949900000105WAWNYO17941347001794140700000100ARNWMI_540a7feaa4253fb748548444c8fe9e53_3937&search_date=07102026&expected_price_uuid=01a1167c-39b7-8030-efcb-995004a61d3c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ZelOKP4dQotm91wRtzRmgQ&expected_price_source=share&expected_price_currency=pln&expected_price=180&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-CRL-2026-12-09-2026-12-13",
@@ -4487,7 +4409,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0412STO06121?t=W617963628001796369100000105WAWNYO17965539001796559900000100ARNWMI_efc802f05301d55d4b3b0f913e0665bf_3931&search_date=06102026&expected_price_uuid=01a1135b-6ee3-8030-6a56-e5c313225b1f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ZelOKP4dQotm91wRtzRmgQ&expected_price_source=share&expected_price_currency=pln&expected_price=180&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-BUD-2027-01-26-2027-01-31",
@@ -4617,7 +4539,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1311STO15111?t=W617945484001794554700000105WAWNYO17947296001794735000000090NYOWAW_3246f07cd356349fa0324a4f3ffc917a_3968&search_date=07102026&expected_price_uuid=01a1169c-590e-8030-627d-10aaa0e35a0c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3lx4X6hDOVJdpB81hHLvew&expected_price_source=share&expected_price_currency=pln&expected_price=182&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-VCE-2026-12-04-2026-12-09",
@@ -4773,7 +4695,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0101MIL08011?t=W617987817001798789500000130WAWBGY17993916001799399400000130MXPWAW_d2d290c97734a3e3c8f43d3ba0bbd0ac_3997&search_date=07102026&expected_price_uuid=01a116ea-2ca7-8030-e43c-5a7158c8bed8&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=I4vtqvNiiBS5gVGHdJBNlQ&expected_price_source=share&expected_price_currency=pln&expected_price=183&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-TRF-2026-10-31-2026-11-02",
@@ -4981,7 +4903,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2510VCE26101?t=FR17929263001792933200000115WMITSF17929953001793002500000120VCEWAW_53890281a2945ba38f40754a3be34fe6_4104&search_date=06102026&expected_price_uuid=01a11142-8459-8030-612a-8f31f0c863ea&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=RpQ7iA_cND6-AMOtzP8aKA&expected_price_source=share&expected_price_currency=pln&expected_price=186&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-BGY-2027-02-03-2027-02-12",
@@ -5007,7 +4929,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0302MIL12021?t=W618016329001801640700000130WAWBGY18024156001802423400000130MXPWAW_1d81f1bdf5f7570f9a23224a47288b1e_4064&search_date=08102026&expected_price_uuid=01a11bc7-420b-8031-6269-357491256b65&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=4BCAbT7IIdgmqaZiycblkw&expected_price_source=share&expected_price_currency=pln&expected_price=186&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-11-08-2026-11-14",
@@ -5267,7 +5189,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0101MIL06011?t=W617987817001798789500000130WAWBGY17992188001799226600000130MXPWAW_25549b65ca44b3e40180c623675201a2_4135&search_date=10102026&expected_price_uuid=01a125d9-ed77-8031-2cdd-76a9b3c48b74&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=aYflqX9tqHy0uhaXhHbo0g&expected_price_source=share&expected_price_currency=pln&expected_price=190&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BGY-2026-11-17-2026-11-23",
@@ -5400,6 +5322,32 @@
       "median_price": 196.0
     },
     {
+      "id": "WMI-ARN-2026-10-13-2026-10-20",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "ARN",
+      "dest_city": "Sztokholm",
+      "dest_country": "Szwecja",
+      "date_out": "2026-10-13",
+      "time_out": "20:45",
+      "date_in": "2026-10-20",
+      "time_in": "22:50",
+      "nights": 7,
+      "price": 193.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 1,
+      "weekday_in": 1,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1310STO20101?t=FR17919243001791930300000100WMIARN17925366001792542600000100ARNWMI_7b3bca3e355af7c170075a37131d1d88_4198&search_date=10102026&expected_price_uuid=01a12797-8fdb-8030-e7f9-46efc5b827e7&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fxcw0527IVtpb0ClL7lbhw&expected_price_source=share&expected_price_currency=pln&expected_price=193&marker=787990",
+      "record_low": false,
+      "median_price": 157.0
+    },
+    {
       "id": "WAW-BGY-2026-10-25-2026-10-27",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -5423,7 +5371,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2510MIL27101?t=W617929065001792914300000130WAWBGY17930892001793096400000120BGYWAW_3e268b3516684e9ff22a7f976aab2102_4201&search_date=10102026&expected_price_uuid=01a12696-019d-8030-2674-06e75b39848f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ehWBMQK6YQF7wlm0XHW3qA&expected_price_source=share&expected_price_currency=pln&expected_price=193&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-MXP-2026-11-05-2026-11-09",
@@ -5501,7 +5449,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1201MIL14011?t=W617997321001799739900000130WAWBGY17999148001799922000000120BGYWAW_2f8ca50016bdedf2b4dcaf7c9b7191d3_4198&search_date=05102026&expected_price_uuid=01a10d99-50d0-8030-2744-33e1797addbb&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ehWBMQK6YQF7wlm0XHW3qA&expected_price_source=share&expected_price_currency=pln&expected_price=193&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-MXP-2027-01-17-2027-01-23",
@@ -5553,7 +5501,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2011SOF26111?t=FR17951610001795171800000120WMISOF17957286001795731900000115SOFWMI_88de300d363e54f4aee2ade01df25afb_4250&search_date=07102026&expected_price_uuid=01a11662-1bd7-8030-615e-aee47666d703&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=IF4mxiG3aNzCBc6r_Untcw&expected_price_source=share&expected_price_currency=pln&expected_price=195&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WAW-BUD-2026-11-03-2026-11-04",
@@ -5683,7 +5631,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2110VCE28101?t=FR17925660001792572900000115WMITSF17931681001793175300000120VCEWAW_47135ba291059cd36be1ca27bbc3c27f_4257&search_date=10102026&expected_price_uuid=01a124ba-efb9-8030-29f9-70aa0479fe21&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=E0V9oElhNgwERhPGZXau7w&expected_price_source=share&expected_price_currency=pln&expected_price=196&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-RMO-2026-10-21-2026-10-30",
@@ -5865,7 +5813,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2701MIL02021?t=W618010281001801035900000130WAWBGY18015564001801563600000120BGYWAW_06433d3ea623e1a189ea251b632b9daa_4235&search_date=09102026&expected_price_uuid=01a120ab-1b7e-8030-afe1-2045e23b5473&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3Qqm7bcV4yAa2rJdVBmnhQ&expected_price_source=share&expected_price_currency=pln&expected_price=196&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-VCE-2027-01-25-2027-01-29",
@@ -6177,7 +6125,7 @@
       "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2027-01-13&dateIn=2027-01-20&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=BRI&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2027-01-13&tpEndDate=2027-01-20&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=BRI",
       "record_low": false,
-      "median_price": 226.37
+      "median_price": 229.19
     },
     {
       "id": "WMI-MXP-2026-10-17-2026-10-27",
@@ -6437,7 +6385,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0811VCE09111?t=FR17941359001794142800000115WMITSF17942049001794212100000120VCEWAW_cb98e4795fa260f402ebf34ac4c81660_4384&search_date=07102026&expected_price_uuid=01a116b9-32bd-8030-691c-7e3ca73016d5&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=RpQ7iA_cND6-AMOtzP8aKA&expected_price_source=share&expected_price_currency=pln&expected_price=201&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-NYO-2026-12-03-2026-12-05",
@@ -6463,7 +6411,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0312STO05121?t=W617962764001796282700000105WAWNYO17965041001796510100000100ARNWMI_d7c359718900ccc04f54fce32b0ce30a_4355&search_date=09102026&expected_price_uuid=01a12126-5aba-8030-24b6-b8eb38b29872&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=It-0aEB98q2vaZ6wZsUebw&expected_price_source=share&expected_price_currency=pln&expected_price=201&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WMI-ATH-2026-11-16-2026-11-28",
@@ -6723,7 +6671,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0711SOF12111?t=FR17940330001794043800000120WMISOF17945190001794522300000115SOFWMI_353c5aab864f7db0aa465e201105cce5_4461&search_date=07102026&expected_price_uuid=01a11651-d231-8030-26d9-f4f6c14f0c8c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=5m7zwx2yH0yi6JU5rEaXWw&expected_price_source=share&expected_price_currency=pln&expected_price=204&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-CPH-2026-11-07-2026-11-08",
@@ -6853,7 +6801,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2212STO25121?t=W617979177001797924000000105WAWNYO17981856001798191000000090NYOWAW_0dfc580cead43e6fbeb8723109d5bc48_4458&search_date=10102026&expected_price_uuid=01a12505-9c73-8031-618d-e137a1cba474&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Neb9JM-7wQ9NKyKpKNL4CQ&expected_price_source=share&expected_price_currency=pln&expected_price=205&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WMI-BUD-2026-10-18-2026-10-20",
@@ -6986,32 +6934,6 @@
       "median_price": 207.0
     },
     {
-      "id": "WAW-TRF-2026-10-24-2026-10-26",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "TRF",
-      "dest_city": "Oslo",
-      "dest_country": "Norwegia",
-      "date_out": "2026-10-24",
-      "time_out": "12:35",
-      "date_in": "2026-10-26",
-      "time_in": "09:40",
-      "nights": 2,
-      "price": 208.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 5,
-      "weekday_in": 0,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2410OSL26101?t=W617928453001792852200000115WAWTRF17930076001793014200000110TRFWAW_c09290498baa90cf2ed433fe076f9ec1_4495&search_date=09102026&expected_price_uuid=01a12154-e3f5-8031-2db3-510c18f2d9e6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=k5-o6wocKnrtHLmQdcW-yQ&expected_price_source=share&expected_price_currency=pln&expected_price=208&marker=787990",
-      "record_low": false,
-      "median_price": 202.0
-    },
-    {
       "id": "WAW-CTA-2026-10-25-2026-10-29",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -7087,7 +7009,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0901MIL16011?t=W617995167001799524500000130WAWBGY18000792001800086100000115BGYWMI_08bfee539635e2e431dd1abd6b97eb8b_4514&search_date=10102026&expected_price_uuid=01a125f5-7d43-8031-6a07-3fb5a20a5187&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=DreOHJ4Mhc1BgeTtpSYYZA&expected_price_source=share&expected_price_currency=pln&expected_price=208&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-BGY-2027-01-16-2027-01-23",
@@ -7113,7 +7035,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1601MIL23011?t=W618001215001800129300000130WAWBGY18006924001800699600000120BGYWAW_0fab5eb70e770f2ca2a8fd2ac6ac3666_4553&search_date=08102026&expected_price_uuid=01a11b10-7c02-8030-e2e0-1836a067c95f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Tl2av2cFxFYQ9xA7ZW0XiA&expected_price_source=share&expected_price_currency=pln&expected_price=208&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-BUD-2026-11-03-2026-11-05",
@@ -7191,7 +7113,7 @@
       "note": "cena bez bagażu rejestrowanego",
       "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2027-01-08&dateIn=2027-01-18&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WAW&destinationIata=AGP&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2027-01-08&tpEndDate=2027-01-18&tpDiscount=0&tpPromoCode=&tpOriginIata=WAW&tpDestinationIata=AGP",
       "record_low": true,
-      "median_price": 275.0
+      "median_price": 298.0
     },
     {
       "id": "WAW-VCE-2026-11-09-2026-11-16",
@@ -7607,7 +7529,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0611VCE13111?t=FR17939736001793980500000115WMITSF17945505001794557100000110VCEWAW_f1427dc898654bbeadd87201b64e6628_4702&search_date=07102026&expected_price_uuid=01a11847-4a52-8030-2eea-d342a41a464a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-YcNEm7QHitSfuPTc-PPnQ&expected_price_source=share&expected_price_currency=pln&expected_price=215&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-BGY-2026-12-04-2026-12-05",
@@ -7945,7 +7867,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1501SOF18011?t=FR17999994001800010200000120WMISOF18002979001800301200000115SOFWMI_c7d55755d233c9e11bf9f47a4e15f2b1_4769&search_date=05102026&expected_price_uuid=01a10c45-e47e-8030-acc6-60ba95df6d56&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-8Pc3pbUNIyVscGN6114HQ&expected_price_source=share&expected_price_currency=pln&expected_price=219&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-RMO-2026-11-26-2026-11-29",
@@ -8257,7 +8179,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0511MIL06111?t=W617938569001793864700000130WAWBGY17939484001793956200000130MXPWAW_c0ce9dad2b14653395a486012b5650ce_4824&search_date=09102026&expected_price_uuid=01a1229e-f0e0-8030-a48d-34a9e741376f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Pj805l-TLvr8P4M14pEXnQ&expected_price_source=share&expected_price_currency=pln&expected_price=222&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-CIA-2027-01-10-2027-01-17",
@@ -8310,6 +8232,32 @@
       "link": "https://www.aviasales.com/search/WAW2210LON30101?t=FR17926506001792655700000145WMISTN17933919001793403600000135STNWMI_7aa55589070ac9950e6a1b60f48973be_4874&search_date=07102026&expected_price_uuid=01a1171a-75f7-8030-66e8-b2687cf29c73&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Y-k9bxyESonLjkEEGXOGGg&expected_price_source=share&expected_price_currency=pln&expected_price=223&marker=787990",
       "record_low": false,
       "median_price": 230.0
+    },
+    {
+      "id": "WAW-NYO-2026-10-18-2026-10-19",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "NYO",
+      "dest_city": "Sztokholm",
+      "dest_country": "Szwecja",
+      "date_out": "2026-10-18",
+      "time_out": "05:35",
+      "date_in": "2026-10-19",
+      "time_in": "20:45",
+      "nights": 1,
+      "price": 223.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 6,
+      "weekday_in": 0,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1810STO19101?t=W617923017001792307700000100WAWNYO17924427001792448700000100ARNWMI_8c05eb19796e87d3c162d8592fb97ed8_4849&search_date=10102026&expected_price_uuid=01a127b2-e0d0-8030-adae-e92d404fdae3&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gOZ_YyDEtj0l9PacmvxKDA&expected_price_source=share&expected_price_currency=pln&expected_price=223&marker=787990",
+      "record_low": false,
+      "median_price": 182.0
     },
     {
       "id": "WMI-BGY-2026-10-16-2026-10-20",
@@ -8702,32 +8650,6 @@
       "median_price": 230.0
     },
     {
-      "id": "WMI-MXP-2026-12-28-2027-01-02",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "MXP",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-12-28",
-      "time_out": "06:20",
-      "date_in": "2027-01-02",
-      "time_in": "06:00",
-      "nights": 5,
-      "price": 229.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 0,
-      "weekday_in": 5,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2812MIL02011?t=FR17984388001798446600000130WMIMXP17988696001798876500000115BGYWMI_022d675e59ccf7a39c9e230251833e08_4917&search_date=03102026&expected_price_uuid=01a103e2-927a-8030-e3cf-c6fa809a7925&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=BrKPoGF-9415azD9fIAUuw&expected_price_source=share&expected_price_currency=pln&expected_price=229&marker=787990",
-      "record_low": false,
-      "median_price": 167.0
-    },
-    {
       "id": "WMI-RMO-2026-10-29-2026-11-06",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -8778,32 +8700,6 @@
       "link": "https://www.aviasales.com/search/WAW1911LON23111?t=FR17950929001795098300000150WMISTN17954586001795470300000135STNWMI_97208e8f0694a60e3f30b3e421c8d8cd_5015&search_date=08102026&expected_price_uuid=01a11a51-f8ea-8030-e54e-4f4a683f9687&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=a4XOfFSPFcfIWh6IdBpFAA&expected_price_source=share&expected_price_currency=pln&expected_price=230&marker=787990",
       "record_low": false,
       "median_price": 230.0
-    },
-    {
-      "id": "WMI-MAD-2026-12-05-2026-12-12",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "MAD",
-      "dest_city": "Madryt",
-      "dest_country": "Hiszpania",
-      "date_out": "2026-12-05",
-      "time_out": "17:25",
-      "date_in": "2026-12-12",
-      "time_in": "21:45",
-      "nights": 7,
-      "price": 230.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 5,
-      "weekday_in": 5,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW0512MAD12121?t=FR17964915001796505000000225WMIMAD17971119001797124500000210MADWMI_8536796fd88dc3d864bbc60a1fa86bed_4935&search_date=03102026&expected_price_uuid=01a103dd-d63a-8040-6928-d8a662b9dbbd&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=cezLQJ6e6aOKZ-KwayGuog&expected_price_source=share&expected_price_currency=pln&expected_price=230&marker=787990",
-      "record_low": true,
-      "median_price": 295.0
     },
     {
       "id": "WAW-FCO-2027-01-19-2027-01-23",
@@ -9037,7 +8933,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1301BRI17011?t=FR17998335001799841600000135WAWBRI18002004001800208500000135BRIWAW_2b6526810bf43a98bd6de84442b5fa35_5055&search_date=05102026&expected_price_uuid=01a10c63-dec4-8030-abd7-febd72b86c45&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=CrPZ9wUZU9qqV5u1DDpwcg&expected_price_source=share&expected_price_currency=pln&expected_price=232&marker=787990",
       "record_low": false,
-      "median_price": 226.37
+      "median_price": 229.19
     },
     {
       "id": "WMI-BGY-2026-10-16-2026-10-21",
@@ -9115,7 +9011,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2812STO05011?t=W617984364001798442700000105WAWNYO17991378001799143200000090NYOWAW_d42aeeb7bc638702200d3572b3c28bac_5133&search_date=06102026&expected_price_uuid=01a11198-83e0-8030-edaa-c16cef8b0fad&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fG9YN4NYMA84ilcdWPUCLw&expected_price_source=share&expected_price_currency=pln&expected_price=233&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-FCO-2027-01-09-2027-01-12",
@@ -9167,7 +9063,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1410VCE21101?t=FR17919612001791968100000115WMITSF17925756001792582200000110TSFWMI_48db28e77644f24fe31731f448fe91c8_5094&search_date=10102026&expected_price_uuid=01a1278a-ba8e-8030-6e10-4e74b31d3e36&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=uVetFNdS20nPvIVI5inB_Q&expected_price_source=share&expected_price_currency=pln&expected_price=234&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-STN-2026-11-14-2026-11-21",
@@ -9583,7 +9479,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2412DTM02011?t=W617980920001798098900000115WAWDTM17988813001798887600000105DTMWAW_365563de57158a92c86bfe009ef895fd_5237&search_date=06102026&expected_price_uuid=01a10f06-a337-8030-2e68-4652eab7ec8b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=zw3vvuN3ow88HxWkFB0QUg&expected_price_source=share&expected_price_currency=pln&expected_price=240&marker=787990",
       "record_low": false,
-      "median_price": 278.5
+      "median_price": 254.0
     },
     {
       "id": "WMI-BCN-2026-12-13-2026-12-14",
@@ -9635,7 +9531,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2712STO05011?t=W617983500001798356300000105WAWNYO17991378001799143200000090NYOWAW_02fc04cc98d1f25a4d6cb7fb3d90095c_5308&search_date=06102026&expected_price_uuid=01a11193-3848-8030-ea5b-f9cbbab38b0b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=dvnpsZAMwr0ELQdFmqmNLw&expected_price_source=share&expected_price_currency=pln&expected_price=241&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-BUD-2026-12-25-2026-12-27",
@@ -9687,7 +9583,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0401MIL10011?t=W617990409001799048700000130WAWBGY17995644001799572200000130MXPWAW_fa657175216ccdcdaa57ab1aff8a6e71_5246&search_date=10102026&expected_price_uuid=01a125ee-f44a-8030-e4a7-cfaa7200b29d&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=SvIMDjXAzaiRUSEo1da4EA&expected_price_source=share&expected_price_currency=pln&expected_price=241&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-BGY-2027-01-04-2027-01-11",
@@ -9713,7 +9609,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0401MIL11011?t=W617990409001799048700000130WAWBGY17996508001799658600000130MXPWAW_06702bc34d92ccbabc420d85906cd3cb_5246&search_date=10102026&expected_price_uuid=01a125fe-75c1-8030-ed7c-a154ca0d8281&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=I4vtqvNiiBS5gVGHdJBNlQ&expected_price_source=share&expected_price_currency=pln&expected_price=241&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-FCO-2027-01-23-2027-01-30",
@@ -9794,32 +9690,6 @@
       "median_price": 249.0
     },
     {
-      "id": "WAW-BTS-2026-10-11-2026-10-13",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BTS",
-      "dest_city": "Bratysława",
-      "dest_country": "Słowacja",
-      "date_out": "2026-10-11",
-      "time_out": "11:35",
-      "date_in": "2026-10-13",
-      "time_in": "08:20",
-      "nights": 2,
-      "price": 243.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 1,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110BTS13101?t=W617917185001791723000000075WAWBTS17918796001791883800000070BTSWAW_7ccab5c884ce391bd8576b7758f01a56_5314&search_date=08102026&expected_price_uuid=01a11bd9-60fa-8030-29cb-64bfd45ba44b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=pXhkxtQ4zXtdAl290aJ9iQ&expected_price_source=share&expected_price_currency=pln&expected_price=243&marker=787990",
-      "record_low": false,
-      "median_price": 243.0
-    },
-    {
       "id": "WMI-RMO-2026-11-19-2026-11-26",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -9870,32 +9740,6 @@
       "link": "https://www.aviasales.com/search/WAW2511LYS27111?t=W617955858001795594800000150WAWLYS17957712001795779600000140LYSWAW_ef90b3f2bf56e55511e50c14f92269c3_5390&search_date=06102026&expected_price_uuid=01a1108b-7b44-8030-e5b7-be6e3c7a2ba0&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=dP-7kfpn3NZa5V-n6wA1OA&expected_price_source=share&expected_price_currency=pln&expected_price=244&marker=787990",
       "record_low": false,
       "median_price": 283.0
-    },
-    {
-      "id": "WAW-BUD-2026-12-08-2026-12-10",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BUD",
-      "dest_city": "Budapeszt",
-      "dest_country": "Węgry",
-      "date_out": "2026-12-08",
-      "time_out": "08:10",
-      "date_in": "2026-12-10",
-      "time_in": "06:20",
-      "nights": 2,
-      "price": 244.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 3,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW0812BUD10121?t=W617967174001796722200000080WAWBUD17968836001796888100000075BUDWAW_d56d89ada8834ccc05ae10fc9ce3c9f4_5240&search_date=03102026&expected_price_uuid=01a10399-0e57-8030-639b-b62735abce25&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=l861ZhCLMzLjCRWrXvelvQ&expected_price_source=share&expected_price_currency=pln&expected_price=244&marker=787990",
-      "record_low": false,
-      "median_price": 207.0
     },
     {
       "id": "WMI-MLA-2026-11-18-2026-11-21",
@@ -10051,7 +9895,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1212MIL20121?t=W617970975001797105300000130WAWBGY17977500001797757800000130MXPWAW_0064d673e16602563b0b3e0537bd1ed2_5343&search_date=10102026&expected_price_uuid=01a12561-b9a4-8031-2f82-6a3131f32f97&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=g-DSlSYnZ-wX3hHyGtdtaQ&expected_price_source=share&expected_price_currency=pln&expected_price=246&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-RMO-2026-12-26-2027-01-05",
@@ -10366,32 +10210,6 @@
       "median_price": 250.0
     },
     {
-      "id": "WMI-BLQ-2026-10-13-2026-10-20",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BLQ",
-      "dest_city": "Bolonia",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-13",
-      "time_out": "17:15",
-      "date_in": "2026-10-20",
-      "time_in": "20:00",
-      "nights": 7,
-      "price": 251.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 1,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1310BLQ20101?t=FR17919117001791919200000125WMIBLQ17925264001792533600000120BLQWMI_3c660c2617ea726c20e5922a4a2d6e02_5491&search_date=07102026&expected_price_uuid=01a11858-226d-8030-e22b-946a66b2d8fa&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=sJESYSDIXh2J9JSADJYr5Q&expected_price_source=share&expected_price_currency=pln&expected_price=251&marker=787990",
-      "record_low": false,
-      "median_price": 148.0
-    },
-    {
       "id": "WAW-FCO-2026-11-14-2026-11-19",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -10623,7 +10441,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2012VCE23121?t=FR17977647001797771600000115WMITSF17980065001798013700000120VCEWAW_094c1b6ccc3f0e69bd1252c0d9e6a018_5550&search_date=08102026&expected_price_uuid=01a11bd9-5d52-8040-6cab-a9d9f7778799&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=HC456dSMJuLBGh9CgwjK6g&expected_price_source=share&expected_price_currency=pln&expected_price=254&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-DTM-2027-01-27-2027-02-05",
@@ -10649,7 +10467,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2701DTM05021?t=W618010284001801035300000115WAWDTM18018414001801847700000105DTMWAW_c14640f13fad2ac4ca28a510877ba010_5527&search_date=08102026&expected_price_uuid=01a11cab-5eb9-8040-23db-f9470cdbf57e&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=1zseVqiLd576nQm4oknPIQ&expected_price_source=share&expected_price_currency=pln&expected_price=254&marker=787990",
       "record_low": false,
-      "median_price": 278.5
+      "median_price": 254.0
     },
     {
       "id": "WAW-LYS-2026-10-26-2026-11-04",
@@ -10779,7 +10597,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2712MIL07011?t=W617983497001798357500000130WAWBGY17993052001799313000000130MXPWAW_be66bef86fe9042a696a70dda6c6773a_5495&search_date=04102026&expected_price_uuid=01a105fc-9e38-8050-2ec6-71bd3c8f3569&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=M1hAgoGMc9ux6bVfAc_BWw&expected_price_source=share&expected_price_currency=pln&expected_price=256&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-FCO-2026-11-21-2026-11-25",
@@ -10938,30 +10756,30 @@
       "median_price": 249.0
     },
     {
-      "id": "WMI-CPH-2026-10-23-2026-10-25",
+      "id": "WMI-ARN-2026-10-17-2026-10-19",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "CPH",
-      "dest_city": "Kopenhaga",
-      "dest_country": "Dania",
-      "date_out": "2026-10-23",
-      "time_out": "23:50",
-      "date_in": "2026-10-25",
-      "time_in": "06:05",
+      "dest": "ARN",
+      "dest_city": "Sztokholm",
+      "dest_country": "Szwecja",
+      "date_out": "2026-10-17",
+      "time_out": "21:05",
+      "date_in": "2026-10-19",
+      "time_in": "20:45",
       "nights": 2,
-      "price": 262.0,
+      "price": 261.0,
       "price_out": null,
       "price_in": null,
       "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 6,
+      "weekday_out": 5,
+      "weekday_in": 0,
       "airline_code": "FR",
       "airline": "Ryanair",
       "source": "aviasales",
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2310CPH25101?t=FR17927994001792804500000085WMICPH17929083001792913100000080CPHWMI_9539e5998009e570bc3cbd3d6fcb7d41_5704&search_date=05102026&expected_price_uuid=01a10c01-d3e7-8030-23e1-7d4328e441bd&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3huF8ZAt80KCAL4JGw5JRg&expected_price_source=share&expected_price_currency=pln&expected_price=262&marker=787990",
+      "link": "https://www.aviasales.com/search/WAW1710STO19101?t=FR17922711001792277100000100WMIARN17924427001792448700000100ARNWMI_532ba13926f3484df917fa64b64cbdc0_5675&search_date=10102026&expected_price_uuid=01a127b2-d9be-8031-2f87-5fe0c209fc7a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=a9CaV9h6axIj2ZFv1LVbUA&expected_price_source=share&expected_price_currency=pln&expected_price=261&marker=787990",
       "record_low": false,
-      "median_price": 210.0
+      "median_price": 157.0
     },
     {
       "id": "WMI-BGY-2026-10-15-2026-10-24",
@@ -11091,7 +10909,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2412MIL31121?t=W617981343001798142100000130WAWBGY17987490001798756200000120BGYWAW_39c22b86a26cbb1c8d99cc41919fd12a_5717&search_date=09102026&expected_price_uuid=01a1221d-3ed3-8031-67b4-a114011aaa5e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=PRcEXYFrfEPP7j2BXJlYdQ&expected_price_source=share&expected_price_currency=pln&expected_price=263&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WMI-BCN-2026-12-12-2026-12-14",
@@ -11250,6 +11068,32 @@
       "median_price": 299.0
     },
     {
+      "id": "WAW-TRF-2026-10-24-2026-10-26",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "TRF",
+      "dest_city": "Oslo",
+      "dest_country": "Norwegia",
+      "date_out": "2026-10-24",
+      "time_out": "12:35",
+      "date_in": "2026-10-26",
+      "time_in": "09:40",
+      "nights": 2,
+      "price": 267.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 5,
+      "weekday_in": 0,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW2410OSL26101?t=W617928453001792852200000115WAWTRF17930076001793014200000110TRFWAW_c09290498baa90cf2ed433fe076f9ec1_5805&search_date=10102026&expected_price_uuid=01a127eb-6bd5-8030-a443-0a4d71de7567&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=k5-o6wocKnrtHLmQdcW-yQ&expected_price_source=share&expected_price_currency=pln&expected_price=267&marker=787990",
+      "record_low": false,
+      "median_price": 202.0
+    },
+    {
       "id": "WMI-TSF-2026-10-23-2026-10-30",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -11273,7 +11117,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2310VCE30101?t=FR17927610001792767900000115WMITSF17933403001793347500000120VCEWAW_670229fc5d43d150c22a93ff36e1b451_5960&search_date=06102026&expected_price_uuid=01a110a1-def3-8030-ae02-71d22fa87824&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fVQnheaBoRZpxFsrSQM71w&expected_price_source=share&expected_price_currency=pln&expected_price=269&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-BSL-2026-12-07-2026-12-11",
@@ -11432,30 +11276,30 @@
       "median_price": 207.0
     },
     {
-      "id": "WAW-WRO-2027-01-08-2027-01-10",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "WRO",
-      "dest_city": "Wrocław",
-      "dest_country": "Polska",
-      "date_out": "2027-01-08",
-      "time_out": "13:15",
-      "date_in": "2027-01-10",
-      "time_in": "21:30",
+      "id": "WMI-STN-2026-12-08-2026-12-10",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "STN",
+      "dest_city": "Londyn",
+      "dest_country": "Wielka Brytania",
+      "date_out": "2026-12-08",
+      "time_out": "13:05",
+      "date_in": "2026-12-10",
+      "time_in": "16:30",
       "nights": 2,
       "price": 271.0,
       "price_out": null,
       "price_in": null,
       "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 6,
-      "airline_code": "LO",
-      "airline": "LOT",
+      "weekday_out": 1,
+      "weekday_in": 3,
+      "airline_code": "FR",
+      "airline": "Ryanair",
       "source": "aviasales",
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW0801WRO10011?t=LO17994141001799417400000055WAWWRO17996166001799619600000050WROWAW_550920b20ddcac1be07ec6cafca9e7bf_5814&search_date=03102026&expected_price_uuid=01a1034a-3585-8030-efa5-899c8fe47400&static_fare_key=TY%7CP1%7CH1%7CL0%7CCH1%7CR0%7CTBC0&itinerary_key=qXCk7SS5wNaJkfo6JdcH7w&expected_price_source=share&expected_price_currency=pln&expected_price=271&marker=787990",
+      "link": "https://www.aviasales.com/search/WAW0812LON10121?t=FR17967351001796740500000150WMISTN17969202001796932500000145LTNWAW_ff17a1b9cda44632e9e0502052f2d4a2_5902&search_date=10102026&expected_price_uuid=01a1232f-421e-8031-605c-c818d8f7b813&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=jMCt1hd1C3YoMnL2cfY-BQ&expected_price_source=share&expected_price_currency=pln&expected_price=271&marker=787990",
       "record_low": false,
-      "median_price": 283.5
+      "median_price": 230.0
     },
     {
       "id": "WAW-NAP-2027-01-13-2027-01-18",
@@ -11585,7 +11429,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1112AGP17121?t=FR17970207001797035100000240WAWAGP17974899001797503700000230AGPWAW_c7bfed1d26c6e93826e23a10b7c22077_5910&search_date=05102026&expected_price_uuid=01a10a45-3b89-8030-2d02-75ff22c5b0a6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-Pd4fWuQ2IJ23ix2BEj5bQ&expected_price_source=share&expected_price_currency=pln&expected_price=275&marker=787990",
       "record_low": false,
-      "median_price": 275.0
+      "median_price": 298.0
     },
     {
       "id": "WMI-BRI-2026-10-24-2026-10-28",
@@ -11716,6 +11560,32 @@
       "link": "https://www.aviasales.com/search/WAW2510RMO31101?t=W617929485001792959000000115WMIRMO17934864001793489700000115RMOWMI_80691a5343d5adf82217b77f5545d5c8_6052&search_date=07102026&expected_price_uuid=01a117e2-a574-8030-a0b0-209fb31682a0&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=wDP9byoesLV-GwOJ1bV08Q&expected_price_source=share&expected_price_currency=pln&expected_price=277&marker=787990",
       "record_low": false,
       "median_price": 230.0
+    },
+    {
+      "id": "WAW-TRF-2026-10-23-2026-10-25",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "TRF",
+      "dest_city": "Oslo",
+      "dest_country": "Norwegia",
+      "date_out": "2026-10-23",
+      "time_out": "12:40",
+      "date_in": "2026-10-25",
+      "time_in": "09:40",
+      "nights": 2,
+      "price": 278.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 4,
+      "weekday_in": 6,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW2310OSL25101?t=W617927592001792765800000110WAWTRF17929212001792927800000110TRFWAW_8d4bb18d5b8bc3e1fdcf8ddb71229128_6047&search_date=10102026&expected_price_uuid=01a127b8-5821-8030-ec40-a235b51dcb4c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=dxvqG5yA0pvK2MyQcimORg&expected_price_source=share&expected_price_currency=pln&expected_price=278&marker=787990",
+      "record_low": false,
+      "median_price": 202.0
     },
     {
       "id": "WAW-ALC-2026-11-17-2026-11-30",
@@ -12001,7 +11871,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0611VCE11111?t=FR17939736001793980500000115WMITSF17943777001794384900000120VCEWAW_46c08c04e3804684487db38c2fe62634_6108&search_date=09102026&expected_price_uuid=01a1209b-fa3d-8030-a945-5d8aaf5f3fd1&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ZL0mQVtpFYKg1vzTMywC9g&expected_price_source=share&expected_price_currency=pln&expected_price=282&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WAW-LYS-2026-11-04-2026-11-13",
@@ -12339,7 +12209,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2912MIL09011?t=W617985663001798574100000130WAWBGY17994780001799485800000130MXPWAW_67e2483fba58e606c6561a80a365749e_6208&search_date=04102026&expected_price_uuid=01a105fc-9e28-8050-2d21-e1f5204d92c8&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=do0rs8evzsiGa62kNDiY3Q&expected_price_source=share&expected_price_currency=pln&expected_price=289&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-LCA-2027-01-14-2027-01-19",
@@ -12703,7 +12573,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW1311BRI18111?t=FR17945595001794567600000135WAWBRI17950353001795043400000135BRIWAW_a0fdd266e99248826b9ec52eb27dc071_6289&search_date=04102026&expected_price_uuid=01a1068b-46da-8030-25e1-33a84809e7a6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=66z9s0HY5L6c5j8uwoUikA&expected_price_source=share&expected_price_currency=pln&expected_price=294&marker=787990",
       "record_low": false,
-      "median_price": 226.37
+      "median_price": 229.19
     },
     {
       "id": "WMI-BGY-2026-11-05-2026-11-10",
@@ -12730,6 +12600,32 @@
       "link": "https://www.aviasales.com/search/WAW0511MIL10111?t=FR17938836001793891100000125WMIBGY17943087001794315600000115BGYWMI_d5e9036debfa2c459c28ed558cb9e9ec_6436&search_date=08102026&expected_price_uuid=01a11b4d-4ec6-8030-2eb2-7458dcb30a89&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=6u44YlBlT4_9k12YT5Rc6A&expected_price_source=share&expected_price_currency=pln&expected_price=294&marker=787990",
       "record_low": false,
       "median_price": 173.0
+    },
+    {
+      "id": "WAW-BUD-2026-12-29-2027-01-02",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "BUD",
+      "dest_city": "Budapeszt",
+      "dest_country": "Węgry",
+      "date_out": "2026-12-29",
+      "time_out": "08:10",
+      "date_in": "2027-01-02",
+      "time_in": "06:20",
+      "nights": 4,
+      "price": 294.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 1,
+      "weekday_in": 5,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW2912BUD02011?t=W617985318001798536600000080WAWBUD17988708001798875300000075BUDWAW_ffabfab53c16f3d0f5d3222ae71729c8_6439&search_date=08102026&expected_price_uuid=01a11b4e-067d-8030-ea2f-af6520131629&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=RsGibmr2uY72O3NCEzGvNQ&expected_price_source=share&expected_price_currency=pln&expected_price=294&marker=787990",
+      "record_low": false,
+      "median_price": 207.0
     },
     {
       "id": "WMI-MAD-2026-11-18-2026-11-22",
@@ -13249,7 +13145,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW3112MIL02011?t=W617987391001798746900000130WAWBGY17988780001798885200000120BGYWAW_4ed30e33f4923dc2f650b605ca67b694_6679&search_date=10102026&expected_price_uuid=01a12584-edd4-8031-61bc-43fad34644d8&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=pnYQBPKo21qnPF2Fry7iWA&expected_price_source=share&expected_price_currency=pln&expected_price=307&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-VCE-2026-10-18-2026-10-21",
@@ -13382,6 +13278,32 @@
       "median_price": 171.0
     },
     {
+      "id": "WAW-BUD-2026-12-28-2027-01-02",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "BUD",
+      "dest_city": "Budapeszt",
+      "dest_country": "Węgry",
+      "date_out": "2026-12-28",
+      "time_out": "08:10",
+      "date_in": "2027-01-02",
+      "time_in": "06:20",
+      "nights": 5,
+      "price": 308.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 0,
+      "weekday_in": 5,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW2812BUD02011?t=W617984454001798450200000080WAWBUD17988708001798875300000075BUDWAW_663897a4395690977415619758226c23_6757&search_date=08102026&expected_price_uuid=01a11ad9-b6f4-8030-2dac-49dc0e3afa94&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=JiYxSfY9vKQ944GoLJyxHA&expected_price_source=share&expected_price_currency=pln&expected_price=308&marker=787990",
+      "record_low": false,
+      "median_price": 207.0
+    },
+    {
       "id": "WMI-DUB-2026-11-04-2026-11-07",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -13486,32 +13408,6 @@
       "median_price": 249.0
     },
     {
-      "id": "WMI-BUD-2026-10-11-2026-10-15",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BUD",
-      "dest_city": "Budapeszt",
-      "dest_country": "Węgry",
-      "date_out": "2026-10-11",
-      "time_out": "11:25",
-      "date_in": "2026-10-15",
-      "time_in": "06:20",
-      "nights": 4,
-      "price": 311.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 3,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110BUD15101?t=FR17917179001791722700000080WMIBUD17920452001792049700000075BUDWAW_ad61638f2b73d8b0189f7d5de945b983_6743&search_date=07102026&expected_price_uuid=01a114f5-68b0-8030-e321-dce6c8f8cb3c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=C0Vk6FwalPwRJjCO1FjeCw&expected_price_source=share&expected_price_currency=pln&expected_price=311&marker=787990",
-      "record_low": false,
-      "median_price": 203.0
-    },
-    {
       "id": "WAW-NYO-2026-12-29-2027-01-05",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -13535,7 +13431,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2912STO05011?t=W617985225001798528800000105WAWNYO17991378001799143200000090NYOWAW_3ce5406a1b8c0ef293e1f42446be38df_6848&search_date=06102026&expected_price_uuid=01a11198-3ec0-8030-eea7-11b74b0f519b&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=kPBUgKXEpXcc73s0iY8acQ&expected_price_source=share&expected_price_currency=pln&expected_price=311&marker=787990",
       "record_low": false,
-      "median_price": 191.5
+      "median_price": 182.0
     },
     {
       "id": "WAW-BTS-2026-12-27-2026-12-31",
@@ -13562,6 +13458,32 @@
       "link": "https://www.aviasales.com/search/WAW2712BTS31121?t=FR17983764001798380900000075WAWBTS17987040001798709100000085BTSWMI_2ffedab2af0013ebfca3685c3ff75a7b_6770&search_date=10102026&expected_price_uuid=01a12432-9b70-8031-2a3d-deab88b504cc&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=WthvB01m5Jwhaecw1q8lfA&expected_price_source=share&expected_price_currency=pln&expected_price=311&marker=787990",
       "record_low": false,
       "median_price": 243.0
+    },
+    {
+      "id": "WMI-BCN-2027-01-08-2027-01-10",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "BCN",
+      "dest_city": "Barcelona",
+      "dest_country": "Hiszpania",
+      "date_out": "2027-01-08",
+      "time_out": "11:30",
+      "date_in": "2027-01-10",
+      "time_in": "17:35",
+      "nights": 2,
+      "price": 311.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 4,
+      "weekday_in": 6,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW0801BCN10011?t=W617994078001799419200000190WMIBCN17996025001799613300000180BCNWMI_aa4ce8e4bec8f5050a06be05c7ad04c9_6691&search_date=04102026&expected_price_uuid=01a10512-8b98-8040-2a76-d1d4e0463531&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=y3Q-RksOcr3AJlyDLaRavw&expected_price_source=share&expected_price_currency=pln&expected_price=311&marker=787990",
+      "record_low": false,
+      "median_price": 281.0
     },
     {
       "id": "WMI-PMO-2026-10-15-2026-10-28",
@@ -13614,32 +13536,6 @@
       "link": "https://www.aviasales.com/search/WAW2112ROM24121?t=W617978379001797846300000140WMICIA17981016001798110300000145FCOWAW_6dcbdd8ef411d056054c9c86c87fb878_6776&search_date=10102026&expected_price_uuid=01a1271b-c8e0-8030-a342-1555b14b2081&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ujUa0-sTKidpO2PdQrEoYQ&expected_price_source=share&expected_price_currency=pln&expected_price=312&marker=787990",
       "record_low": false,
       "median_price": 232.0
-    },
-    {
-      "id": "WAW-BUD-2027-01-01-2027-01-02",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BUD",
-      "dest_city": "Budapeszt",
-      "dest_country": "Węgry",
-      "date_out": "2027-01-01",
-      "time_out": "08:10",
-      "date_in": "2027-01-02",
-      "time_in": "06:20",
-      "nights": 1,
-      "price": 312.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 5,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW0101BUD02011?t=W617987910001798795800000080WAWBUD17988708001798875300000075BUDWAW_89a2efbfa8e0575e32b0fe70d11c0155_6691&search_date=03102026&expected_price_uuid=01a1041e-0c3d-8040-2a1b-56bb78418c2d&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=JGFqa7kLn40WV0tJhgi3VQ&expected_price_source=share&expected_price_currency=pln&expected_price=312&marker=787990",
-      "record_low": false,
-      "median_price": 207.0
     },
     {
       "id": "WAW-BLQ-2026-10-31-2026-11-06",
@@ -13824,32 +13720,6 @@
       "median_price": 173.0
     },
     {
-      "id": "WAW-FCO-2026-12-22-2027-01-04",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "FCO",
-      "dest_city": "Rzym",
-      "dest_country": "Włochy",
-      "date_out": "2026-12-22",
-      "time_out": "05:35",
-      "date_in": "2027-01-04",
-      "time_in": "08:40",
-      "nights": 13,
-      "price": 318.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 0,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2212ROM04011?t=W617979177001797926400000145WAWFCO17990520001799060700000145FCOWAW_8b9f43e69b5f2aa0798c220f49876095_6825&search_date=03102026&expected_price_uuid=01a103c9-11c3-8030-6e82-ed4a5c3ccc4f&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=qI-cUElqxmZ_MwjbUOFcYA&expected_price_source=share&expected_price_currency=pln&expected_price=318&marker=787990",
-      "record_low": false,
-      "median_price": 249.0
-    },
-    {
       "id": "WMI-BCN-2026-11-02-2026-11-07",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -13978,32 +13848,6 @@
       "link": "https://www.aviasales.com/search/WAW1012BCN20121?t=W617969226001796933700000185WMIBCN17977803001797791700000190BCNWMI_53af79a4dc03ac474371a12bde445383_7009&search_date=06102026&expected_price_uuid=01a10fdf-7535-8030-a186-53ffd01fc433&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=zkSP6WN_InkULxhgb36ppw&expected_price_source=share&expected_price_currency=pln&expected_price=321&marker=787990",
       "record_low": false,
       "median_price": 281.0
-    },
-    {
-      "id": "WMI-BGY-2026-12-29-2027-01-02",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BGY",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-12-29",
-      "time_out": "21:25",
-      "date_in": "2027-01-02",
-      "time_in": "06:00",
-      "nights": 4,
-      "price": 321.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 1,
-      "weekday_in": 5,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2912MIL02011?t=FR17985795001798587000000125WMIBGY17988696001798876500000115BGYWMI_445fd4eaca764533dc7db21757f7bb88_6892&search_date=03102026&expected_price_uuid=01a103e3-5881-8030-e5b9-3bdc26797dac&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=iRoxbIro2zaMY603qOPZgA&expected_price_source=share&expected_price_currency=pln&expected_price=321&marker=787990",
-      "record_low": false,
-      "median_price": 173.0
     },
     {
       "id": "WAW-FCO-2027-01-05-2027-01-08",
@@ -14183,9 +14027,9 @@
       "airline": "Ryanair",
       "source": "aviasales",
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW2612SOF03011?t=FR17982666001798277400000120WMISOF17990169001799020200000115SOFWMI_acb38a253eeab43b5dbbfd713b4940e6_7036&search_date=10102026&expected_price_uuid=01a12628-d7cc-8030-2c42-0a8fbd0ffeff&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gVb1Gj0_Y6i_75aFQqPf3g&expected_price_source=share&expected_price_currency=pln&expected_price=324&marker=787990",
+      "link": "https://www.aviasales.com/search/WAW2612SOF03011?t=FR17982666001798277400000120WMISOF17990169001799020200000115SOFWMI_acb38a253eeab43b5dbbfd713b4940e6_7036&search_date=11102026&expected_price_uuid=01a128d8-1e7a-8030-62e5-2527ac326c07&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=gVb1Gj0_Y6i_75aFQqPf3g&expected_price_source=share&expected_price_currency=pln&expected_price=324&marker=787990",
       "record_low": false,
-      "median_price": 146.0
+      "median_price": 147.0
     },
     {
       "id": "WMI-BCN-2026-12-13-2026-12-18",
@@ -14264,32 +14108,6 @@
       "link": "https://www.aviasales.com/search/WAW2901PMO31011?t=W618012504001801260900000175WMIPMO18014358001801445700000165PMOWMI_9a051fecaa27d46da760bac0c80407e1_7107&search_date=08102026&expected_price_uuid=01a11b2b-98b1-8031-6dc4-0d57d18ae369&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=02gflNqQo-XTCd0BBo8Zuw&expected_price_source=share&expected_price_currency=pln&expected_price=324&marker=787990",
       "record_low": false,
       "median_price": 312.0
-    },
-    {
-      "id": "WMI-MXP-2026-10-17-2026-10-19",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "MXP",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-17",
-      "time_out": "17:40",
-      "date_in": "2026-10-19",
-      "time_in": "07:00",
-      "nights": 2,
-      "price": 325.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 5,
-      "weekday_in": 0,
-      "airline_code": "MW",
-      "airline": "Malta Air (Ryanair)",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1710MIL19101?t=FR17922588001792267200000140WMIMXP17923932001792401000000130MXPWAW_d4d6ef6ad2a523a6e369d5844713185d_7107&search_date=08102026&expected_price_uuid=01a11bdc-8799-8030-628b-7b551ba0a7f8&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=n8aJqdzOx1fHeLLAA4tLMQ&expected_price_source=share&expected_price_currency=pln&expected_price=325&marker=787990",
-      "record_low": false,
-      "median_price": 167.0
     },
     {
       "id": "WMI-BVA-2026-11-26-2026-11-27",
@@ -14445,7 +14263,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2412DTM03011?t=W617980920001798098900000115WAWDTM17990031001799009100000100DTMWAW_37261ae575b5ef17c2f9ebf2168214d5_7187&search_date=05102026&expected_price_uuid=01a10c6e-8ea0-8030-6112-cc5d656ae72e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=zj8Qp5nGUzg6Xd9YNG1vYw&expected_price_source=share&expected_price_currency=pln&expected_price=330&marker=787990",
       "record_low": false,
-      "median_price": 278.5
+      "median_price": 254.0
     },
     {
       "id": "WMI-BGY-2026-11-07-2026-11-10",
@@ -14705,7 +14523,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0201MIL05011?t=W617988681001798875900000130WAWBGY17991324001799140200000130MXPWAW_8f62c2756bb394b2bd4f0dc26e6c31e0_7228&search_date=09102026&expected_price_uuid=01a120db-2065-8030-acd2-568eacad4562&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=XW3vlJemwVo51MsoMuE9ew&expected_price_source=share&expected_price_currency=pln&expected_price=334&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-BUD-2027-01-02-2027-01-04",
@@ -14939,7 +14757,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0201MIL06011?t=W617988681001798875900000130WAWBGY17992188001799226600000130MXPWAW_795149f2af0d11a87e9bbafcbf26139b_7365&search_date=05102026&expected_price_uuid=01a10cc6-f3e4-8030-afaf-f78b4bd3af28&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=fqJk8cHqIktSqTYyoWRqow&expected_price_source=share&expected_price_currency=pln&expected_price=339&marker=787990",
       "record_low": false,
-      "median_price": 169.0
+      "median_price": 171.0
     },
     {
       "id": "WAW-VLC-2027-01-12-2027-01-19",
@@ -15150,32 +14968,6 @@
       "median_price": 295.0
     },
     {
-      "id": "WAW-BGY-2026-10-11-2026-10-16",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BGY",
-      "dest_city": "Mediolan",
-      "dest_country": "Włochy",
-      "date_out": "2026-10-11",
-      "time_out": "06:00",
-      "date_in": "2026-10-16",
-      "time_in": "22:00",
-      "nights": 5,
-      "price": 342.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 4,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110MIL16101?t=W617916984001791705900000125WAWBGY17921880001792195140000119BGYWMI_0291aff6ff6fbac6d37a02d45a9ad22b_7318&search_date=04102026&expected_price_uuid=01a107ee-b4ec-8030-a96a-6c8cb20e66f8&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=Q50u-1tcGRjMUsICC9gSpw&expected_price_source=share&expected_price_currency=pln&expected_price=342&marker=787990",
-      "record_low": false,
-      "median_price": 169.0
-    },
-    {
       "id": "WAW-PFO-2026-12-11-2026-12-24",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -15332,6 +15124,32 @@
       "median_price": 312.0
     },
     {
+      "id": "WAW-BCN-2027-02-09-2027-02-19",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "BCN",
+      "dest_city": "Barcelona",
+      "dest_country": "Hiszpania",
+      "date_out": "2027-02-09",
+      "time_out": "15:05",
+      "date_in": "2027-02-19",
+      "time_in": "15:25",
+      "nights": 10,
+      "price": 345.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 1,
+      "weekday_in": 4,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW0902BCN19021?t=W618021855001802196900000190WAWBCN18030507001803062100000190BCNWMI_0650d1095522169d1a86803a519fb5d6_7489&search_date=09102026&expected_price_uuid=01a121cb-7195-8030-653f-a7a69d9a0808&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=YfzhrAtDlDWC0wtzemxcFQ&expected_price_source=share&expected_price_currency=pln&expected_price=345&marker=787990",
+      "record_low": false,
+      "median_price": 323.0
+    },
+    {
       "id": "WMI-CIA-2027-02-08-2027-02-13",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -15462,6 +15280,32 @@
       "median_price": 249.0
     },
     {
+      "id": "WAW-ALC-2026-12-15-2026-12-28",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "ALC",
+      "dest_city": "Alicante",
+      "dest_country": "Hiszpania",
+      "date_out": "2026-12-15",
+      "time_out": "11:40",
+      "date_in": "2026-12-28",
+      "time_in": "10:40",
+      "nights": 13,
+      "price": 352.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 1,
+      "weekday_in": 0,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1512ALC28121?t=FR17973348001797347400000210WAWALC17984544001798467000000210ALCWAW_c28904d1c3fed07dba02f7895008d940_7644&search_date=11102026&expected_price_uuid=01a1288b-703d-8030-a760-61d28c5bbf95&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=8yxxZOsd0f-4s4F5rDez0A&expected_price_source=share&expected_price_currency=pln&expected_price=352&marker=787990",
+      "record_low": false,
+      "median_price": 295.0
+    },
+    {
       "id": "WMI-TSF-2026-10-21-2026-10-25",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -15485,7 +15329,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2110VCE25101?t=FR17925660001792572900000115WMITSF17929089001792915500000110VCEWAW_522285659b93f0dce40726ea5b6ed17d_7643&search_date=09102026&expected_price_uuid=01a12172-e817-8030-6fef-ee3e330740e2&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=k2gggnyFqb7RhHhhuJhcJA&expected_price_source=share&expected_price_currency=pln&expected_price=353&marker=787990",
       "record_low": false,
-      "median_price": 158.0
+      "median_price": 172.0
     },
     {
       "id": "WMI-STN-2026-10-15-2026-10-20",
@@ -15564,6 +15408,32 @@
       "link": "https://www.aviasales.com/search/WAW2101KUT28011?t=W618005202001800543600000210WAWKUT18011193001801122000000225KUTWAW_99c1cb1ab1710d6b607c79978912b952_7703&search_date=08102026&expected_price_uuid=01a11c72-31fe-8030-a4ea-49d126e07b08&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=-lTSI_RvFWQc_1WJvyZ37A&expected_price_source=share&expected_price_currency=pln&expected_price=354&marker=787990",
       "record_low": false,
       "median_price": 320.5
+    },
+    {
+      "id": "WMI-LIS-2026-12-05-2026-12-12",
+      "origin": "WMI",
+      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
+      "dest": "LIS",
+      "dest_city": "Lizbona",
+      "dest_country": "Portugalia",
+      "date_out": "2026-12-05",
+      "time_out": "15:25",
+      "date_in": "2026-12-12",
+      "time_in": "19:10",
+      "nights": 7,
+      "price": 355.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 5,
+      "weekday_in": 5,
+      "airline_code": "FR",
+      "airline": "Ryanair",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW0512LIS12121?t=FR17964843001796496300000260WMILIS17971026001797120900000245LISWMI_104fa54a32bd97447d2cfef40cd26cf9_7728&search_date=10102026&expected_price_uuid=01a124d1-b250-8030-e13d-88a310c8d80c&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=jzDuxJMVoA_9JdHbWtpYig&expected_price_source=share&expected_price_currency=pln&expected_price=355&marker=787990",
+      "record_low": false,
+      "median_price": 364.0
     },
     {
       "id": "WMI-BCN-2026-11-13-2026-11-17",
@@ -15774,32 +15644,6 @@
       "median_price": 167.0
     },
     {
-      "id": "WAW-BCN-2026-12-12-2026-12-13",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BCN",
-      "dest_city": "Barcelona",
-      "dest_country": "Hiszpania",
-      "date_out": "2026-12-12",
-      "time_out": "15:05",
-      "date_in": "2026-12-13",
-      "time_in": "15:25",
-      "nights": 1,
-      "price": 363.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 5,
-      "weekday_in": 6,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1212BCN13121?t=W617970879001797099300000190WAWBCN17971755001797186900000190BCNWMI_cad91b5c93bf1fc01cd4bd3af5253cfb_7892&search_date=10102026&expected_price_uuid=01a126f9-1e85-8030-27c7-e65479d4c519&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ckJqtWyhjpOzFHZIxxXnPg&expected_price_source=share&expected_price_currency=pln&expected_price=363&marker=787990",
-      "record_low": false,
-      "median_price": 323.0
-    },
-    {
       "id": "WMI-BCN-2027-01-17-2027-01-21",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -15875,7 +15719,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW0501AGP14011?t=FR17991822001799196600000240WAWAGP17999091001799922900000230AGPWAW_7101a36f8eaf69f5fcab6714379af31f_7905&search_date=10102026&expected_price_uuid=01a12779-9101-8031-60e4-6b62a9bc2cf0&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=3AoYNg-0a8jL_43GqYGanQ&expected_price_source=share&expected_price_currency=pln&expected_price=364&marker=787990",
       "record_low": false,
-      "median_price": 275.0
+      "median_price": 298.0
     },
     {
       "id": "WAW-CRL-2026-11-05-2026-11-12",
@@ -15902,6 +15746,32 @@
       "link": "https://www.aviasales.com/search/WAW0511BRU12111?t=W617938587001793866800000135WAWCRL17944737001794480900000120CRLWAW_a301d6660f70ba23d67ab607f5be623f_7928&search_date=05102026&expected_price_uuid=01a10d1d-13ee-8051-2fbb-d260675c25fa&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=tzq4mtS1GsX7LFBxUPcVFA&expected_price_source=share&expected_price_currency=pln&expected_price=365&marker=787990",
       "record_low": false,
       "median_price": 196.0
+    },
+    {
+      "id": "WAW-BCN-2026-12-12-2026-12-13",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "BCN",
+      "dest_city": "Barcelona",
+      "dest_country": "Hiszpania",
+      "date_out": "2026-12-12",
+      "time_out": "15:05",
+      "date_in": "2026-12-13",
+      "time_in": "15:25",
+      "nights": 1,
+      "price": 365.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 5,
+      "weekday_in": 6,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1212BCN13121?t=W617970879001797099300000190WAWBCN17971755001797186900000190BCNWMI_cad91b5c93bf1fc01cd4bd3af5253cfb_7930&search_date=10102026&expected_price_uuid=01a1279d-8d92-8031-6ffe-7700fa317c8a&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=ckJqtWyhjpOzFHZIxxXnPg&expected_price_source=share&expected_price_currency=pln&expected_price=365&marker=787990",
+      "record_low": false,
+      "median_price": 323.0
     },
     {
       "id": "WAW-CRL-2026-11-05-2026-11-13",
@@ -16005,7 +15875,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2401AGP04021?t=FR18007908001800805200000240WAWAGP18017235001801737300000230AGPWAW_d1be11f09a191981c8dfe8485ad14148_8026&search_date=07102026&expected_price_uuid=01a115fc-f564-8030-650c-30175c392819&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=dFH472Z1nIqbm-ZMAh9VTQ&expected_price_source=share&expected_price_currency=pln&expected_price=367&marker=787990",
       "record_low": false,
-      "median_price": 275.0
+      "median_price": 298.0
     },
     {
       "id": "WMI-BVA-2027-02-06-2027-02-11",
@@ -16138,32 +16008,6 @@
       "median_price": 203.0
     },
     {
-      "id": "WAW-BUD-2026-10-11-2026-10-12",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "BUD",
-      "dest_city": "Budapeszt",
-      "dest_country": "Węgry",
-      "date_out": "2026-10-11",
-      "time_out": "22:05",
-      "date_in": "2026-10-12",
-      "time_in": "05:45",
-      "nights": 1,
-      "price": 372.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 0,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110BUD12101?t=W617917563001791761100000080WAWBUD17917839001791788700000080BUDWMI_5871f36b433217b7ca6f82903eca21dd_8077&search_date=10102026&expected_price_uuid=01a12747-5c70-8030-6d0d-128b47475f2e&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=QTsoCbGqzSYaY4xXKIsesA&expected_price_source=share&expected_price_currency=pln&expected_price=372&marker=787990",
-      "record_low": false,
-      "median_price": 207.0
-    },
-    {
       "id": "WAW-MLA-2026-10-26-2026-11-07",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -16242,28 +16086,28 @@
       "median_price": 173.0
     },
     {
-      "id": "WMI-AHO-2026-10-15-2026-10-22",
+      "id": "WMI-AHO-2026-10-18-2026-10-22",
       "origin": "WMI",
       "origin_name": "Warszawa-Modlin",
       "dest": "AHO",
       "dest_city": "Alghero",
       "dest_country": "Włochy",
-      "date_out": "2026-10-15",
-      "time_out": "13:55",
+      "date_out": "2026-10-18",
+      "time_out": "07:05",
       "date_in": "2026-10-22",
       "time_in": "17:05",
-      "nights": 7,
+      "nights": 4,
       "price": 372.98,
       "price_out": 87.0,
       "price_in": 285.98,
       "transfers": 0,
-      "weekday_out": 3,
+      "weekday_out": 6,
       "weekday_in": 3,
       "airline_code": "FR",
       "airline": "Ryanair",
       "source": "ryanair",
       "note": "cena bez bagażu rejestrowanego",
-      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-15&dateIn=2026-10-22&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=AHO&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-15&tpEndDate=2026-10-22&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=AHO",
+      "link": "https://www.ryanair.com/pl/pl/trip/flights/select?adults=1&teens=0&children=0&infants=0&dateOut=2026-10-18&dateIn=2026-10-22&isConnectedFlight=false&discount=0&promoCode=&isReturn=true&originIata=WMI&destinationIata=AHO&tpAdults=1&tpTeens=0&tpChildren=0&tpInfants=0&tpStartDate=2026-10-18&tpEndDate=2026-10-22&tpDiscount=0&tpPromoCode=&tpOriginIata=WMI&tpDestinationIata=AHO",
       "record_low": false,
       "median_price": 372.98
     },
@@ -16346,32 +16190,6 @@
       "median_price": 232.0
     },
     {
-      "id": "WMI-BCN-2026-10-11-2026-10-22",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "BCN",
-      "dest_city": "Barcelona",
-      "dest_country": "Hiszpania",
-      "date_out": "2026-10-11",
-      "time_out": "11:40",
-      "date_in": "2026-10-22",
-      "time_in": "09:20",
-      "nights": 11,
-      "price": 375.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 6,
-      "weekday_in": 3,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1110BCN22101?t=W617917188001791729900000185WMIBCN17926608001792670700000165BCNWAW_075354bd22dff802ac34439e2cc4f097_8125&search_date=05102026&expected_price_uuid=01a10b51-b3fa-8030-23eb-7078c3eac88e&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=cF9rSv9-jhTYJ4UR2qtOig&expected_price_source=share&expected_price_currency=pln&expected_price=375&marker=787990",
-      "record_low": false,
-      "median_price": 281.0
-    },
-    {
       "id": "WAW-MAD-2027-01-20-2027-01-26",
       "origin": "WAW",
       "origin_name": "Lotnisko Chopina w Warszawie",
@@ -16422,32 +16240,6 @@
       "link": "https://www.aviasales.com/search/WAW2812BUD30121?t=W617984454001798450200000080WAWBUD17986116001798616100000075BUDWAW_2101332fdbc3dd8d01b82816b40864fc_8252&search_date=10102026&expected_price_uuid=01a126f2-98ef-8030-afae-dc4efbcbcab6&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=l861ZhCLMzLjCRWrXvelvQ&expected_price_source=share&expected_price_currency=pln&expected_price=380&marker=787990",
       "record_low": false,
       "median_price": 207.0
-    },
-    {
-      "id": "WMI-CPH-2026-12-30-2027-01-02",
-      "origin": "WMI",
-      "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
-      "dest": "CPH",
-      "dest_city": "Kopenhaga",
-      "dest_country": "Dania",
-      "date_out": "2026-12-30",
-      "time_out": "08:45",
-      "date_in": "2027-01-02",
-      "time_in": "21:35",
-      "nights": 3,
-      "price": 381.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 2,
-      "weekday_in": 5,
-      "airline_code": "FR",
-      "airline": "Ryanair",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW3012CPH02011?t=FR17986203001798625400000085WMICPH17989257001798930500000080CPHWMI_8df2e14797f3602a72c21f00715378fc_8179&search_date=03102026&expected_price_uuid=01a103f8-4ad3-8030-6cd7-b47759e34482&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=IFTe7oEKcGfYdPFW1sfQ4Q&expected_price_source=share&expected_price_currency=pln&expected_price=381&marker=787990",
-      "record_low": false,
-      "median_price": 210.0
     },
     {
       "id": "WMI-BVA-2027-02-08-2027-02-11",
@@ -16551,7 +16343,7 @@
       "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
       "link": "https://www.aviasales.com/search/WAW2710AGP07111?t=FR17931342001793148600000240WAWAGP17940744001794088500000235AGPWAW_cb4b540544f1c44da0035eaf046d9f7d_8306&search_date=07102026&expected_price_uuid=01a114e5-b822-8030-e5ff-57b2c61873a3&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=9HDyXLu5PfKhgiDPhxi8Sg&expected_price_source=share&expected_price_currency=pln&expected_price=383&marker=787990",
       "record_low": false,
-      "median_price": 275.0
+      "median_price": 298.0
     },
     {
       "id": "WAW-FCO-2026-10-26-2026-10-31",
@@ -16788,6 +16580,32 @@
       "median_price": 173.0
     },
     {
+      "id": "WAW-TRF-2026-10-16-2026-10-18",
+      "origin": "WAW",
+      "origin_name": "Lotnisko Chopina w Warszawie",
+      "dest": "TRF",
+      "dest_city": "Oslo",
+      "dest_country": "Norwegia",
+      "date_out": "2026-10-16",
+      "time_out": "12:40",
+      "date_in": "2026-10-18",
+      "time_in": "15:05",
+      "nights": 2,
+      "price": 396.0,
+      "price_out": null,
+      "price_in": null,
+      "transfers": 0,
+      "weekday_out": 4,
+      "weekday_in": 6,
+      "airline_code": "W6",
+      "airline": "Wizz Air",
+      "source": "aviasales",
+      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
+      "link": "https://www.aviasales.com/search/WAW1610OSL18101?t=W617921544001792161000000110WAWTRF17923359001792342500000110TRFWAW_4cb9679db35483966558ab7802cb6e88_8602&search_date=10102026&expected_price_uuid=01a127b7-ca5d-8031-6914-523d35c8fcd9&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=MWxYHTp8ffccRaIG6MlObg&expected_price_source=share&expected_price_currency=pln&expected_price=396&marker=787990",
+      "record_low": false,
+      "median_price": 202.0
+    },
+    {
       "id": "WMI-CPH-2026-11-23-2026-11-24",
       "origin": "WMI",
       "origin_name": "Mazowiecki Port lotniczy Warszawa-Modlin",
@@ -16864,32 +16682,6 @@
       "link": "https://www.aviasales.com/search/WAW2910LON08111?t=W617932917001793298000000165WAWLTN17941470001794158700000135STNWMI_31f638f63090e37d16135dd87a1fc352_8586&search_date=09102026&expected_price_uuid=01a120a1-2059-8040-aadd-81ce207d6706&static_fare_key=TY%7CP0%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=P_E1D6rKoupFuoE524yehA&expected_price_source=share&expected_price_currency=pln&expected_price=397&marker=787990",
       "record_low": false,
       "median_price": 349.0
-    },
-    {
-      "id": "WAW-TRF-2026-10-16-2026-10-18",
-      "origin": "WAW",
-      "origin_name": "Lotnisko Chopina w Warszawie",
-      "dest": "TRF",
-      "dest_city": "Oslo",
-      "dest_country": "Norwegia",
-      "date_out": "2026-10-16",
-      "time_out": "12:40",
-      "date_in": "2026-10-18",
-      "time_in": "15:05",
-      "nights": 2,
-      "price": 397.0,
-      "price_out": null,
-      "price_in": null,
-      "transfers": 0,
-      "weekday_out": 4,
-      "weekday_in": 6,
-      "airline_code": "W6",
-      "airline": "Wizz Air",
-      "source": "aviasales",
-      "note": "cena z ostatnich 48 h, sprawdź przy zakupie",
-      "link": "https://www.aviasales.com/search/WAW1610OSL18101?t=W617921544001792161000000110WAWTRF17923359001792342500000110TRFWAW_4cb9679db35483966558ab7802cb6e88_8622&search_date=09102026&expected_price_uuid=01a12280-bbca-8030-69e4-5140486df5ca&static_fare_key=TY%7CP1%7CH0%7CL0%7CCH0%7CR0%7CTBC0&itinerary_key=MWxYHTp8ffccRaIG6MlObg&expected_price_source=share&expected_price_currency=pln&expected_price=397&marker=787990",
-      "record_low": false,
-      "median_price": 202.0
     },
     {
       "id": "WMI-BVA-2026-11-28-2026-12-02",
