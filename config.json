@@ -4,6 +4,7 @@
   "min_nights": 1,
   "max_nights": 14,
   "days_ahead": 120,
+  "far": {"max_price_pln": 3500, "min_nights": 5, "max_nights": 28, "days_ahead": 270, "max_transfers_each_way": 1},
   "record_low_ratio": 0.8,
   "record_low_min_samples": 5
 }

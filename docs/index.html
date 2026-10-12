@@ -175,6 +175,7 @@
 
 <div class="tabs">
   <button id="tabOkazje" class="active">Okazje</button>
+  <button id="tabDaleko">Daleko</button>
   <button id="tabUstawienia">Ustawienia</button>
 </div>
 
@@ -203,6 +204,38 @@
 </div>
 
 <main id="list"></main>
+</div>
+
+<div id="viewDaleko" style="display:none">
+<header style="padding-top:8px">
+  <p class="desc" id="farDesc"></p>
+  <p class="desc" id="farCounts"></p>
+  <p class="desc" id="farSettingsLine"></p>
+  <p class="desc" id="farUpdated"></p>
+</header>
+
+<div class="controls">
+  <label>Sortuj:
+    <select id="fSort">
+      <option value="price">po cenie</option>
+      <option value="date">po dacie</option>
+    </select>
+  </label>
+  <label>Linia:
+    <select id="fAirline">
+      <option value="">wszystkie linie</option>
+    </select>
+  </label>
+  <label>Przesiadki:
+    <select id="fTransfers">
+      <option value="">wszystkie</option>
+      <option value="0">tylko bezpośrednie</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="fGroupBy" checked> Grupuj po kierunku</label>
+</div>
+
+<main id="listFar"></main>
 </div>
 
 <section id="settings" style="display:none">
@@ -258,6 +291,7 @@
     <div class="checks" id="sCountries"></div>
   </div>
 
+
   <div class="field">
     <label><input type="checkbox" id="sDirect"> Tylko loty bezpośrednie</label>
   </div>
@@ -265,6 +299,46 @@
   <div class="field">
     <label><input type="checkbox" id="sDomestic"> Pokazuj loty krajowe</label>
     <div class="help">Np. Warszawa–Kraków — domyślnie ukryte.</div>
+  </div>
+
+  <h2 style="font-size:1.1rem;margin:28px 0 8px">Daleko (poza Europą)</h2>
+
+  <div class="field">
+    <label class="t" for="sFarPrice">Maksymalna cena (zł)</label>
+    <div class="help" id="sFarPriceHelp"></div>
+    <input type="number" id="sFarPrice" min="0" step="50">
+  </div>
+
+  <div class="field">
+    <label class="t">Liczba nocy</label>
+    <div class="help" id="sFarNightsHelp"></div>
+    <div class="inline">
+      <input type="number" id="sFarNightsMin" min="1" step="1"> od
+      <input type="number" id="sFarNightsMax" min="1" step="1"> do
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sFarHorizon">Horyzont wyszukiwania</label>
+    <div class="help" id="sFarHorizonHelp"></div>
+    <div class="inline">wyloty w ciągu najbliższych
+      <input type="number" id="sFarHorizon" min="1" step="1"> dni</div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sFarTransfers">Maks. przesiadek w każdą stronę</label>
+    <select id="sFarTransfers" class="btn" style="min-height:44px">
+      <option value="1">1</option>
+      <option value="0">0 (tylko bezpośrednie)</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="t">Kraje — Daleko
+      <button class="mini" id="sFarCountriesAll">zaznacz wszystkie</button>
+      <button class="mini" id="sFarCountriesNone">odznacz wszystkie</button>
+    </label>
+    <div class="checks" id="sFarCountries"></div>
   </div>
 
   <div class="actions">
@@ -293,6 +367,8 @@ function fmtCena(v) {
 const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
 
 let deals = [], cfg = {}, settings = null;
+let farDeals = [], farCfg = {};
+let activeTab = "okazje";
 
 /* GA4 — bez awarii przy zablokowanym skrypcie. */
 function track(name, params) {
@@ -313,7 +389,14 @@ function defaults() {
     origins: null,                   // null = wszystkie z danych
     excludedCountries: [],
     directOnly: true,
-    showDomestic: false
+    showDomestic: false,
+    // Zakładka „Daleko" — osobne filtry (prefiks far*).
+    farMaxPrice: 2500,
+    farNightsMin: 7,
+    farNightsMax: 21,
+    farHorizonDays: farCfg.days_ahead || 270,
+    farMaxTransfers: 1,
+    farExcludedCountries: []
   };
 }
 
@@ -357,6 +440,24 @@ function applySettings(deals, s, cfg, today) {
   );
 }
 
+/* Filtry zakładki „Daleko" — czysta funkcja, testowalna. */
+function applyFarSettings(deals, s, cfgFar, today) {
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() +
+                  (s.farHorizonDays || cfgFar.days_ahead || 365));
+  const horizonIso = horizon.toISOString().slice(0, 10);
+  const excl = new Set(s.farExcludedCountries || []);
+  const maxT = s.farMaxTransfers;
+  return deals.filter(d =>
+    d.price <= s.farMaxPrice &&
+    d.nights >= s.farNightsMin && d.nights <= s.farNightsMax &&
+    d.date_out <= horizonIso &&
+    (d.transfers_out === undefined || d.transfers_out <= maxT) &&
+    (d.transfers_in === undefined || d.transfers_in <= maxT) &&
+    !excl.has(d.dest_country)
+  );
+}
+
 function isDefault(s) {
   return JSON.stringify(s) === JSON.stringify(defaults());
 }
@@ -397,6 +498,20 @@ function allCountries() {
 
 /* ---------- renderowanie kart ---------- */
 
+function fmtDur(min) {
+  if (!min) return "";
+  return Math.floor(min / 60) + "h " + String(min % 60).padStart(2, "0");
+}
+
+function transferText(d) {
+  const t = [d.transfers_out, d.transfers_in];
+  const legs = t.map(n => n === 0 ? "bezpośrednio" : n + " przesiadka")
+    .join(", z powrotem ");
+  const dur = [fmtDur(d.duration_out_min), fmtDur(d.duration_in_min)]
+    .filter(Boolean).join(" / ");
+  return legs + (dur ? " · ≈ " + dur : "");
+}
+
 function dealLink(d) {
   return d.link || ((d.offers || [])[0] || {}).link || "";
 }
@@ -428,6 +543,8 @@ function kartaHtml(d, showBadge) {
         <span class="airline">${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
       </div>
       ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
+      ${d.transfers_out !== undefined
+        ? '<div class="note">' + transferText(d) + '</div>' : ''}
       ${offersHtml}
       ${directHtml}
       ${low ? '<span class="badge">REKORDOWO TANIO' +
@@ -442,22 +559,38 @@ function render() {
   const airline = document.getElementById("airline").value;
   const category = document.getElementById("category").value;
   const groupBy = document.getElementById("groupBy").checked;
-  const list = document.getElementById("list");
 
   // Najpierw ustawienia użytkownika, potem szybkie filtry.
   let items = applySettings(deals, settings, cfg, new Date());
   items = items.filter(d => (!onlyLow || d.record_low) &&
                             (!airline || d.airline === airline) &&
                             (!category || d.category === category));
-  items.sort((a, b) => sort === "date"
+  renderList(items, "list", sort, groupBy, deals.length > 0);
+}
+
+function renderFar() {
+  const sort = document.getElementById("fSort").value;
+  const airline = document.getElementById("fAirline").value;
+  const onlyDirect = document.getElementById("fTransfers").value === "0";
+  const groupBy = document.getElementById("fGroupBy").checked;
+
+  let items = applyFarSettings(farDeals, settings, farCfg, new Date());
+  items = items.filter(d => (!airline || d.airline === airline) &&
+                            (!onlyDirect || d.transfers === 0));
+  renderList(items, "listFar", sort, groupBy, farDeals.length > 0);
+}
+
+function renderList(items, listId, sort, groupBy, anyData) {
+  const list = document.getElementById(listId);
+  items = items.slice().sort((a, b) => sort === "date"
     ? a.date_out.localeCompare(b.date_out) || a.price - b.price
     : a.price - b.price);
 
   if (!items.length) {
-    list.innerHTML = deals.length
+    list.innerHTML = anyData
       ? '<p class="empty">Brak okazji dla tych ustawień — ' +
         '<a href="#ustawienia">poluzuj filtry w zakładce Ustawienia</a></p>'
-      : '<p class="empty">Brak okazji poniżej progu — sprawdź później</p>';
+      : '<p class="empty">Brak danych — poczekaj na następne wyszukiwanie</p>';
     return;
   }
 
@@ -510,18 +643,27 @@ function render() {
 
 /* ---------- zakładki ---------- */
 
-function showTab(ustawienia) {
-  track("view_tab", { tab: ustawienia ? "ustawienia" : "okazje" });
-  document.getElementById("tabOkazje").classList.toggle("active", !ustawienia);
-  document.getElementById("tabUstawienia").classList.toggle("active", ustawienia);
-  document.getElementById("viewOkazje").style.display = ustawienia ? "none" : "";
-  document.getElementById("settings").style.display = ustawienia ? "" : "none";
+function showTab(tab) {
+  activeTab = tab;
+  track("view_tab", { tab: tab });
+  document.getElementById("tabOkazje").classList.toggle("active", tab === "okazje");
+  document.getElementById("tabDaleko").classList.toggle("active", tab === "daleko");
+  document.getElementById("tabUstawienia").classList.toggle("active", tab === "ustawienia");
+  document.getElementById("viewOkazje").style.display = tab === "okazje" ? "" : "none";
+  document.getElementById("viewDaleko").style.display = tab === "daleko" ? "" : "none";
+  document.getElementById("settings").style.display = tab === "ustawienia" ? "" : "none";
 }
 
-document.getElementById("tabOkazje").onclick = () => { location.hash = ""; showTab(false); };
-document.getElementById("tabUstawienia").onclick = () => { location.hash = "ustawienia"; showTab(true); };
-window.addEventListener("hashchange",
-  () => showTab(location.hash === "#ustawienia"));
+document.getElementById("tabOkazje").onclick = () => { location.hash = ""; showTab("okazje"); };
+document.getElementById("tabDaleko").onclick = () => { location.hash = "daleko"; showTab("daleko"); };
+document.getElementById("tabUstawienia").onclick = () => { location.hash = "ustawienia"; showTab("ustawienia"); };
+window.addEventListener("hashchange", () => showTab(tabFromHash()));
+
+function tabFromHash() {
+  if (location.hash === "#ustawienia") return "ustawienia";
+  if (location.hash === "#daleko") return "daleko";
+  return "okazje";
+}
 
 /* ---------- formularz ustawień ---------- */
 
@@ -564,6 +706,20 @@ function fillSettingsForm() {
   document.getElementById("sDirect").checked = settings.directOnly;
   document.getElementById("sDomestic").checked = settings.showDomestic;
 
+  document.getElementById("sFarPrice").value = settings.farMaxPrice;
+  document.getElementById("sFarPrice").max = farCfg.max_price_pln || "";
+  document.getElementById("sFarPriceHelp").textContent =
+    "koperta skryptu: " + (farCfg.max_price_pln || "—") + " zł";
+  document.getElementById("sFarNightsMin").value = settings.farNightsMin;
+  document.getElementById("sFarNightsMax").value = settings.farNightsMax;
+  document.getElementById("sFarNightsHelp").textContent =
+    "koperta skryptu: " + farCfg.min_nights + "–" + farCfg.max_nights + " nocy";
+  document.getElementById("sFarHorizon").value = settings.farHorizonDays;
+  document.getElementById("sFarHorizon").max = farCfg.days_ahead || "";
+  document.getElementById("sFarHorizonHelp").textContent =
+    "maks. " + farCfg.days_ahead + " dni (tyle zbiera skrypt)";
+  document.getElementById("sFarTransfers").value = String(settings.farMaxTransfers);
+
   pillGroup("sDaysOut", "daysOut");
   pillGroup("sDaysIn", "daysIn");
 
@@ -573,6 +729,7 @@ function fillSettingsForm() {
       ${origins.includes(o) ? "checked" : ""}> ${o}</label>`).join("");
 
   renderCountries();
+  renderFarCountries();
 }
 
 function renderCountries() {
@@ -598,6 +755,44 @@ document.getElementById("sCountriesNone").onclick = () => {
   renderCountries();
 };
 
+function farCountries() {
+  return [...new Set(farDeals.map(d => d.dest_country).filter(Boolean))].sort();
+}
+
+function renderFarCountries() {
+  const excl = new Set(settings.farExcludedCountries || []);
+  document.getElementById("sFarCountries").innerHTML = farCountries().map(c => `
+    <label><input type="checkbox" data-country="${c}"
+      ${excl.has(c) ? "" : "checked"}> ${c}</label>`).join("");
+  document.querySelectorAll("#sFarCountries input").forEach(cb =>
+    cb.addEventListener("change", () => {
+      const set = new Set(settings.farExcludedCountries || []);
+      if (cb.checked) set.delete(cb.dataset.country);
+      else set.add(cb.dataset.country);
+      settings.farExcludedCountries = [...set];
+    }));
+}
+
+document.getElementById("sFarCountriesAll").onclick = () => {
+  settings.farExcludedCountries = [];
+  renderFarCountries();
+};
+document.getElementById("sFarCountriesNone").onclick = () => {
+  settings.farExcludedCountries = farCountries();
+  renderFarCountries();
+};
+
+function farSummary(s) {
+  const parts = ["do " + s.farMaxPrice + " zł",
+    s.farNightsMin + "–" + s.farNightsMax + " nocy",
+    "maks. " + s.farMaxTransfers + " przesiadka"];
+  const excl = s.farExcludedCountries || [];
+  if (excl.length)
+    parts.push("bez: " + excl.slice(0, 2).join(", ") +
+      (excl.length > 2 ? " (+" + (excl.length - 2) + ")" : ""));
+  return parts.join(" · ");
+}
+
 document.getElementById("sSave").onclick = () => {
   settings.maxPriceLcc = +document.getElementById("sPriceLcc").value || 0;
   settings.maxPriceFull = +document.getElementById("sPriceFull").value || 0;
@@ -607,6 +802,13 @@ document.getElementById("sSave").onclick = () => {
                                 cfg.days_ahead);
   settings.directOnly = document.getElementById("sDirect").checked;
   settings.showDomestic = document.getElementById("sDomestic").checked;
+  settings.farMaxPrice = +document.getElementById("sFarPrice").value || 0;
+  settings.farNightsMin = +document.getElementById("sFarNightsMin").value || 1;
+  settings.farNightsMax = +document.getElementById("sFarNightsMax").value || 1;
+  settings.farHorizonDays = Math.min(
+    +document.getElementById("sFarHorizon").value || farCfg.days_ahead,
+    farCfg.days_ahead || 365);
+  settings.farMaxTransfers = +document.getElementById("sFarTransfers").value;
   const checked = [...document.querySelectorAll("#sOrigins input:checked")]
     .map(cb => cb.dataset.origin);
   settings.origins = checked.length === allOrigins().length ? null : checked;
@@ -620,12 +822,14 @@ document.getElementById("sSave").onclick = () => {
     direct_only: settings.directOnly
   });
   document.getElementById("settingsLine").textContent = settingsSummary(settings);
+  document.getElementById("farSettingsLine").textContent = farSummary(settings);
   const t = document.getElementById("toast");
   t.classList.add("show");
   setTimeout(() => t.classList.remove("show"), 2000);
   location.hash = "";
-  showTab(false);
+  showTab("okazje");
   render();
+  renderFar();
 };
 
 document.getElementById("sReset").onclick = () => {
@@ -640,29 +844,38 @@ document.getElementById("sort").addEventListener("change", render);
 document.getElementById("airline").addEventListener("change", render);
 document.getElementById("category").addEventListener("change", render);
 document.getElementById("groupBy").addEventListener("change", render);
+document.getElementById("fSort").addEventListener("change", renderFar);
+document.getElementById("fAirline").addEventListener("change", renderFar);
+document.getElementById("fTransfers").addEventListener("change", renderFar);
+document.getElementById("fGroupBy").addEventListener("change", renderFar);
 
-// Kliknięcia w oferty (delegacja na całą listę).
-document.getElementById("list").addEventListener("click", e => {
+// Kliknięcia w oferty (delegacja na obie listy).
+["list", "listFar"].forEach(id =>
+  document.getElementById(id).addEventListener("click", e => {
   const el = e.target.closest("[data-id]");
   if (!el) return;
-  const d = deals.find(x => x.id === el.dataset.id);
+  const d = deals.find(x => x.id === el.dataset.id) ||
+            farDeals.find(x => x.id === el.dataset.id);
   if (!d) return;
   track("select_deal", {
     deal_id: d.id, destination: d.dest_city, country: d.dest_country,
     price: d.price, airline: d.airline, source: d.source, nights: d.nights,
-    category: d.category, via: el.dataset.via || ""
+    category: d.category, via: el.dataset.via || "", tab: activeTab
   });
   // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
   if (!e.target.closest("a") && el.dataset.href)
     window.open(el.dataset.href, "_blank", "noopener");
-});
+}));
 
-fetch("deals.json", { cache: "no-store" })
-  .then(r => {
+Promise.all([
+  fetch("deals.json", { cache: "no-store" }).then(r => {
     if (!r.ok) throw new Error("HTTP " + r.status);
     return r.json();
-  })
-  .then(data => {
+  }),
+  // far.json może jeszcze nie istnieć — zakładka Daleko pokaże stan pusty.
+  fetch("far.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null)
+    .catch(() => null)
+]).then(([data, farData]) => {
     deals = data.deals || [];
     cfg = data.config || {};
     settings = loadSettings();
@@ -694,8 +907,36 @@ fetch("deals.json", { cache: "no-store" })
         sel.appendChild(o);
       });
     fillSettingsForm();
-    showTab(location.hash === "#ustawienia");
+
+    // Zakładka „Daleko".
+    if (farData) {
+      farDeals = farData.deals || [];
+      farCfg = farData.config || {};
+      document.getElementById("farUpdated").textContent =
+        "Zaktualizowano: " + new Date(farData.generated_at).toLocaleString("pl-PL");
+      document.getElementById("farDesc").textContent =
+        "Skrypt zbiera oferty poza Europą do " + farCfg.max_price_pln +
+        " zł, " + farCfg.min_nights + "–" + farCfg.max_nights +
+        " nocy, do " + farCfg.max_transfers_each_way +
+        " przesiadki, najbliższe " + farCfg.days_ahead + " dni";
+      const fc = (farData.counts || {}).aviasales;
+      if (fc) document.getElementById("farCounts").textContent =
+        "Źródło: Aviasales " + fc + " ofert";
+      const fSel = document.getElementById("fAirline");
+      [...new Set(farDeals.map(d => d.airline).filter(Boolean))].sort()
+        .forEach(a => {
+          const o = document.createElement("option");
+          o.value = a; o.textContent = a;
+          fSel.appendChild(o);
+        });
+    }
+    // Po wczytaniu farCfg odświeżamy domyślny horyzont i formularz.
+    document.getElementById("farSettingsLine").textContent = farSummary(settings);
+    fillSettingsForm();
+
+    showTab(tabFromHash());
     render();
+    renderFar();
   })
   .catch(e => {
     document.getElementById("list").innerHTML =

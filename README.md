@@ -56,6 +56,12 @@ w `localStorage` — czyli per urządzenie i przeglądarka, bez serwera.
 `config.json` pełni rolę „koperty" wyszukiwania: skrypt zbiera szerszy
 zestaw ofert, a strona zawęża go do preferencji użytkownika.
 
+Zakładka **Daleko** pokazuje okazje poza Europą (max 1 przesiadka
+w każdą stronę, dane z Aviasales) — osobne filtry w Ustawieniach.
+Jej „koperta" to sekcja `far` w `config.json`
+(`max_price_pln`, `min_nights`/`max_nights`, `days_ahead`,
+`max_transfers_each_way`).
+
 Strona ma wpięte Google Analytics 4 (ID w `docs/index.html`, zdarzenia:
 kliknięcie oferty, zapis ustawień, zmiana zakładki) — by je usunąć lub
 zmienić, wystarczy skasować/podmienić blok `gtag` w `<head>`.

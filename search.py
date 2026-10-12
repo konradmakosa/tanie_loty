@@ -18,6 +18,7 @@ CONFIG_PATH = ROOT / "config.json"
 ENV_PATH = ROOT / ".env"
 HISTORY_PATH = ROOT / "data" / "history.jsonl"
 DEALS_PATH = ROOT / "docs" / "deals.json"
+FAR_PATH = ROOT / "docs" / "far.json"
 CACHE_DIR = ROOT / "data" / "cache"
 
 RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
@@ -27,6 +28,16 @@ RYANAIR_CAL = ("https://www.ryanair.com/api/farfnd/v4/roundTripFares"
 ROUTES_CACHE_DAYS = 7
 MAX_PER_ROUTE = 8
 MAX_PER_ROUTE_FULL = 15  # linie tradycyjne — cap na trasę po scaleniu
+MAX_PER_ROUTE_FAR = 20   # zakładka „Daleko" — cap na trasę
+
+# Kraje Europy (ISO2) — reszta świata trafia do zakładki „Daleko".
+EUROPE_CC = {
+    "AL", "AD", "AT", "BY", "BE", "BA", "BG", "HR", "CY", "CZ", "DK",
+    "EE", "FI", "FR", "DE", "GI", "GR", "HU", "IS", "IE", "IM", "IT",
+    "XK", "LV", "LI", "LT", "LU", "MT", "MD", "MC", "ME", "NL", "MK",
+    "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SE",
+    "CH", "UA", "GB", "VA", "JE", "GG", "FO", "AX", "SJ",
+}
 AVIASALES_API = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
@@ -344,38 +355,51 @@ def ryanair_deal(origin, dest, arr, fo, fi, total, nights):
     }
 
 
-def fetch_aviasales(cfg, token, marker):
+def load_tp_maps():
+    """Mapowania kodów Travelpayouts (cache w data/cache)."""
+    return {
+        "cities": {c.get("code"): c for c in cached_json(
+            "cities.json", TP_DATA + "/cities.json")},
+        "countries": {c.get("code"): c for c in cached_json(
+            "countries.json", TP_DATA + "/countries.json")},
+        "airports": {a.get("code"): a for a in cached_json(
+            "airports.json", TP_DATA + "/airports.json")},
+        "airlines": {a.get("code"): a.get("name") for a in cached_json(
+            "airlines.json",
+            "https://api.travelpayouts.com/data/en/airlines.json")},
+    }
+
+
+def tp_city_name(maps, code):
+    c = maps["cities"].get(code)
+    return (c or {}).get("name") or code or ""
+
+
+def tp_country_code(maps, code):
+    """Kod ISO2 kraju dla kodu miasta lub lotniska."""
+    if code in maps["cities"] and maps["cities"][code].get("country_code"):
+        return maps["cities"][code]["country_code"]
+    if code in maps["airports"] and maps["airports"][code].get("country_code"):
+        return maps["airports"][code]["country_code"]
+    return code
+
+
+def tp_country_name(maps, code):
+    code = tp_country_code(maps, code)
+    c = maps["countries"].get(code) or {}
+    name = c.get("name")
+    if not name or name == code:
+        tr = c.get("name_translations") or {}
+        name = COUNTRY_PL.get(code) or tr.get("en") or name or ""
+    return name
+
+
+def fetch_aviasales(cfg, token, marker, maps):
     """Ceny wszystkich linii z Aviasales Data API (Travelpayouts).
     Bez tokena zwraca pustą listę."""
     if not token:
         print("Aviasales: brak TRAVELPAYOUTS_TOKEN — pomijam")
         return []
-
-    # Mapowania kodów -> nazwy (cache w data/cache, odświeżane co 30 dni).
-    cities = {c.get("code"): c for c in cached_json("cities.json",
-                                                  TP_DATA + "/cities.json")}
-    countries = {c.get("code"): c for c in cached_json(
-        "countries.json", TP_DATA + "/countries.json")}
-    airports = {a.get("code"): a for a in cached_json(
-        "airports.json", TP_DATA + "/airports.json")}
-    tp_airlines = {a.get("code"): a.get("name") for a in cached_json(
-        "airlines.json", "https://api.travelpayouts.com/data/en/airlines.json")}
-
-    def city_name(code):
-        c = cities.get(code)
-        return (c or {}).get("name") or code or ""
-
-    def country_name(code):
-        if code in cities and cities[code].get("country_code"):
-            code = cities[code]["country_code"]
-        elif code in airports and airports[code].get("country_code"):
-            code = airports[code]["country_code"]
-        c = countries.get(code) or {}
-        name = c.get("name")
-        if not name or name == code:
-            tr = c.get("name_translations") or {}
-            name = COUNTRY_PL.get(code) or tr.get("en") or name or ""
-        return name
 
     jutro = date.today() + timedelta(days=1)
     koniec = jutro + timedelta(days=cfg["days_ahead"])
@@ -385,54 +409,12 @@ def fetch_aviasales(cfg, token, marker):
 
     deals = []
     for month in months:
-        # Stronnicowanie: gdy strona jest pełna (1000) a najdroższa cena
-        # wciąż pod progiem — dobieramy kolejne (max 3 strony).
-        data = []
-        limit = cfg["max_price_pln"]["full"]
-        pages = 0
-        for page in range(1, 4):
-            params = {
-                "origin": "WAW",  # kod miasta — obejmuje WAW i WMI
-                "departure_at": month,
-                "one_way": "false",
-                "direct": "true",
-                "unique": "false",
-                "sorting": "price",
-                "currency": "pln",
-                "market": "pl",
-                "limit": 1000,
-                "page": page,
-            }
-            url = AVIASALES_API + "?" + urllib.parse.urlencode(params)
-            try:
-                resp = http_get_json(url, {"X-Access-Token": token})
-            except urllib.error.HTTPError as e:
-                if e.code in (401, 403):
-                    print("Aviasales %s: HTTP %d — nieprawidłowy token?"
-                          % (month, e.code))
-                else:
-                    print("Aviasales %s: błąd HTTP %d — pomijam"
-                          % (month, e.code))
-                break
-            except Exception as e:
-                print("Aviasales %s: błąd pobierania (%s) — pomijam"
-                      % (month, e))
-                break
-            pages += 1
-            chunk = resp.get("data") or []
-            data += chunk
-            last_price = max([c.get("price") or 0 for c in chunk],
-                             default=0)
-            if len(chunk) < 1000 or last_price >= limit:
-                break
-        if pages > 1:
-            print("Aviasales %s: dobrano %d stron" % (month, pages))
-
+        data = aviasales_month(month, token, direct=True,
+                               price_cap=cfg["max_price_pln"]["full"])
         ok = 0
         for r in data:
             try:
-                d = aviasales_deal(r, cfg, marker, city_name, country_name,
-                                   airports, tp_airlines, jutro, koniec)
+                d = aviasales_deal(r, cfg, marker, maps, jutro, koniec)
             except (KeyError, TypeError, ValueError) as e:
                 print("Aviasales: pominięto niekompletny wpis (%s)" % e)
                 continue
@@ -446,8 +428,175 @@ def fetch_aviasales(cfg, token, marker):
     return deals
 
 
-def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
-                   tp_airlines, jutro, koniec):
+def aviasales_month(month, token, direct, price_cap):
+    """Jeden miesiąc z prices_for_dates; stronicowanie gdy strona pełna
+    (1000) i najdroższa cena wciąż pod progiem (max 3 strony)."""
+    data = []
+    pages = 0
+    for page in range(1, 4):
+        params = {
+            "origin": "WAW",  # kod miasta — obejmuje WAW i WMI
+            "departure_at": month,
+            "one_way": "false",
+            "direct": "true" if direct else "false",
+            "unique": "false",
+            "sorting": "price",
+            "currency": "pln",
+            "market": "pl",
+            "limit": 1000,
+            "page": page,
+        }
+        url = AVIASALES_API + "?" + urllib.parse.urlencode(params)
+        try:
+            resp = http_get_json(url, {"X-Access-Token": token})
+        except urllib.error.HTTPError as e:
+            if e.code in (401, 403):
+                print("Aviasales %s: HTTP %d — nieprawidłowy token?"
+                      % (month, e.code))
+            else:
+                print("Aviasales %s: błąd HTTP %d — pomijam"
+                      % (month, e.code))
+            break
+        except Exception as e:
+            print("Aviasales %s: błąd pobierania (%s) — pomijam" % (month, e))
+            break
+        pages += 1
+        chunk = resp.get("data") or []
+        data += chunk
+        last_price = max([c.get("price") or 0 for c in chunk], default=0)
+        if len(chunk) < 1000 or last_price >= price_cap:
+            break
+    if pages > 1:
+        print("Aviasales %s: dobrano %d stron" % (month, pages))
+    return data
+
+
+def fetch_aviasales_far(far, token, marker, maps):
+    """Okazje poza Europę (zakładka „Daleko"): max 1 przesiadka w stronę,
+    kraje spoza EUROPE_CC, cap MAX_PER_ROUTE_FAR na trasę."""
+    if not token:
+        return []
+
+    jutro = date.today() + timedelta(days=1)
+    koniec = jutro + timedelta(days=far["days_ahead"])
+    months = [m[:7] for m in month_starts(jutro, koniec)]
+
+    raw = 0
+    deals = []
+    for month in months:
+        data = aviasales_month(month, token, direct=False,
+                               price_cap=far["max_price_pln"])
+        raw += len(data)
+        ok = 0
+        for r in data:
+            try:
+                d = aviasales_far_deal(r, far, marker, maps, jutro, koniec)
+            except (KeyError, TypeError, ValueError) as e:
+                print("Daleko: pominięto niekompletny wpis (%s)" % e)
+                continue
+            if d is not None:
+                deals.append(d)
+                ok += 1
+        if ok:
+            print("Daleko %s: %d rekordów, %d po filtrach"
+                  % (month, len(data), ok))
+
+    # Cap: najtańsze MAX_PER_ROUTE_FAR ofert na trasę.
+    by_route = {}
+    for d in deals:
+        by_route.setdefault((d["origin"], d["dest"]), []).append(d)
+    deals = []
+    for ds in by_route.values():
+        ds.sort(key=lambda x: x["price"])
+        deals.extend(ds[:MAX_PER_ROUTE_FAR])
+
+    print("Daleko: %d rekordów z API, %d po filtrach, %d tras"
+          % (raw, len(deals), len(by_route)))
+    return deals
+
+
+def aviasales_far_deal(r, far, marker, maps, jutro, koniec):
+    """Surowy rekord Aviasales -> rekord „Daleko" albo None."""
+    price = r.get("price")
+    dep_at = r.get("departure_at") or ""
+    ret_at = r.get("return_at") or ""
+    if price is None or len(dep_at) < 16 or len(ret_at) < 16:
+        raise ValueError("brak price/departure_at/return_at")
+
+    code = r.get("airline") or ""
+    if float(price) > far["max_price_pln"]:
+        return None
+    t_out = r.get("transfers") or 0
+    t_in = r.get("return_transfers") or 0
+    if t_out > far["max_transfers_each_way"] or \
+            t_in > far["max_transfers_each_way"]:
+        return None
+
+    dest_city_code = r.get("destination") or r.get("destination_airport") or ""
+    cc = tp_country_code(maps, dest_city_code)
+    if not cc or cc in EUROPE_CC:
+        return None
+
+    date_out, time_out = dep_at[:10], dep_at[11:16]
+    date_in, time_in = ret_at[:10], ret_at[11:16]
+    d_out = date.fromisoformat(date_out)
+    nights = (date.fromisoformat(date_in) - d_out).days
+    if not (far["min_nights"] <= nights <= far["max_nights"]):
+        return None
+    if not (jutro <= d_out <= koniec):
+        return None
+
+    origin = r.get("origin_airport") or r.get("origin") or ""
+    dest = r.get("destination_airport") or dest_city_code
+    dest_country = tp_country_name(maps, cc)
+
+    link = r.get("link")
+    if link:
+        url = AVIASALES_SITE + link
+    else:
+        url = ("%s/search/%s%s%s%s1"
+               % (AVIASALES_SITE, r.get("origin") or origin,
+                  date_out[8:10] + date_out[5:7],
+                  dest_city_code,
+                  date_in[8:10] + date_in[5:7]))
+    if marker:
+        url += ("&" if "?" in url else "?") + "marker=" + urllib.parse.quote(marker)
+
+    return {
+        "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
+        "origin": origin,
+        "origin_name": (maps["airports"].get(origin) or {}).get("name")
+                       or origin,
+        "dest": dest,
+        "dest_city": tp_city_name(maps, dest_city_code),
+        "dest_country": dest_country,
+        "country_code": cc,
+        "date_out": date_out,
+        "time_out": time_out,
+        "date_in": date_in,
+        "time_in": time_in,
+        "nights": nights,
+        "price": float(price),
+        "price_out": None,
+        "price_in": None,
+        "transfers": t_out + t_in,
+        "transfers_out": t_out,
+        "transfers_in": t_in,
+        "duration_out_min": r.get("duration_to"),
+        "duration_in_min": r.get("duration_back"),
+        "weekday_out": d_out.weekday(),
+        "weekday_in": date.fromisoformat(date_in).weekday(),
+        "airline_code": code,
+        "airline": airline_name(code, maps["airlines"]),
+        "category": category_for(code),
+        "domestic": False,
+        "source": "aviasales",
+        "note": NOTE_AVIASALES,
+        "link": url,
+    }
+
+
+def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
     """Surowy rekord Aviasales -> rekord deal albo None gdy odfiltrowany."""
     price = r.get("price")
     dep_at = r.get("departure_at") or ""
@@ -487,15 +636,15 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
     if marker:
         url += ("&" if "?" in url else "?") + "marker=" + urllib.parse.quote(marker)
 
-    origin_name = (airports.get(origin) or {}).get("name") or origin
-    dest_country = country_name(dest_city_code)
+    origin_name = (maps["airports"].get(origin) or {}).get("name") or origin
+    dest_country = tp_country_name(maps, dest_city_code)
 
     return {
         "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
         "origin": origin,
         "origin_name": origin_name,
         "dest": dest,
-        "dest_city": city_name(dest_city_code),
+        "dest_city": tp_city_name(maps, dest_city_code),
         "dest_country": dest_country,
         "date_out": date_out,
         "time_out": time_out,
@@ -509,7 +658,7 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "weekday_out": d_out.weekday(),
         "weekday_in": date.fromisoformat(date_in).weekday(),
         "airline_code": code,
-        "airline": airline_name(code, tp_airlines),
+        "airline": airline_name(code, maps["airlines"]),
         "category": category_for(code),
         "domestic": dest_country == "Polska",
         "source": "aviasales",
@@ -588,12 +737,28 @@ def main():
     sources = ["ryanair"]
     if token:
         sources.append("aviasales")
+    maps = load_tp_maps() if token else None
     ry = fetch_ryanair(cfg)
-    avi = fetch_aviasales(cfg, token, marker)
+    avi = fetch_aviasales(cfg, token, marker, maps)
     counts = {"ryanair": len(ry), "aviasales": len(avi)}
 
     # Scalanie ofert z wielu źródeł dla tej samej trasy i dat.
     deals = merge_offers(ry + avi)
+
+    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+    # Zakładka „Daleko" — okazje poza Europą, osobny plik.
+    far_raw = fetch_aviasales_far(cfg.get("far") or {}, token, marker, maps) \
+        if token else []
+    far_deals = merge_offers(far_raw)
+    annotate_record_low(far_deals, history_by_route, cfg)
+    far_deals.sort(key=lambda d: d["price"])
+    DEALS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(FAR_PATH, "w", encoding="utf-8") as f:
+        json.dump({"generated_at": now, "config": cfg.get("far"),
+                   "counts": {"aviasales": len(far_raw)},
+                   "deals": far_deals},
+                  f, ensure_ascii=False, separators=(",", ":"))
 
     # Limit ofert linii tradycyjnych na trasę (kontrola rozmiaru pliku).
     full_by_route = {}
@@ -614,9 +779,8 @@ def main():
     annotate_record_low(deals, history_by_route, cfg)
 
     # Do historii zapisujemy jedną linię na trasę — najniższą cenę z runu.
-    now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
     lowest = {}
-    for d in deals:
+    for d in deals + far_deals:
         key = (d["origin"], d["dest"])
         if key not in lowest or d["price"] < lowest[key]["price"]:
             lowest[key] = d
