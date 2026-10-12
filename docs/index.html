@@ -114,6 +114,14 @@
   }
   .alt:last-child { border-bottom: none; }
   .alt .muted { color: var(--muted); }
+  .vs { font-size: 0.8rem; font-weight: 600; }
+  .vs.neg { color: var(--price); }
+  .vs.neu { color: var(--muted); font-weight: 400; }
+  .vs.pos { color: var(--badge); }
+  details.hist summary { font-size: 0.8rem; }
+  .hist-body { padding: 4px; }
+  .hist-cap { font-size: 0.75rem; color: var(--muted); display: flex;
+              justify-content: space-between; }
   .empty, .error { text-align: center; color: var(--muted); padding: 48px 16px; }
   .empty a { color: var(--accent); }
   /* Ustawienia */
@@ -534,6 +542,12 @@ function kartaHtml(d, showBadge) {
         <span class="price">${fmtCena(d.price)}</span>
         <span class="route">${d.origin} → ${d.dest}</span>
       </div>
+      ${d.vs_typical !== null && d.vs_typical !== undefined
+        ? '<div><span class="vs ' + (d.vs_typical <= -15 ? "neg" :
+          d.vs_typical > 15 ? "pos" : "neu") + '">' +
+          (d.vs_typical > 0 ? "+" : "") + d.vs_typical +
+          "% vs typowo " + fmtCena(d.typical_price) + "</span></div>"
+        : ""}
       <div class="row">
         <span class="city">${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
         <span class="times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})</span>
@@ -637,8 +651,92 @@ function renderList(items, listId, sort, groupBy, anyData) {
             · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
           </a>`).join("") + "</details>"
       : "";
-    return '<div class="group">' + kartaHtml(main, anyLow) + legacy + alts + "</div>";
+    return '<div class="group">' + kartaHtml(main, anyLow) + legacy + alts +
+      histDetails(main) + "</div>";
   }).join("");
+}
+
+/* ---------- historia cen (mini-wykres) ---------- */
+
+function histDetails(d) {
+  return '<details class="hist" data-route="' + d.origin + '-' + d.dest + '">' +
+    '<summary>Historia ceny ▸ ' + d.origin + ' → ' + d.dest + '</summary>' +
+    '<div class="hist-body"></div></details>';
+}
+
+/* Czysta funkcja skalująca — testowalna poza DOM. */
+function scalePoints(points, w, h) {
+  const xs = points.map(p => Date.parse(p[0]));
+  const ys = points.map(p => p[1]);
+  const x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+  const y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  const dx = (x1 - x0) || 1, dy = (y1 - y0) || 1;
+  return points.map(p => ({
+    x: (Date.parse(p[0]) - x0) / dx * (w - 16) + 8,
+    y: h - 12 - (p[1] - y0) / dy * (h - 20)
+  }));
+}
+
+function drawHistory(canvas, pts, route) {
+  const w = canvas.width, h = canvas.height;
+  const ctx = canvas.getContext("2d");
+  const css = getComputedStyle(document.documentElement);
+  const line = css.getPropertyValue("--accent").trim() || "#073590";
+  const dot = css.getPropertyValue("--price").trim() || "#0a7d3b";
+  const muted = css.getPropertyValue("--muted").trim() || "#888";
+
+  const scaled = scalePoints(pts, w, h);
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  scaled.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+  ctx.stroke();
+  const last = scaled[scaled.length - 1];
+  ctx.fillStyle = dot;
+  ctx.beginPath();
+  ctx.arc(last.x, last.y, 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = muted;
+  ctx.font = "10px sans-serif";
+  const prices = pts.map(p => p[1]);
+  ctx.fillText(Math.round(Math.min.apply(null, prices)) + " zł", 8, h - 2);
+  ctx.fillText("max " + Math.round(Math.max.apply(null, prices)) + " zł",
+               w - 70, 12);
+  ctx.fillText(route, 8, 12);
+}
+
+// Leniwy fetch po rozwinięciu <details.hist>.
+document.getElementById("list").addEventListener("toggle", onHistToggle, true);
+document.getElementById("listFar").addEventListener("toggle", onHistToggle, true);
+function onHistToggle(e) {
+  const det = e.target;
+  if (!(det instanceof HTMLDetailsElement) || !det.open ||
+      !det.classList.contains("hist") || det.dataset.loaded)
+    return;
+  det.dataset.loaded = "1";
+  const route = det.dataset.route;
+  track("view_history", { route: route });
+  const body = det.querySelector(".hist-body");
+  fetch("history/" + route + ".json", { cache: "default" })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(data => {
+      const pts = (data.points || []).slice(-90);
+      if (pts.length < 3) {
+        const first = pts.length ? pts[0][0].slice(0, 10) : "?";
+        body.textContent = "Za mało danych (zbieramy od " + first + ")";
+        return;
+      }
+      const c = document.createElement("canvas");
+      c.width = 320; c.height = 80;
+      body.appendChild(c);
+      drawHistory(c, pts, route);
+      const cap = document.createElement("div");
+      cap.className = "hist-cap";
+      cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
+        "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
+      body.appendChild(cap);
+    })
+    .catch(() => { body.textContent = "Brak historii tej trasy."; });
 }
 
 /* ---------- zakładki ---------- */

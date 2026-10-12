@@ -62,6 +62,14 @@ Jej „koperta" to sekcja `far` w `config.json`
 (`max_price_pln`, `min_nights`/`max_nights`, `days_ahead`,
 `max_transfers_each_way`).
 
+## Historia cen
+
+Skrypt zapisuje najniższą cenę każdej trasy z każdego uruchomienia —
+w `data/history.jsonl` (surowe, do mediany/rekordów) oraz jako wykresowe
+`docs/history/{ORIGIN}-{DEST}.json` (punkt `[czas, cena, miesiąc wylotu]`,
+przycinane do 400 dni). Na karcie widać „typową cenę" — medianę
+z ostatnich 90 dni — i rozwijany mini-wykres historii trasy.
+
 Strona ma wpięte Google Analytics 4 (ID w `docs/index.html`, zdarzenia:
 kliknięcie oferty, zapis ustawień, zmiana zakładki) — by je usunąć lub
 zmienić, wystarczy skasować/podmienić blok `gtag` w `<head>`.

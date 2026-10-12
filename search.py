@@ -19,6 +19,7 @@ ENV_PATH = ROOT / ".env"
 HISTORY_PATH = ROOT / "data" / "history.jsonl"
 DEALS_PATH = ROOT / "docs" / "deals.json"
 FAR_PATH = ROOT / "docs" / "far.json"
+HISTORY_DIR = ROOT / "docs" / "history"
 CACHE_DIR = ROOT / "data" / "cache"
 
 RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
@@ -42,7 +43,10 @@ AVIASALES_API = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
 
-HISTORY_DAYS = 180
+HISTORY_DAYS = 400
+HISTORY_POINTS_DAYS = 400   # okno przycinania punktów w docs/history/*.json
+TYPICAL_DAYS = 90           # okno mediany „typowej ceny"
+TYPICAL_MIN_POINTS = 5
 CACHE_MAX_AGE_DAYS = 30
 
 # Polskie nazwy krajów, których brakuje w pliku countries.json Travelpayouts
@@ -217,6 +221,98 @@ def is_record_low(price, history_prices, cfg):
     if len(history_prices) < cfg["record_low_min_samples"]:
         return False
     return price <= cfg["record_low_ratio"] * statistics.median(history_prices)
+
+
+def history_file(origin, dest):
+    return HISTORY_DIR / ("%s-%s.json" % (origin, dest))
+
+
+def load_route_file(origin, dest):
+    """Plik historii trasy: {"origin","dest","city","country","points":[]}."""
+    path = history_file(origin, dest)
+    if path.exists():
+        try:
+            with open(path, encoding="utf-8") as f:
+                return json.load(f)
+        except (OSError, ValueError):
+            pass
+    return {"origin": origin, "dest": dest, "city": "", "country": "",
+            "points": []}
+
+
+def backfill_history():
+    """Jednorazowo: buduje docs/history/*.json z data/history.jsonl
+    (miesiąc wylotu nieznany -> null). Wołane gdy katalog nie istnieje."""
+    if HISTORY_DIR.exists() or not HISTORY_PATH.exists():
+        return
+    HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    routes = {}
+    with open(HISTORY_PATH, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                e = json.loads(line)
+            except ValueError:
+                continue
+            key = (e["origin"], e["dest"])
+            ts = (e["ts"] or "")[:16]
+            pt = [ts, e["price"], None]
+            routes.setdefault(key, {}).setdefault(ts, pt)
+            if e["price"] < routes[key][ts][1]:
+                routes[key][ts][1] = e["price"]
+    n = 0
+    for (origin, dest), by_ts in routes.items():
+        data = load_route_file(origin, dest)
+        data["points"] = sorted(by_ts.values())
+        with open(history_file(origin, dest), "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
+        n += 1
+    print("Backfill historii: %d tras z data/history.jsonl" % n)
+
+
+def annotate_typical(deals):
+    """Ustawia typical_price (mediana punktów z ostatnich TYPICAL_DAYS dni,
+    min. TYPICAL_MIN_POINTS punktów — PRZED dopisaniem bieżącego runu)
+    oraz vs_typical w %."""
+    cutoff = datetime.now(timezone.utc) - timedelta(days=TYPICAL_DAYS)
+    cache = {}
+    for d in deals:
+        key = (d["origin"], d["dest"])
+        if key not in cache:
+            pts = []
+            for p in load_route_file(*key).get("points", []):
+                try:
+                    ts = datetime.fromisoformat(p[0])
+                    if ts.tzinfo is None:
+                        ts = ts.replace(tzinfo=timezone.utc)
+                    if ts >= cutoff:
+                        pts.append(p[1])
+                except (IndexError, TypeError, ValueError):
+                    continue
+            cache[key] = statistics.median(pts) \
+                if len(pts) >= TYPICAL_MIN_POINTS else None
+        typ = cache[key]
+        d["typical_price"] = round(typ, 2) if typ else None
+        d["vs_typical"] = round((d["price"] / typ - 1) * 100) \
+            if typ else None
+
+
+def append_history_points(deals, lowest, now):
+    """Dopisuje punkt [ts, min cena, miesiąc wylotu] do plików tras."""
+    for key, d in lowest.items():
+        data = load_route_file(*key)
+        data["city"] = data.get("city") or d.get("dest_city", "")
+        data["country"] = data.get("country") or d.get("dest_country", "")
+        ts = now[:16]
+        if not any(p[0] == ts for p in data["points"]):
+            data["points"].append([ts, d["price"], d["date_out"][:7]])
+        cutoff = (datetime.now(timezone.utc)
+                  - timedelta(days=HISTORY_POINTS_DAYS)).isoformat()[:16]
+        data["points"] = [p for p in data["points"] if p[0] >= cutoff]
+        with open(history_file(*key), "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
 
 
 def annotate_record_low(deals, history_by_route, cfg):
@@ -729,6 +825,7 @@ def main():
     marker = os.environ.get("TRAVELPAYOUTS_MARKER")
 
     history = load_history()
+    backfill_history()
     history_by_route = {}
     for e in history:
         history_by_route.setdefault((e["origin"], e["dest"]),
@@ -752,6 +849,7 @@ def main():
         if token else []
     far_deals = merge_offers(far_raw)
     annotate_record_low(far_deals, history_by_route, cfg)
+    annotate_typical(far_deals)
     far_deals.sort(key=lambda d: d["price"])
     DEALS_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(FAR_PATH, "w", encoding="utf-8") as f:
@@ -777,6 +875,7 @@ def main():
               % (dropped, MAX_PER_ROUTE_FULL))
 
     annotate_record_low(deals, history_by_route, cfg)
+    annotate_typical(deals)
 
     # Do historii zapisujemy jedną linię na trasę — najniższą cenę z runu.
     lowest = {}
@@ -793,6 +892,7 @@ def main():
                                 "dest": d["dest"], "price": d["price"],
                                 "source": d["source"]},
                                ensure_ascii=False) + "\n")
+    append_history_points(deals + far_deals, lowest, now)
 
     deals.sort(key=lambda d: d["price"])
     DEALS_PATH.parent.mkdir(parents=True, exist_ok=True)
