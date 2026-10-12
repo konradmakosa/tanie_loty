@@ -6,6 +6,7 @@
 import json
 import os
 import statistics
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -19,7 +20,12 @@ HISTORY_PATH = ROOT / "data" / "history.jsonl"
 DEALS_PATH = ROOT / "docs" / "deals.json"
 CACHE_DIR = ROOT / "data" / "cache"
 
-RYANAIR_API = "https://services-api.ryanair.com/farfnd/v4/roundTripFares"
+RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
+                  "/routes/pl/airport/{origin}")
+RYANAIR_CAL = ("https://www.ryanair.com/api/farfnd/v4/roundTripFares"
+               "/{origin}/{dest}/cheapestPerDay")
+ROUTES_CACHE_DAYS = 7
+MAX_PER_ROUTE = 10
 AVIASALES_API = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
@@ -51,6 +57,9 @@ RYANAIR_LINK = (
 
 NOTE_RYANAIR = "cena bez bagażu rejestrowanego"
 NOTE_AVIASALES = "cena z ostatnich 48 h, sprawdź przy zakupie"
+NOTE_AVIASALES_LOWCOST = ("cena pośrednika z ostatnich 48 h — "
+                          "przy Ryanair/Wizz lepiej kupić bezpośrednio")
+LOWCOST_CODES = {"FR", "RK", "RR", "MW", "W6", "W4", "W9"}
 
 AIRLINE_NAMES = {
     "FR": "Ryanair", "RK": "Ryanair UK",
@@ -109,14 +118,14 @@ def http_get_json(url, headers=None):
         return json.loads(resp.read().decode("utf-8"))
 
 
-def cached_json(name, url):
+def cached_json(name, url, max_age_days=CACHE_MAX_AGE_DAYS):
     """Pobiera JSON z URL-a, trzymając kopię w data/cache przez
-    CACHE_MAX_AGE_DAYS dni. Przy błędzie używa starej kopii, jeśli jest."""
+    max_age_days dni. Przy błędzie używa starej kopii, jeśli jest."""
     path = CACHE_DIR / name
     fresh = (
         path.exists()
         and (datetime.now() - datetime.fromtimestamp(path.stat().st_mtime))
-        < timedelta(days=CACHE_MAX_AGE_DAYS)
+        < timedelta(days=max_age_days)
     )
     if not fresh:
         try:
@@ -186,73 +195,117 @@ def annotate_record_low(deals, history_by_route, cfg):
         )
 
 
+def month_starts(start, end):
+    """Lista 'YYYY-MM-01' pokrywająca miesiące od start do end włącznie."""
+    months = []
+    cur = start.replace(day=1)
+    while cur <= end:
+        months.append(cur.strftime("%Y-%m-01"))
+        rok, mies = cur.year + (cur.month == 12), (cur.month % 12) + 1
+        cur = cur.replace(year=rok, month=mies)
+    return months
+
+
 def fetch_ryanair(cfg):
-    """Najtańsze połączenia Ryanair dla każdego lotniska z konfiguracji."""
+    """Kalendarz cen Ryanair: wszystkie trasy z lotnisk z konfiguracji,
+    wszystkie kombinacje dat w kopercie (max MAX_PER_ROUTE na trasę)."""
     jutro = date.today() + timedelta(days=1)
+    max_out = jutro + timedelta(days=cfg["days_ahead"])
+    months = month_starts(jutro, max_out + timedelta(days=cfg["max_nights"]))
     deals = []
     for origin in cfg["airports"]:
-        params = {
-            "departureAirportIataCode": origin,
-            "outboundDepartureDateFrom": jutro.isoformat(),
-            "outboundDepartureDateTo": (
-                jutro + timedelta(days=cfg["days_ahead"])).isoformat(),
-            "inboundDepartureDateFrom": (
-                jutro + timedelta(days=cfg["min_nights"])).isoformat(),
-            "inboundDepartureDateTo": (
-                jutro + timedelta(days=cfg["days_ahead"] + cfg["max_nights"])
-            ).isoformat(),
-            "durationFrom": cfg["min_nights"],
-            "durationTo": cfg["max_nights"],
-            "market": "pl-pl",
-            "currency": "PLN",
-            "priceValueTo": cfg["max_price_pln"],
-        }
-        url = RYANAIR_API + "?" + urllib.parse.urlencode(params)
-        try:
-            fares = http_get_json(url).get("fares", [])
-        except Exception as e:
-            print("Ryanair %s: błąd pobierania (%s) — pomijam" % (origin, e))
+        routes = cached_json("routes_%s.json" % origin,
+                             RYANAIR_ROUTES.format(origin=origin),
+                             ROUTES_CACHE_DAYS)
+        if not routes:
+            print("Ryanair %s: brak listy tras — pomijam" % origin)
             continue
-        ok = 0
-        for fare in fares:
-            try:
-                deals.append(ryanair_deal(fare))
-                ok += 1
-            except (KeyError, TypeError, ValueError) as e:
-                print("Ryanair %s: pominięto niekompletny wpis (%s)"
-                      % (origin, e))
-        print("Ryanair %s: %d połączeń" % (origin, ok))
+        n_tras = 0
+        for r in routes:
+            arr = r.get("arrivalAirport") or {}
+            dest = arr.get("code")
+            if not dest or not r.get("operator"):
+                continue
+            n_tras += 1
+            deals.extend(ryanair_route(origin, dest, arr, cfg, jutro,
+                                       max_out, months))
+        print("Ryanair %s: %d tras" % (origin, n_tras))
     return deals
 
 
-def ryanair_deal(fare):
-    out = fare["outbound"]
-    inn = fare["inbound"]
-    origin = out["departureAirport"]["iataCode"]
-    dest = out["arrivalAirport"]["iataCode"]
+def ryanair_route(origin, dest, arr, cfg, jutro, max_out, months):
+    """Kombinacje tam-i-z-powrotem dla jednej trasy, max MAX_PER_ROUTE."""
+    out_by_day = {}
+    in_by_day = {}
+    for month in months:
+        params = {
+            "outboundMonthOfDate": month,
+            "inboundMonthOfDate": month,
+            "currency": "PLN",
+        }
+        url = (RYANAIR_CAL.format(origin=origin, dest=dest)
+               + "?" + urllib.parse.urlencode(params))
+        try:
+            data = http_get_json(url)
+        except Exception as e:
+            print("Ryanair %s->%s %s: błąd (%s) — pomijam miesiąc"
+                  % (origin, dest, month, e))
+            time.sleep(0.15)
+            continue
+        time.sleep(0.15)
+        for f in (data.get("outbound") or {}).get("fares") or []:
+            if fare_ok(f):
+                out_by_day[f["day"]] = f
+        for f in (data.get("inbound") or {}).get("fares") or []:
+            if fare_ok(f):
+                in_by_day[f["day"]] = f
 
-    dep_out = out["departureDate"]  # np. "2026-11-27T12:55:00"
-    dep_in = inn["departureDate"]
+    combos = []
+    for d_out, fo in out_by_day.items():
+        do = date.fromisoformat(d_out)
+        if not (jutro <= do <= max_out):
+            continue
+        for d_in, fi in in_by_day.items():
+            nights = (date.fromisoformat(d_in) - do).days
+            if not (cfg["min_nights"] <= nights <= cfg["max_nights"]):
+                continue
+            total = fo["price"]["value"] + fi["price"]["value"]
+            if total > cfg["max_price_pln"]:
+                continue
+            combos.append((total, fo, fi, nights))
+    combos.sort(key=lambda c: c[0])
+    return [ryanair_deal(origin, dest, arr, fo, fi, total, nights)
+            for total, fo, fi, nights in combos[:MAX_PER_ROUTE]]
+
+
+def fare_ok(f):
+    """Czy wpis kalendarza ma realną cenę."""
+    return (f.get("price") and not f.get("soldOut")
+            and not f.get("unavailable"))
+
+
+def ryanair_deal(origin, dest, arr, fo, fi, total, nights):
+    dep_out = fo.get("departureDate") or (fo["day"] + "T00:00:00")
+    dep_in = fi.get("departureDate") or (fi["day"] + "T00:00:00")
     date_out, time_out = dep_out[:10], dep_out[11:16]
     date_in, time_in = dep_in[:10], dep_in[11:16]
-    nights = (date.fromisoformat(date_in)
-              - date.fromisoformat(date_out)).days
 
     return {
         "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
         "origin": origin,
-        "origin_name": out["departureAirport"].get("name", origin),
+        "origin_name": origin,
         "dest": dest,
-        "dest_city": out["arrivalAirport"].get("city", {}).get("name", dest),
-        "dest_country": out["arrivalAirport"].get("countryName", ""),
+        "dest_city": (arr.get("city") or {}).get("name")
+                     or arr.get("name") or dest,
+        "dest_country": (arr.get("country") or {}).get("name", ""),
         "date_out": date_out,
         "time_out": time_out,
         "date_in": date_in,
         "time_in": time_in,
         "nights": nights,
-        "price": fare["summary"]["price"]["value"],
-        "price_out": out.get("price", {}).get("value"),
-        "price_in": inn.get("price", {}).get("value"),
+        "price": round(total, 2),
+        "price_out": fo["price"]["value"],
+        "price_in": fi["price"]["value"],
         "transfers": 0,
         "weekday_out": date.fromisoformat(date_out).weekday(),
         "weekday_in": date.fromisoformat(date_in).weekday(),
@@ -302,12 +355,7 @@ def fetch_aviasales(cfg, token, marker):
     koniec = jutro + timedelta(days=cfg["days_ahead"])
 
     # Jeden request na każdy miesiąc pokrywający zakres dat.
-    months = []
-    cur = jutro.replace(day=1)
-    while cur <= koniec:
-        months.append(cur.strftime("%Y-%m"))
-        rok, mies = cur.year + (cur.month == 12), (cur.month % 12) + 1
-        cur = cur.replace(year=rok, month=mies)
+    months = [m[:7] for m in month_starts(jutro, koniec)]
 
     deals = []
     for month in months:
@@ -420,9 +468,62 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "airline_code": code,
         "airline": airline_name(code, tp_airlines),
         "source": "aviasales",
-        "note": NOTE_AVIASALES,
+        "note": (NOTE_AVIASALES_LOWCOST if code in LOWCOST_CODES
+                 else NOTE_AVIASALES),
         "link": url,
     }
+
+
+SOURCE_LABELS = {"ryanair": "ryanair.com", "aviasales": "Aviasales"}
+
+
+def direct_for(d, group):
+    """Link bezpośredni do linii dla scalonej oferty + etykieta.
+    Oferta ryanair-source wygrywa (jej link = strona wyboru lotu)."""
+    for g in group:
+        if g["source"] == "ryanair":
+            return g["link"], "ryanair.com"
+    code = d.get("airline_code")
+    if code in ("FR", "RK", "RR", "MW"):
+        return RYANAIR_LINK.format(origin=d["origin"], dest=d["dest"],
+                                   date_out=d["date_out"],
+                                   date_in=d["date_in"]), "ryanair.com"
+    if code in ("W6", "W4", "W9"):
+        return ("https://wizzair.com/pl-pl/booking/select-flight/"
+                "{}/{}/{}/{}/1/0/0/null".format(d["origin"], d["dest"],
+                                                d["date_out"], d["date_in"]),
+                "wizzair.com")
+    if code == "LO":
+        return ("https://www.lot.com/pl/pl/booking/flights"
+                "?from={}&to={}&departure={}&return={}".format(
+                    d["origin"], d["dest"], d["date_out"], d["date_in"]),
+                "lot.com")
+    return None, None
+
+
+def merge_offers(deals):
+    """Scala rekordy o tym samym (origin, dest, date_out, date_in):
+    rekord główny = najtańszy, reszta trafia do offers."""
+    groups = {}
+    for d in deals:
+        key = (d["origin"], d["dest"], d["date_out"], d["date_in"])
+        groups.setdefault(key, []).append(d)
+
+    merged = []
+    for group in groups.values():
+        group.sort(key=lambda d: d["price"])
+        main = dict(group[0])
+        main["offers"] = [
+            {"source": g["source"], "price": g["price"], "link": g["link"],
+             "label": SOURCE_LABELS.get(g["source"], g["source"]),
+             "airline": g["airline"]}
+            for g in group
+        ]
+        main["direct_link"], main["direct_label"] = direct_for(main, group)
+        # Top-level link == offers[0].link — oszczędzamy ~600 B na rekord.
+        del main["link"]
+        merged.append(main)
+    return merged
 
 
 def main():
@@ -440,16 +541,12 @@ def main():
     sources = ["ryanair"]
     if token:
         sources.append("aviasales")
-    deals = fetch_ryanair(cfg)
-    deals += fetch_aviasales(cfg, token, marker)
+    ry = fetch_ryanair(cfg)
+    avi = fetch_aviasales(cfg, token, marker)
+    counts = {"ryanair": len(ry), "aviasales": len(avi)}
 
-    # Dedupe po trasie i datach — zostaje tańsza oferta.
-    best = {}
-    for d in deals:
-        key = (d["origin"], d["dest"], d["date_out"], d["date_in"])
-        if key not in best or d["price"] < best[key]["price"]:
-            best[key] = d
-    deals = list(best.values())
+    # Scalanie ofert z wielu źródeł dla tej samej trasy i dat.
+    deals = merge_offers(ry + avi)
 
     annotate_record_low(deals, history_by_route, cfg)
 
@@ -469,13 +566,17 @@ def main():
     DEALS_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(DEALS_PATH, "w", encoding="utf-8") as f:
         json.dump({"generated_at": now, "config": cfg,
-                   "sources": sources, "deals": deals},
-                  f, ensure_ascii=False, indent=2)
+                   "sources": sources, "counts": counts, "deals": deals},
+                  f, ensure_ascii=False, separators=(",", ":"))
 
     lows = sum(1 for d in deals if d["record_low"])
-    print("Zapisano %d okazji do %s (rekordowo tanich: %d, źródła: %s)"
-          % (len(deals), DEALS_PATH, lows,
-             ", ".join(sources) if sources else "brak"))
+    multi = sum(1 for d in deals if len(d["offers"]) > 1)
+    print("Zapisano %d okazji do %s (rekordowo tanich: %d, "
+          "z wieloma źródłami: %d, źródła: %s "
+          "[ryanair: %d, aviasales: %d])"
+          % (len(deals), DEALS_PATH, lows, multi,
+             ", ".join(sources) if sources else "brak",
+             counts["ryanair"], counts["aviasales"]))
 
 
 if __name__ == "__main__":

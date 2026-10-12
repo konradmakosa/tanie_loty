@@ -78,8 +78,17 @@
     display: block; text-decoration: none; color: inherit;
     background: var(--card); border-radius: 14px; padding: 16px;
     margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.12);
+    cursor: pointer;
   }
   .card:active { transform: scale(.99); }
+  .offers { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+  .offers a { color: var(--accent); text-decoration: none; }
+  .direct {
+    display: inline-block; margin-top: 8px; padding: 6px 14px;
+    border: 1px solid var(--accent); border-radius: 999px;
+    color: var(--accent); font-size: 0.85rem; font-weight: 600;
+    text-decoration: none;
+  }
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
   .price { font-size: 1.6rem; font-weight: 700; color: var(--price); }
   .route { font-weight: 600; font-size: 1.05rem; }
@@ -159,6 +168,7 @@
   <h1>Tanie loty z Warszawy</h1>
   <p class="updated" id="updated"></p>
   <p class="desc" id="desc"></p>
+  <p class="desc" id="countsLine"></p>
   <p class="desc" id="settingsLine"></p>
   <p class="desc" id="srcwarn"></p>
 </header>
@@ -357,10 +367,24 @@ function allCountries() {
 
 /* ---------- renderowanie kart ---------- */
 
+function dealLink(d) {
+  return d.link || ((d.offers || [])[0] || {}).link || "";
+}
+
 function kartaHtml(d, showBadge) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
+  const offers = d.offers || [];
+  const offersHtml = offers.length > 1
+    ? '<div class="offers">Ceny: ' + offers.map(o =>
+        `<a href="${o.link}" target="_blank" rel="noopener" data-id="${d.id}" data-via="${o.label}">` +
+        `${o.label} ${fmtCena(o.price)}</a>`).join(" · ") + "</div>"
+    : "";
+  const directHtml = (d.direct_link && d.source !== "ryanair")
+    ? `<a class="direct" href="${d.direct_link}" target="_blank" rel="noopener"` +
+      ` data-id="${d.id}" data-via="direct">Kup bezpośrednio: ${d.direct_label} →</a>`
+    : "";
   return `
-    <a class="card" href="${d.link}" target="_blank" rel="noopener" data-id="${d.id}">
+    <div class="card" data-href="${dealLink(d)}" data-id="${d.id}" data-via="${offers[0] ? offers[0].label : ""}">
       <div class="row">
         <span class="price">${fmtCena(d.price)}</span>
         <span class="route">${d.origin} → ${d.dest}</span>
@@ -374,10 +398,12 @@ function kartaHtml(d, showBadge) {
         <span class="airline">${d.airline} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
       </div>
       ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
+      ${offersHtml}
+      ${directHtml}
       ${low ? '<span class="badge">REKORDOWO TANIO' +
         (d.median_price ? ' <small>· mediana ' + fmtCena(d.median_price) + '</small>' : '') +
         '</span>' : ''}
-    </a>`;
+    </div>`;
 }
 
 function render() {
@@ -429,10 +455,12 @@ function render() {
         (rest.length === 1 ? "inny termin" : rest.length <= 4 ? "inne terminy" : "innych terminów") +
         ` (od ${fmtCena(rest[0].price)})</summary>` +
         rest.map(d => `
-          <a class="alt" href="${d.link}" target="_blank" rel="noopener" data-id="${d.id}">
+          <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
+             data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
             ${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
             · <strong>${fmtCena(d.price)}</strong>
-            · ${d.airline} <span class="muted">· ${d.dest}</span>
+            · ${d.airline} <span class="muted">· ${d.dest}
+            · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
           </a>`).join("") + "</details>"
       : "";
     return '<div class="group">' + kartaHtml(main, anyLow) + alts + "</div>";
@@ -564,13 +592,18 @@ document.getElementById("groupBy").addEventListener("change", render);
 
 // Kliknięcia w oferty (delegacja na całą listę).
 document.getElementById("list").addEventListener("click", e => {
-  const a = e.target.closest("a[data-id]");
-  if (!a) return;
-  const d = deals.find(x => x.id === a.dataset.id);
-  if (d) track("select_deal", {
+  const el = e.target.closest("[data-id]");
+  if (!el) return;
+  const d = deals.find(x => x.id === el.dataset.id);
+  if (!d) return;
+  track("select_deal", {
     deal_id: d.id, destination: d.dest_city, country: d.dest_country,
-    price: d.price, airline: d.airline, source: d.source, nights: d.nights
+    price: d.price, airline: d.airline, source: d.source, nights: d.nights,
+    via: el.dataset.via || ""
   });
+  // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
+  if (!e.target.closest("a") && el.dataset.href)
+    window.open(el.dataset.href, "_blank", "noopener");
 });
 
 fetch("deals.json", { cache: "no-store" })
@@ -588,6 +621,13 @@ fetch("deals.json", { cache: "no-store" })
       "Skrypt zbiera oferty do " + cfg.max_price_pln + " zł, " +
       cfg.min_nights + "–" + cfg.max_nights + " nocy, najbliższe " +
       cfg.days_ahead + " dni — zawęź w Ustawieniach";
+    const c = data.counts || {};
+    const cParts = [];
+    if (c.ryanair) cParts.push("Ryanair " + c.ryanair + " ofert");
+    if (c.aviasales) cParts.push("Aviasales " + c.aviasales + " ofert");
+    if (cParts.length)
+      document.getElementById("countsLine").textContent =
+        "Źródła: " + cParts.join(" · ");
     document.getElementById("settingsLine").textContent = settingsSummary(settings);
     if (!(data.sources || []).includes("aviasales")) {
       document.getElementById("srcwarn").textContent =
