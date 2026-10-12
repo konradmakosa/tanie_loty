@@ -1,0 +1,11 @@
+Options -Indexes
+
+<Files "config.php">
+    Require all denied
+</Files>
+<Files "config.sample.php">
+    Require all denied
+</Files>
+<Files "schema.sql">
+    Require all denied
+</Files>

@@ -70,6 +70,18 @@ w `data/history.jsonl` (surowe, do mediany/rekordów) oraz jako wykresowe
 przycinane do 400 dni). Na karcie widać „typową cenę" — medianę
 z ostatnich 90 dni — i rozwijany mini-wykres historii trasy.
 
+### Baza MySQL (opcjonalna)
+
+Katalog `server/` to API PHP (PDO — MySQL w produkcji, SQLite lokalnie)
+wgrywane na hosting przez `deploy.py` (FTP/FTP_TLS, flaga `--dry-run`
+dla podglądu). Endpointy: `ingest.php` (POST + `X-Ingest-Key`, gzip),
+`history.php?route=XXX-YYY`, `typical.php?tab=`. GitHub Actions
+po każdym wyszukiwaniu uruchamia `ingest.py` — bez sekretów
+`TL_API_BASE`/`TL_INGEST_KEY` krok wypisuje „pomijam" i nic nie blokuje.
+Dostępy (baza `TL_DB_*`, FTP `TL_FTP_*`, `TL_WEB_DIR`) trzymane są
+w `.env` — nie wchodzą do repozytorium. Strona używa API, gdy
+odpowiada; bez niego działa na statycznych plikach.
+
 Strona ma wpięte Google Analytics 4 (ID w `docs/index.html`, zdarzenia:
 kliknięcie oferty, zapis ustawień, zmiana zakładki) — by je usunąć lub
 zmienić, wystarczy skasować/podmienić blok `gtag` w `<head>`.

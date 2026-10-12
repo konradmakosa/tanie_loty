@@ -358,6 +358,8 @@
 <div class="toast" id="toast">Zapisano</div>
 
 <script>
+const API_BASE = "https://makosa.org/tanie_loty/api";
+
 const DNI = ["nd", "pn", "wt", "śr", "cz", "pt", "so"];
 const DNI_KROTKIE = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
 
@@ -664,6 +666,32 @@ function histDetails(d) {
     '<div class="hist-body"></div></details>';
 }
 
+// Fetch z timeoutem — do zapytań do API (baza może nie odpowiadać).
+function apiGet(path, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms || 4000);
+  return fetch(API_BASE + path, { signal: ctl.signal })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .finally(() => clearTimeout(t));
+}
+
+// Typowa cena z pełnej bazy (nadpisuje statyczną, gdy >= 5 dni danych).
+function applyApiTypical(list, tab, rerender) {
+  apiGet("/typical.php?tab=" + tab).then(map => {
+    if (!map || typeof map !== "object") return;
+    let changed = false;
+    list.forEach(d => {
+      const t = map[d.origin + "-" + d.dest];
+      if (t && t.n_days >= 5 && t.typical_90d) {
+        d.typical_price = t.typical_90d;
+        d.vs_typical = Math.round((d.price / t.typical_90d - 1) * 100);
+        changed = true;
+      }
+    });
+    if (changed) rerender();
+  }).catch(() => {});
+}
+
 /* Czysta funkcja skalująca — testowalna poza DOM. */
 function scalePoints(points, w, h) {
   const xs = points.map(p => Date.parse(p[0]));
@@ -717,26 +745,56 @@ function onHistToggle(e) {
   const route = det.dataset.route;
   track("view_history", { route: route });
   const body = det.querySelector(".hist-body");
-  fetch("history/" + route + ".json", { cache: "default" })
-    .then(r => r.ok ? r.json() : Promise.reject(r.status))
-    .then(data => {
-      const pts = (data.points || []).slice(-90);
-      if (pts.length < 3) {
-        const first = pts.length ? pts[0][0].slice(0, 10) : "?";
-        body.textContent = "Za mało danych (zbieramy od " + first + ")";
-        return;
-      }
-      const c = document.createElement("canvas");
-      c.width = 320; c.height = 80;
-      body.appendChild(c);
-      drawHistory(c, pts, route);
-      const cap = document.createElement("div");
-      cap.className = "hist-cap";
-      cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
-        "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
-      body.appendChild(cap);
-    })
-    .catch(() => { body.textContent = "Brak historii tej trasy."; });
+  // Najpierw pełna historia z API; fallback na statyczny plik trasy.
+  apiGet("/history.php?route=" + route).then(data => {
+    const pts = (data.daily || []).slice(-90);
+    if (pts.length < 3) throw new Error("mało danych");
+    const c = document.createElement("canvas");
+    c.width = 320; c.height = 80;
+    body.appendChild(c);
+    drawHistory(c, pts, route);
+    const cap = document.createElement("div");
+    cap.className = "hist-cap";
+    cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
+      "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
+    body.appendChild(cap);
+    // Typowa cena wg miesiąca wylotu (mediany z >= 3 dniami, maks. 6).
+    const mo = data.by_month || {};
+    const lines = Object.keys(mo).sort().slice(0, 6).map(m => {
+      const vals = mo[m].map(p => p[1]).sort((a, b) => a - b);
+      if (vals.length < 3) return null;
+      const med = vals.length % 2 ? vals[(vals.length - 1) / 2]
+        : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2;
+      return m + " wylotu: typowo " + Math.round(med) + " zł";
+    }).filter(Boolean);
+    if (lines.length) {
+      const div = document.createElement("div");
+      div.className = "hist-cap muted";
+      div.textContent = lines.join(" · ");
+      body.appendChild(div);
+    }
+  }).catch(() => {
+    fetch("history/" + route + ".json", { cache: "default" })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        const pts = (data.points || []).slice(-90);
+        if (pts.length < 3) {
+          const first = pts.length ? pts[0][0].slice(0, 10) : "?";
+          body.textContent = "Za mało danych (zbieramy od " + first + ")";
+          return;
+        }
+        const c = document.createElement("canvas");
+        c.width = 320; c.height = 80;
+        body.appendChild(c);
+        drawHistory(c, pts, route);
+        const cap = document.createElement("div");
+        cap.className = "hist-cap";
+        cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
+          "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
+        body.appendChild(cap);
+      })
+      .catch(() => { body.textContent = "Brak historii tej trasy."; });
+  });
 }
 
 /* ---------- zakładki ---------- */
@@ -1035,6 +1093,9 @@ Promise.all([
     showTab(tabFromHash());
     render();
     renderFar();
+    // Typowe ceny z pełnej bazy (API może nie działać — wtedy statyczne).
+    applyApiTypical(deals, "okazje", render);
+    applyApiTypical(farDeals, "daleko", renderFar);
   })
   .catch(e => {
     document.getElementById("list").innerHTML =

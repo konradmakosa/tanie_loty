@@ -429,6 +429,8 @@ def ryanair_deal(origin, dest, arr, fo, fi, total, nights):
         "dest_city": (arr.get("city") or {}).get("name")
                      or arr.get("name") or dest,
         "dest_country": (arr.get("country") or {}).get("name", ""),
+        "country_code": ((arr.get("country") or {}).get("code") or "")
+                        .upper() or None,
         "date_out": date_out,
         "time_out": time_out,
         "date_in": date_in,
@@ -734,6 +736,7 @@ def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
 
     origin_name = (maps["airports"].get(origin) or {}).get("name") or origin
     dest_country = tp_country_name(maps, dest_city_code)
+    dest_cc = tp_country_code(maps, dest_city_code)
 
     return {
         "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
@@ -742,6 +745,7 @@ def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
         "dest": dest,
         "dest_city": tp_city_name(maps, dest_city_code),
         "dest_country": dest_country,
+        "country_code": dest_cc,
         "date_out": date_out,
         "time_out": time_out,
         "date_in": date_in,
