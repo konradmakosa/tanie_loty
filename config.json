@@ -1,6 +1,6 @@
 {
   "airports": ["WMI", "WAW"],
-  "max_price_pln": 400,
+  "max_price_pln": {"lcc": 400, "full": 1200},
   "min_nights": 1,
   "max_nights": 14,
   "days_ahead": 120,

@@ -25,7 +25,8 @@ RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
 RYANAIR_CAL = ("https://www.ryanair.com/api/farfnd/v4/roundTripFares"
                "/{origin}/{dest}/cheapestPerDay")
 ROUTES_CACHE_DAYS = 7
-MAX_PER_ROUTE = 10
+MAX_PER_ROUTE = 8
+MAX_PER_ROUTE_FULL = 15  # linie tradycyjne — cap na trasę po scaleniu
 AVIASALES_API = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
@@ -60,6 +61,29 @@ NOTE_AVIASALES = "cena z ostatnich 48 h, sprawdź przy zakupie"
 NOTE_AVIASALES_LOWCOST = ("cena pośrednika z ostatnich 48 h — "
                           "przy Ryanair/Wizz lepiej kupić bezpośrednio")
 LOWCOST_CODES = {"FR", "RK", "RR", "MW", "W6", "W4", "W9"}
+
+# Linie niskokosztowe (+ tanie czartery/regionalne) — reszta to "full".
+LCC_CODES = {"FR", "RK", "RR", "MW", "W6", "W4", "W9", "U2", "EJU", "DS",
+             "VY", "EW", "PC", "FB", "0B", "TO", "HV", "X3", "LS", "BE",
+             "V7", "OE", "4U", "XQ", "XC", "GQ", "2L"}
+
+# Strony główne linii tradycyjnych (link "Kup bezpośrednio" bez parametrów).
+LEGACY_LINKS = {
+    "SK": "https://www.flysas.com/", "OS": "https://www.austrian.com/",
+    "LH": "https://www.lufthansa.com/", "KL": "https://www.klm.com/",
+    "AF": "https://www.airfrance.com/", "AY": "https://www.finnair.com/",
+    "TP": "https://www.flytap.com/", "A3": "https://en.aegeanair.com/",
+    "TK": "https://www.turkishairlines.com/",
+}
+
+
+def category_for(code):
+    return "lcc" if code in LCC_CODES else "full"
+
+
+def price_limit(cfg, code):
+    """Próg ceny w kopercie dla kategorii linii."""
+    return cfg["max_price_pln"][category_for(code)]
 
 AIRLINE_NAMES = {
     "FR": "Ryanair", "RK": "Ryanair UK",
@@ -270,7 +294,7 @@ def ryanair_route(origin, dest, arr, cfg, jutro, max_out, months):
             if not (cfg["min_nights"] <= nights <= cfg["max_nights"]):
                 continue
             total = fo["price"]["value"] + fi["price"]["value"]
-            if total > cfg["max_price_pln"]:
+            if total > price_limit(cfg, "FR"):
                 continue
             combos.append((total, fo, fi, nights))
     combos.sort(key=lambda c: c[0])
@@ -311,6 +335,8 @@ def ryanair_deal(origin, dest, arr, fo, fi, total, nights):
         "weekday_in": date.fromisoformat(date_in).weekday(),
         "airline_code": "FR",
         "airline": "Ryanair",
+        "category": "lcc",
+        "domestic": (arr.get("country") or {}).get("name") == "Polska",
         "source": "ryanair",
         "note": NOTE_RYANAIR,
         "link": RYANAIR_LINK.format(origin=origin, dest=dest,
@@ -359,34 +385,49 @@ def fetch_aviasales(cfg, token, marker):
 
     deals = []
     for month in months:
-        params = {
-            "origin": "WAW",  # kod miasta — obejmuje WAW i WMI
-            "departure_at": month,
-            "one_way": "false",
-            "direct": "true",
-            "unique": "false",
-            "sorting": "price",
-            "currency": "pln",
-            "market": "pl",
-            "limit": 1000,
-            "page": 1,
-        }
-        url = AVIASALES_API + "?" + urllib.parse.urlencode(params)
-        try:
-            resp = http_get_json(url, {"X-Access-Token": token})
-        except urllib.error.HTTPError as e:
-            if e.code in (401, 403):
-                print("Aviasales %s: HTTP %d — nieprawidłowy token?"
-                      % (month, e.code))
-            else:
-                print("Aviasales %s: błąd HTTP %d — pomijam"
-                      % (month, e.code))
-            continue
-        except Exception as e:
-            print("Aviasales %s: błąd pobierania (%s) — pomijam" % (month, e))
-            continue
+        # Stronnicowanie: gdy strona jest pełna (1000) a najdroższa cena
+        # wciąż pod progiem — dobieramy kolejne (max 3 strony).
+        data = []
+        limit = cfg["max_price_pln"]["full"]
+        pages = 0
+        for page in range(1, 4):
+            params = {
+                "origin": "WAW",  # kod miasta — obejmuje WAW i WMI
+                "departure_at": month,
+                "one_way": "false",
+                "direct": "true",
+                "unique": "false",
+                "sorting": "price",
+                "currency": "pln",
+                "market": "pl",
+                "limit": 1000,
+                "page": page,
+            }
+            url = AVIASALES_API + "?" + urllib.parse.urlencode(params)
+            try:
+                resp = http_get_json(url, {"X-Access-Token": token})
+            except urllib.error.HTTPError as e:
+                if e.code in (401, 403):
+                    print("Aviasales %s: HTTP %d — nieprawidłowy token?"
+                          % (month, e.code))
+                else:
+                    print("Aviasales %s: błąd HTTP %d — pomijam"
+                          % (month, e.code))
+                break
+            except Exception as e:
+                print("Aviasales %s: błąd pobierania (%s) — pomijam"
+                      % (month, e))
+                break
+            pages += 1
+            chunk = resp.get("data") or []
+            data += chunk
+            last_price = max([c.get("price") or 0 for c in chunk],
+                             default=0)
+            if len(chunk) < 1000 or last_price >= limit:
+                break
+        if pages > 1:
+            print("Aviasales %s: dobrano %d stron" % (month, pages))
 
-        data = resp.get("data") or []
         ok = 0
         for r in data:
             try:
@@ -400,6 +441,8 @@ def fetch_aviasales(cfg, token, marker):
                 ok += 1
         print("Aviasales %s: %d rekordów z API, %d po filtrach"
               % (month, len(data), ok))
+    lcc_n = sum(1 for d in deals if d["category"] == "lcc")
+    print("Aviasales: lcc %d, full %d" % (lcc_n, len(deals) - lcc_n))
     return deals
 
 
@@ -412,7 +455,8 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
     if price is None or len(dep_at) < 16 or len(ret_at) < 16:
         raise ValueError("brak price/departure_at/return_at")
 
-    if float(price) > cfg["max_price_pln"]:
+    code = r.get("airline") or ""
+    if float(price) > price_limit(cfg, code):
         return None
     if (r.get("transfers") or 0) != 0 or (r.get("return_transfers") or 0) != 0:
         return None
@@ -431,8 +475,6 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
     origin_city = r.get("origin") or origin
     dest_city_code = r.get("destination") or dest
 
-    code = r.get("airline") or ""
-
     link = r.get("link")
     if link:
         url = AVIASALES_SITE + link
@@ -446,6 +488,7 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         url += ("&" if "?" in url else "?") + "marker=" + urllib.parse.quote(marker)
 
     origin_name = (airports.get(origin) or {}).get("name") or origin
+    dest_country = country_name(dest_city_code)
 
     return {
         "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
@@ -453,7 +496,7 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "origin_name": origin_name,
         "dest": dest,
         "dest_city": city_name(dest_city_code),
-        "dest_country": country_name(dest_city_code),
+        "dest_country": dest_country,
         "date_out": date_out,
         "time_out": time_out,
         "date_in": date_in,
@@ -467,6 +510,8 @@ def aviasales_deal(r, cfg, marker, city_name, country_name, airports,
         "weekday_in": date.fromisoformat(date_in).weekday(),
         "airline_code": code,
         "airline": airline_name(code, tp_airlines),
+        "category": category_for(code),
+        "domestic": dest_country == "Polska",
         "source": "aviasales",
         "note": (NOTE_AVIASALES_LOWCOST if code in LOWCOST_CODES
                  else NOTE_AVIASALES),
@@ -498,6 +543,8 @@ def direct_for(d, group):
                 "?from={}&to={}&departure={}&return={}".format(
                     d["origin"], d["dest"], d["date_out"], d["date_in"]),
                 "lot.com")
+    if code in LEGACY_LINKS:
+        return LEGACY_LINKS[code], "strona linii"
     return None, None
 
 
@@ -547,6 +594,22 @@ def main():
 
     # Scalanie ofert z wielu źródeł dla tej samej trasy i dat.
     deals = merge_offers(ry + avi)
+
+    # Limit ofert linii tradycyjnych na trasę (kontrola rozmiaru pliku).
+    full_by_route = {}
+    for d in deals:
+        if d.get("category") == "full":
+            full_by_route.setdefault((d["origin"], d["dest"]),
+                                     []).append(d)
+    dropped = 0
+    for route_ds in full_by_route.values():
+        route_ds.sort(key=lambda x: x["price"])
+        dropped += max(0, len(route_ds) - MAX_PER_ROUTE_FULL)
+        for x in route_ds[MAX_PER_ROUTE_FULL:]:
+            deals.remove(x)
+    if dropped:
+        print("Obcięto %d ofert linii tradycyjnych (cap %d/trasę)"
+              % (dropped, MAX_PER_ROUTE_FULL))
 
     annotate_record_low(deals, history_by_route, cfg)
 

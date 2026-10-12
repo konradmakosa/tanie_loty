@@ -192,6 +192,13 @@
       <option value="">wszystkie linie</option>
     </select>
   </label>
+  <label>Kategoria:
+    <select id="category">
+      <option value="">wszystkie</option>
+      <option value="lcc">tanie linie</option>
+      <option value="full">tradycyjne</option>
+    </select>
+  </label>
   <label><input type="checkbox" id="groupBy" checked> Grupuj po kierunku</label>
 </div>
 
@@ -200,9 +207,15 @@
 
 <section id="settings" style="display:none">
   <div class="field">
-    <label class="t" for="sPrice">Maksymalna cena (zł)</label>
-    <div class="help" id="sPriceHelp"></div>
-    <input type="number" id="sPrice" min="0" step="10">
+    <label class="t" for="sPriceLcc">Maksymalna cena — tanie linie (zł)</label>
+    <div class="help" id="sPriceLccHelp"></div>
+    <input type="number" id="sPriceLcc" min="0" step="10">
+  </div>
+
+  <div class="field">
+    <label class="t" for="sPriceFull">Maksymalna cena — linie tradycyjne (zł)</label>
+    <div class="help" id="sPriceFullHelp"></div>
+    <input type="number" id="sPriceFull" min="0" step="10">
   </div>
 
   <div class="field">
@@ -249,6 +262,11 @@
     <label><input type="checkbox" id="sDirect"> Tylko loty bezpośrednie</label>
   </div>
 
+  <div class="field">
+    <label><input type="checkbox" id="sDomestic"> Pokazuj loty krajowe</label>
+    <div class="help">Np. Warszawa–Kraków — domyślnie ukryte.</div>
+  </div>
+
   <div class="actions">
     <button class="btn primary" id="sSave">Zapisz</button>
     <button class="btn" id="sReset">Przywróć domyślne</button>
@@ -285,7 +303,8 @@ function track(name, params) {
 
 function defaults() {
   return {
-    maxPrice: 250,
+    maxPriceLcc: 250,
+    maxPriceFull: 700,
     nightsMin: 2,
     nightsMax: 5,
     daysOut: [0, 1, 2, 3, 4, 5, 6],   // 0=pn … 6=nd
@@ -293,17 +312,25 @@ function defaults() {
     horizonDays: cfg.days_ahead || 120,
     origins: null,                   // null = wszystkie z danych
     excludedCountries: [],
-    directOnly: true
+    directOnly: true,
+    showDomestic: false
   };
 }
 
 function loadSettings() {
+  let s;
   try {
-    return Object.assign({}, defaults(),
+    s = Object.assign({}, defaults(),
       JSON.parse(localStorage.getItem("tl_settings") || "{}"));
   } catch (e) {
     return defaults();
   }
+  // Migracja ze starego klucza maxPrice.
+  if ("maxPrice" in s) {
+    s.maxPriceLcc = s.maxPrice;
+    delete s.maxPrice;
+  }
+  return s;
 }
 
 function saveSettings(s) {
@@ -318,14 +345,15 @@ function applySettings(deals, s, cfg, today) {
   const origins = s.origins || null;
   const excl = new Set(s.excludedCountries || []);
   return deals.filter(d =>
-    d.price <= s.maxPrice &&
+    d.price <= (d.category === "lcc" ? s.maxPriceLcc : s.maxPriceFull) &&
     d.nights >= s.nightsMin && d.nights <= s.nightsMax &&
     s.daysOut.includes(d.weekday_out) &&
     s.daysIn.includes(d.weekday_in) &&
     d.date_out <= horizonIso &&
     (!origins || origins.includes(d.origin)) &&
     !excl.has(d.dest_country) &&
-    (!s.directOnly || d.transfers === 0)
+    (!s.directOnly || d.transfers === 0) &&
+    (s.showDomestic || !d.domestic)
   );
 }
 
@@ -335,7 +363,8 @@ function isDefault(s) {
 
 function settingsSummary(s) {
   if (isDefault(s)) return "ustawienia domyślne";
-  const parts = ["do " + s.maxPrice + " zł",
+  const parts = ["tanie do " + s.maxPriceLcc + " zł",
+    "tradycyjne do " + s.maxPriceFull + " zł",
     s.nightsMin + "–" + s.nightsMax + " nocy"];
   if (s.daysOut.length < 7) {
     const labels = s.daysOut.slice().sort().map(i => DNI_KROTKIE[i].toLowerCase());
@@ -354,6 +383,7 @@ function settingsSummary(s) {
     parts.push("bez: " + excl.slice(0, 2).join(", ") +
       (excl.length > 2 ? " (+" + (excl.length - 2) + ")" : ""));
   if (!s.directOnly) parts.push("również z przesiadką");
+  if (s.showDomestic) parts.push("+ krajowe");
   return parts.join(" · ");
 }
 
@@ -395,7 +425,7 @@ function kartaHtml(d, showBadge) {
       </div>
       <div class="row">
         <span class="times">${d.time_out} – ${d.time_in}</span>
-        <span class="airline">${d.airline} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+        <span class="airline">${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
       </div>
       ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
       ${offersHtml}
@@ -410,13 +440,15 @@ function render() {
   const onlyLow = document.getElementById("onlyLow").checked;
   const sort = document.getElementById("sort").value;
   const airline = document.getElementById("airline").value;
+  const category = document.getElementById("category").value;
   const groupBy = document.getElementById("groupBy").checked;
   const list = document.getElementById("list");
 
   // Najpierw ustawienia użytkownika, potem szybkie filtry.
   let items = applySettings(deals, settings, cfg, new Date());
   items = items.filter(d => (!onlyLow || d.record_low) &&
-                            (!airline || d.airline === airline));
+                            (!airline || d.airline === airline) &&
+                            (!category || d.category === category));
   items.sort((a, b) => sort === "date"
     ? a.date_out.localeCompare(b.date_out) || a.price - b.price
     : a.price - b.price);
@@ -450,6 +482,15 @@ function render() {
   list.innerHTML = gr.map(g => {
     const [main, ...rest] = g;
     const anyLow = g.some(d => d.record_low);
+    // Widoczność linii tradycyjnych, gdy reprezentant jest tani.
+    let legacy = "";
+    if (main.category !== "full") {
+      const f = g.find(d => d.category === "full");
+      if (f)
+        legacy = `<div class="offers"><a href="${dealLink(f)}" ` +
+          `target="_blank" rel="noopener" data-id="${f.id}">` +
+          `Linią tradycyjną od ${fmtCena(f.price)} (${f.airline})</a></div>`;
+    }
     const alts = rest.length
       ? `<details><summary>+${rest.length} ` +
         (rest.length === 1 ? "inny termin" : rest.length <= 4 ? "inne terminy" : "innych terminów") +
@@ -463,7 +504,7 @@ function render() {
             · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
           </a>`).join("") + "</details>"
       : "";
-    return '<div class="group">' + kartaHtml(main, anyLow) + alts + "</div>";
+    return '<div class="group">' + kartaHtml(main, anyLow) + legacy + alts + "</div>";
   }).join("");
 }
 
@@ -503,10 +544,15 @@ function pillGroup(el, key) {
 }
 
 function fillSettingsForm() {
-  document.getElementById("sPrice").value = settings.maxPrice;
-  document.getElementById("sPrice").max = cfg.max_price_pln || "";
-  document.getElementById("sPriceHelp").textContent =
-    "skrypt zbiera oferty do " + cfg.max_price_pln + " zł";
+  const mp = cfg.max_price_pln || {};
+  document.getElementById("sPriceLcc").value = settings.maxPriceLcc;
+  document.getElementById("sPriceLcc").max = mp.lcc || "";
+  document.getElementById("sPriceLccHelp").textContent =
+    "koperta skryptu: " + mp.lcc + " zł (tanie) / " + mp.full + " zł (tradycyjne)";
+  document.getElementById("sPriceFull").value = settings.maxPriceFull;
+  document.getElementById("sPriceFull").max = mp.full || "";
+  document.getElementById("sPriceFullHelp").textContent =
+    "linie jak LOT, Lufthansa, KLM — skrypt zbiera do " + mp.full + " zł";
   document.getElementById("sNightsMin").value = settings.nightsMin;
   document.getElementById("sNightsMax").value = settings.nightsMax;
   document.getElementById("sNightsHelp").textContent =
@@ -516,6 +562,7 @@ function fillSettingsForm() {
   document.getElementById("sHorizonHelp").textContent =
     "maks. " + cfg.days_ahead + " dni (tyle zbiera skrypt)";
   document.getElementById("sDirect").checked = settings.directOnly;
+  document.getElementById("sDomestic").checked = settings.showDomestic;
 
   pillGroup("sDaysOut", "daysOut");
   pillGroup("sDaysIn", "daysIn");
@@ -552,18 +599,21 @@ document.getElementById("sCountriesNone").onclick = () => {
 };
 
 document.getElementById("sSave").onclick = () => {
-  settings.maxPrice = +document.getElementById("sPrice").value || 0;
+  settings.maxPriceLcc = +document.getElementById("sPriceLcc").value || 0;
+  settings.maxPriceFull = +document.getElementById("sPriceFull").value || 0;
   settings.nightsMin = +document.getElementById("sNightsMin").value || 1;
   settings.nightsMax = +document.getElementById("sNightsMax").value || 1;
   settings.horizonDays = Math.min(+document.getElementById("sHorizon").value || cfg.days_ahead,
                                 cfg.days_ahead);
   settings.directOnly = document.getElementById("sDirect").checked;
+  settings.showDomestic = document.getElementById("sDomestic").checked;
   const checked = [...document.querySelectorAll("#sOrigins input:checked")]
     .map(cb => cb.dataset.origin);
   settings.origins = checked.length === allOrigins().length ? null : checked;
   saveSettings(settings);
   track("save_settings", {
-    max_price: settings.maxPrice,
+    max_price_lcc: settings.maxPriceLcc,
+    max_price_full: settings.maxPriceFull,
     nights: settings.nightsMin + "-" + settings.nightsMax,
     days_out: settings.daysOut.length,
     excluded_countries: (settings.excludedCountries || []).length,
@@ -588,6 +638,7 @@ document.getElementById("sReset").onclick = () => {
 document.getElementById("onlyLow").addEventListener("change", render);
 document.getElementById("sort").addEventListener("change", render);
 document.getElementById("airline").addEventListener("change", render);
+document.getElementById("category").addEventListener("change", render);
 document.getElementById("groupBy").addEventListener("change", render);
 
 // Kliknięcia w oferty (delegacja na całą listę).
@@ -599,7 +650,7 @@ document.getElementById("list").addEventListener("click", e => {
   track("select_deal", {
     deal_id: d.id, destination: d.dest_city, country: d.dest_country,
     price: d.price, airline: d.airline, source: d.source, nights: d.nights,
-    via: el.dataset.via || ""
+    category: d.category, via: el.dataset.via || ""
   });
   // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
   if (!e.target.closest("a") && el.dataset.href)
@@ -617,8 +668,10 @@ fetch("deals.json", { cache: "no-store" })
     settings = loadSettings();
     document.getElementById("updated").textContent =
       "Zaktualizowano: " + new Date(data.generated_at).toLocaleString("pl-PL");
+    const mp = cfg.max_price_pln || {};
     document.getElementById("desc").textContent =
-      "Skrypt zbiera oferty do " + cfg.max_price_pln + " zł, " +
+      "Skrypt zbiera oferty do " + (mp.lcc || cfg.max_price_pln) +
+      " zł (tanie) / " + mp.full + " zł (tradycyjne), " +
       cfg.min_nights + "–" + cfg.max_nights + " nocy, najbliższe " +
       cfg.days_ahead + " dni — zawęź w Ustawieniach";
     const c = data.counts || {};
