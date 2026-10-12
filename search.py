@@ -550,13 +550,18 @@ def main():
 
     annotate_record_low(deals, history_by_route, cfg)
 
-    # Dopisujemy ceny z bieżącego runu do historii.
+    # Do historii zapisujemy jedną linię na trasę — najniższą cenę z runu.
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+    lowest = {}
+    for d in deals:
+        key = (d["origin"], d["dest"])
+        if key not in lowest or d["price"] < lowest[key]["price"]:
+            lowest[key] = d
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(HISTORY_PATH, "w", encoding="utf-8") as f:
         for e in history:
             f.write(json.dumps(e, ensure_ascii=False) + "\n")
-        for d in deals:
+        for d in lowest.values():
             f.write(json.dumps({"ts": now, "origin": d["origin"],
                                 "dest": d["dest"], "price": d["price"],
                                 "source": d["source"]},
