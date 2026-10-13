@@ -70,9 +70,10 @@ w `data/history.jsonl` (surowe, do mediany/rekordów) oraz jako wykresowe
 przycinane do 400 dni). Na karcie widać „typową cenę" — medianę
 z ostatnich 90 dni — i rozwijany mini-wykres historii trasy.
 
-### Baza MySQL (opcjonalna)
+### Baza PostgreSQL / MySQL (opcjonalna)
 
-Katalog `server/` to API PHP (PDO — MySQL w produkcji, SQLite lokalnie)
+Katalog `server/` to API PHP (PDO — PostgreSQL lub MySQL w produkcji,
+wybór `TL_DB_TYPE` w `.env`; SQLite lokalnie)
 wgrywane na hosting przez `deploy.py` (FTP/FTP_TLS, flaga `--dry-run`
 dla podglądu). Endpointy: `ingest.php` (POST + `X-Ingest-Key`, gzip),
 `history.php?route=XXX-YYY`, `typical.php?tab=`. GitHub Actions

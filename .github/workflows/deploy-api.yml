@@ -1,0 +1,33 @@
+name: Deploy API (home.pl)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Wgraj API przez FTP
+        env:
+          TL_DB_TYPE: ${{ secrets.TL_DB_TYPE }}
+          TL_DB_HOST: ${{ secrets.TL_DB_HOST }}
+          TL_DB_PORT: ${{ secrets.TL_DB_PORT }}
+          TL_DB_NAME: ${{ secrets.TL_DB_NAME }}
+          TL_DB_USER: ${{ secrets.TL_DB_USER }}
+          TL_DB_PASS: ${{ secrets.TL_DB_PASS }}
+          TL_FTP_HOST: ${{ secrets.TL_FTP_HOST }}
+          TL_FTP_USER: ${{ secrets.TL_FTP_USER }}
+          TL_FTP_PASS: ${{ secrets.TL_FTP_PASS }}
+          TL_WEB_DIR: ${{ secrets.TL_WEB_DIR }}
+          TL_API_BASE: ${{ secrets.TL_API_BASE }}
+          TL_INGEST_KEY: ${{ secrets.TL_INGEST_KEY }}
+        run: python deploy.py

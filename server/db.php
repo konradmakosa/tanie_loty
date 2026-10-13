@@ -1,5 +1,5 @@
 <?php
-// Połączenie PDO + automigracja + dialekty MySQL/SQLite.
+// Połączenie PDO + automigracja + dialekty PostgreSQL/MySQL/SQLite.
 
 function cfg(): array {
     static $c = null;
@@ -28,7 +28,31 @@ function db_driver(PDO $pdo): string {
 }
 
 function db_migrate(PDO $pdo): void {
-    if (db_driver($pdo) === 'sqlite') {
+    $drv = db_driver($pdo);
+    if ($drv === 'pgsql') {
+        $pdo->exec("CREATE TABLE IF NOT EXISTS runs (
+            id SERIAL PRIMARY KEY,
+            ts TIMESTAMP NOT NULL, tab VARCHAR(8) NOT NULL,
+            n_offers INT NOT NULL)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS offers (
+            id BIGSERIAL PRIMARY KEY,
+            run_id INT NOT NULL, ts TIMESTAMP NOT NULL, tab VARCHAR(8) NOT NULL,
+            origin CHAR(3) NOT NULL, dest CHAR(3) NOT NULL,
+            dest_city VARCHAR(64), country VARCHAR(64), country_code CHAR(2),
+            date_out DATE NOT NULL, date_in DATE NOT NULL, nights SMALLINT,
+            price NUMERIC(9,2) NOT NULL, airline_code VARCHAR(4),
+            category VARCHAR(4), source VARCHAR(12),
+            transfers_out SMALLINT, transfers_in SMALLINT)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_route ON offers (origin, dest, ts)");
+        $pdo->exec("CREATE INDEX IF NOT EXISTS idx_ts ON offers (ts)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS route_daily (
+            day DATE NOT NULL, origin CHAR(3) NOT NULL, dest CHAR(3) NOT NULL,
+            dep_month CHAR(7) NOT NULL, min_price NUMERIC(9,2) NOT NULL,
+            n INT NOT NULL DEFAULT 1,
+            PRIMARY KEY (day, origin, dest, dep_month))");
+        return;
+    }
+    if ($drv === 'sqlite') {
         $pdo->exec("CREATE TABLE IF NOT EXISTS runs (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             ts DATETIME NOT NULL, tab VARCHAR(8) NOT NULL,
@@ -61,11 +85,34 @@ function db_migrate(PDO $pdo): void {
     }
 }
 
+// INSERT do runs — zwraca id niezależnie od dialektu.
+function db_insert_run(PDO $pdo, string $ts, string $tab, int $n): int {
+    if (db_driver($pdo) === 'pgsql') {
+        $stmt = $pdo->prepare(
+            'INSERT INTO runs (ts, tab, n_offers) VALUES (?,?,?) RETURNING id');
+        $stmt->execute([$ts, $tab, $n]);
+        return (int)$stmt->fetchColumn();
+    }
+    $pdo->prepare('INSERT INTO runs (ts, tab, n_offers) VALUES (?,?,?)')
+        ->execute([$ts, $tab, $n]);
+    return (int)$pdo->lastInsertId();
+}
+
 // Upsert agregatu dziennego trasy — dialekt zależny od drivera.
 function db_upsert_route_daily(PDO $pdo, string $day, string $origin,
                              string $dest, string $month,
                              float $price): void {
-    if (db_driver($pdo) === 'sqlite') {
+    $drv = db_driver($pdo);
+    if ($drv === 'pgsql') {
+        $pdo->prepare(
+            "INSERT INTO route_daily (day, origin, dest, dep_month, min_price, n)
+             VALUES (?,?,?,?,?,1)
+             ON CONFLICT (day, origin, dest, dep_month)
+             DO UPDATE SET min_price = LEAST(route_daily.min_price,
+                                             EXCLUDED.min_price),
+                           n = route_daily.n + EXCLUDED.n"
+        )->execute([$day, $origin, $dest, $month, $price]);
+    } elseif ($drv === 'sqlite') {
         $pdo->prepare(
             "INSERT INTO route_daily (day, origin, dest, dep_month, min_price, n)
              VALUES (?,?,?,?,?,1)

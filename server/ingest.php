@@ -45,9 +45,7 @@ foreach ($offers as $i => $o) {
 $pdo = db();
 $pdo->beginTransaction();
 try {
-    $pdo->prepare('INSERT INTO runs (ts, tab, n_offers) VALUES (?,?,?)')
-        ->execute([$ts, $tab, count($offers)]);
-    $runId = (int)$pdo->lastInsertId();
+    $runId = db_insert_run($pdo, $ts, $tab, count($offers));
 
     $ins = $pdo->prepare(
         'INSERT INTO offers (run_id, ts, tab, origin, dest, dest_city,
