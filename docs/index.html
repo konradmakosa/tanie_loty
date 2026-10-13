@@ -170,14 +170,9 @@
     max-width: 720px; margin: 32px auto 48px; padding: 0 16px;
     text-align: center; font-size: 0.85rem; color: var(--muted);
   }
-  .coffee {
-    display: inline-flex; align-items: center; gap: 8px;
-    min-height: 44px; padding: 0 18px; margin-top: 8px;
-    border-radius: 999px; border: 1px solid var(--muted);
-    background: var(--card); color: var(--text);
-    text-decoration: none; font-size: 0.95rem;
-  }
-  .coffee:hover { border-color: var(--accent); color: var(--accent); }
+  .coffee { display: inline-block; margin-top: 10px; line-height: 0; }
+  .coffee img { height: 46px; width: auto; border-radius: 999px; }
+  .coffee:hover img { filter: brightness(1.1); }
   @media (min-width: 720px) {
     h1 { font-size: 1.9rem; }
   }
@@ -370,7 +365,7 @@
 <footer>
   Apka jest darmowa i bez reklam. Jeśli trafiłeś dzięki niej na okazję:<br>
   <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
-     onclick="track('buy_coffee', {})">☕ Postaw mi kawę</a>
+     onclick="track('buy_coffee', {})"><img src="postaw-kawe.png" alt="Postaw kawę" width="175" height="46"></a>
 </footer>
 
 <div class="toast" id="toast">Zapisano</div>
