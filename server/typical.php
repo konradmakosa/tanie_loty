@@ -10,10 +10,11 @@ $pdo = db();
 $cut90 = date('Y-m-d', time() - 90 * 86400);
 // Min per (day, route) ponad dep_month — potem mediana per trasa
 // i mediana per dep_month.
-$rows = $pdo->query(
+$rows = $pdo->prepare(
     'SELECT origin, dest, dep_month, day, MIN(min_price) AS mp
-     FROM route_daily WHERE day >= "' . $cut90 . '"
+     FROM route_daily WHERE day >= ?
      GROUP BY origin, dest, dep_month, day');
+$rows->execute([$cut90]);
 
 $routes = [];
 foreach ($rows as $r) {
