@@ -1028,6 +1028,8 @@ document.getElementById("fGroupBy").addEventListener("change", renderFar);
   if (!d) return;
   track("select_deal", {
     deal_id: d.id, destination: d.dest_city, country: d.dest_country,
+    country_code: d.country_code || "", dest_geo: d.dest_geo || "",
+    dest_airport: d.dest,
     price: d.price, airline: d.airline, source: d.source, nights: d.nights,
     category: d.category, via: el.dataset.via || "", tab: activeTab
   });

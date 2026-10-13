@@ -482,6 +482,22 @@ def tp_country_code(maps, code):
     return code
 
 
+def tp_geo(maps, code):
+    """„lat,lon" kierunku (lotnisko lub miasto) — do mapy w analityce."""
+    if not maps:
+        return ""
+    for table in ("airports", "cities"):
+        c = (maps[table].get(code) or {}).get("coordinates") or {}
+        if c.get("lat") is not None and c.get("lon") is not None:
+            return "%.4f,%.4f" % (c["lat"], c["lon"])
+    return ""
+
+
+def annotate_geo(deals, maps):
+    for d in deals:
+        d["dest_geo"] = tp_geo(maps, d["dest"])
+
+
 def tp_country_name(maps, code):
     code = tp_country_code(maps, code)
     c = maps["countries"].get(code) or {}
@@ -854,6 +870,7 @@ def main():
     far_deals = merge_offers(far_raw)
     annotate_record_low(far_deals, history_by_route, cfg)
     annotate_typical(far_deals)
+    annotate_geo(far_deals, maps)
     far_deals.sort(key=lambda d: d["price"])
     DEALS_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(FAR_PATH, "w", encoding="utf-8") as f:
@@ -880,6 +897,7 @@ def main():
 
     annotate_record_low(deals, history_by_route, cfg)
     annotate_typical(deals)
+    annotate_geo(deals, maps)
 
     # Do historii zapisujemy jedną linię na trasę — najniższą cenę z runu.
     lowest = {}
