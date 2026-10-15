@@ -750,11 +750,11 @@ function mapSvg(d) {
   const px = lon => lon + 180, py = lat => 90 - lat;
   const x1 = px(WAW_GEO[1]), y1 = py(WAW_GEO[0]);
   const x2 = px(parts[1]), y2 = py(parts[0]);
-  let w = Math.max(Math.abs(x2 - x1) + 12, 24);
-  let h = Math.max(Math.abs(y2 - y1) + 8, 12);
+  let w = Math.max(Math.abs(x2 - x1) + 12, 36);
+  let h = Math.max(Math.abs(y2 - y1) + 8, 18);
   if (w / h > 2) h = w / 2; else w = h * 2;
-  let vx = x2 - w * 0.72;              // kierunek w prawej części kadru…
-  let vy = y2 - h * 0.68;              // …i poniżej środka (pod ceną)
+  let vx = x2 - w * 0.84;              // kierunek w prawej części kadru…
+  let vy = y2 - h * 0.80;              // …i poniżej środka (pod ceną)
   vx = Math.max(0, Math.min(360 - w, vx));
   vy = Math.max(0, Math.min(180 - h, vy));
   const r2 = Math.min(1.4, Math.max(0.6, w * 0.022));
