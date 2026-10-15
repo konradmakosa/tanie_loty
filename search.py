@@ -405,8 +405,21 @@ def ryanair_route(origin, dest, arr, cfg, jutro, max_out, months):
                 continue
             combos.append((total, fo, fi, nights))
     combos.sort(key=lambda c: c[0])
+    # Najtańsze MAX_PER_ROUTE + najtańsza kombinacja dla każdego dnia
+    # tygodnia wylotu i powrotu — żeby filtr dni w Ustawieniach miał
+    # z czego wybierać (sam top-N potrafi pominąć np. wszystkie czwartki).
+    picked = combos[:MAX_PER_ROUTE]
+    seen_out = set(date.fromisoformat(c[1]["day"]).weekday() for c in picked)
+    seen_in = set(date.fromisoformat(c[2]["day"]).weekday() for c in picked)
+    for c in combos[MAX_PER_ROUTE:]:
+        wo = date.fromisoformat(c[1]["day"]).weekday()
+        wi = date.fromisoformat(c[2]["day"]).weekday()
+        if wo not in seen_out or wi not in seen_in:
+            picked.append(c)
+            seen_out.add(wo)
+            seen_in.add(wi)
     return [ryanair_deal(origin, dest, arr, fo, fi, total, nights)
-            for total, fo, fi, nights in combos[:MAX_PER_ROUTE]]
+            for total, fo, fi, nights in picked]
 
 
 def fare_ok(f):
