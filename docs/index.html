@@ -229,6 +229,7 @@
     100% { box-shadow: 0 0 0 0 rgba(217,45,32,0); }
   }
   .soon.mini { width: 22px; height: 22px; font-size: 0.5rem; margin-right: 4px; }
+  .soon.s48 { background: #e8891c; animation: none; }
   @media (prefers-reduced-motion: reduce) { .soon { animation: none; } }
   /* Grupa = biały kafelek; karta wewnątrz bez własnego tła */
   .group {
@@ -788,17 +789,22 @@ function mapSvg(d) {
     "</svg>";
 }
 
-/* Wylot w ciągu najbliższych 24 h (wg lokalnego czasu przeglądarki). */
-function soon24(d) {
+/* Pilność wylotu (wg lokalnego czasu przeglądarki): 24 = w ciągu doby,
+   48 = w ciągu dwóch dób, 0 = brak. */
+function soonLevel(d) {
   const dep = new Date(d.date_out + "T" + (d.time_out || "23:59") + ":00");
-  const diff = dep - Date.now();
-  return diff > 0 && diff <= 24 * 3600 * 1000;
+  const h = (dep - Date.now()) / 3600000;
+  return h <= 0 ? 0 : h <= 24 ? 24 : h <= 48 ? 48 : 0;
+}
+function soonHtmlFor(level, mini) {
+  if (!level) return "";
+  return '<span class="soon s' + level + (mini ? " mini" : "") +
+    '" title="Wylot w ciągu ' + level + ' godzin">' + level + 'h</span>';
 }
 
-function kartaHtml(d, showBadge, showSoon) {
+function kartaHtml(d, showBadge, soonLvl) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
-  const soonHtml = (showSoon !== undefined ? showSoon : soon24(d))
-    ? '<span class="soon" title="Wylot w ciągu 24 godzin">24h</span>' : "";
+  const soonHtml = soonHtmlFor(soonLvl !== undefined ? soonLvl : soonLevel(d));
   const offers = d.offers || [];
   const offersHtml = offers.length > 1
     ? '<div class="offers">Ceny: ' + offers.map(o =>
@@ -908,7 +914,9 @@ function renderList(items, listId, sort, groupBy, anyData) {
   list.innerHTML = gr.map(g => {
     const [main, ...rest] = g;
     const anyLow = g.some(d => d.record_low);
-    const anySoon = g.some(soon24);
+    // Najpilniejszy termin w grupie (24 przed 48).
+    const anySoon = g.reduce((m, d) => {
+      const l = soonLevel(d); return l && (!m || l < m) ? l : m; }, 0);
     // Widoczność linii tradycyjnych, gdy reprezentant jest tani.
     let legacy = "";
     if (main.category !== "full") {
@@ -926,7 +934,7 @@ function renderList(items, listId, sort, groupBy, anyData) {
         rest.map(d => `
           <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
              data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
-            ${soon24(d) ? '<span class="soon mini">24h</span>' : ""}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
+            ${soonHtmlFor(soonLevel(d), true)}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
             · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
