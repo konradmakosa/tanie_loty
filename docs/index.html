@@ -30,7 +30,9 @@
     --price: #0a7d3b;
     --badge: #d92d20;
   }
-  @media (prefers-color-scheme: dark) {
+  /* Motyw ciemny (nocne niebo) jest domyślny na każdym urządzeniu;
+     jasna paleta wyżej zostaje jako baza na wypadek przełącznika. */
+  @media all {
     :root {
       --bg: #171c2b;
       --card: #1b2030;
@@ -50,7 +52,7 @@
       linear-gradient(180deg, #8ec5ff 0%, #c9e4ff 45%, #eef5fc 100%)
       no-repeat fixed;
   }
-  @media (prefers-color-scheme: dark) {
+  @media all {
     html {
       background: var(--bg)
         linear-gradient(180deg, #0b1733 0%, #121c34 50%, #171c2b 100%)
@@ -78,7 +80,7 @@
       -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
     }
   }
-  @media (prefers-color-scheme: dark) {
+  @media all {
     .topbar { background: rgba(23,28,43,.92); }
     @supports (backdrop-filter: blur(10px)) {
       .topbar {
@@ -106,7 +108,7 @@
     display: flex; gap: 2px; margin-top: 6px; padding: 3px;
     background: rgba(0,0,0,.06); border-radius: 999px;
   }
-  @media (prefers-color-scheme: dark) {
+  @media all {
     .tabs { background: rgba(255,255,255,.08); }
   }
   .tabs button {
@@ -186,7 +188,7 @@
     mask-image: linear-gradient(to left, #000 35%, transparent);
   }
   .minimap use { opacity: .14; }
-  @media (prefers-color-scheme: dark) { .minimap use { opacity: .2; } }
+  @media all { .minimap use { opacity: .2; } }
   .minimap .mline {
     stroke: var(--accent); stroke-width: .35; stroke-dasharray: 1.4 1.4;
     fill: none; opacity: .5;
