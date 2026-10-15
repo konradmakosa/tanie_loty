@@ -214,6 +214,22 @@
     padding: 3px 8px; border-radius: 999px; margin-bottom: 2px;
   }
   .badge small { font-weight: 400; opacity: .9; }
+  /* Alarm: wylot w ciągu 24 h — czerwone kółko, pulsuje */
+  .soon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; margin-right: 6px; border-radius: 50%;
+    background: var(--badge); color: #fff; font-size: 0.62rem; font-weight: 800;
+    letter-spacing: .02em; vertical-align: middle; flex: none;
+    box-shadow: 0 0 0 0 rgba(217,45,32,.7);
+    animation: soonPulse 1.6s ease-out infinite;
+  }
+  @keyframes soonPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217,45,32,.7); }
+    70%  { box-shadow: 0 0 0 9px rgba(217,45,32,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,45,32,0); }
+  }
+  .soon.mini { width: 22px; height: 22px; font-size: 0.5rem; margin-right: 4px; }
+  @media (prefers-reduced-motion: reduce) { .soon { animation: none; } }
   /* Grupa = biały kafelek; karta wewnątrz bez własnego tła */
   .group {
     display: block; margin-bottom: 12px; overflow: hidden;
@@ -772,8 +788,17 @@ function mapSvg(d) {
     "</svg>";
 }
 
-function kartaHtml(d, showBadge) {
+/* Wylot w ciągu najbliższych 24 h (wg lokalnego czasu przeglądarki). */
+function soon24(d) {
+  const dep = new Date(d.date_out + "T" + (d.time_out || "23:59") + ":00");
+  const diff = dep - Date.now();
+  return diff > 0 && diff <= 24 * 3600 * 1000;
+}
+
+function kartaHtml(d, showBadge, showSoon) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
+  const soonHtml = (showSoon !== undefined ? showSoon : soon24(d))
+    ? '<span class="soon" title="Wylot w ciągu 24 godzin">24h</span>' : "";
   const offers = d.offers || [];
   const offersHtml = offers.length > 1
     ? '<div class="offers">Ceny: ' + offers.map(o =>
@@ -802,7 +827,7 @@ function kartaHtml(d, showBadge) {
       </div>
       <div class="card-body">
         <div class="crow1 row">
-          <span class="city">${flag(d.country_code)} ${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
+          <span class="city">${soonHtml}${flag(d.country_code)} ${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
           <span class="route">${d.origin} → ${d.dest}</span>
         </div>
         <div class="crow2 times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}</div>
@@ -883,6 +908,7 @@ function renderList(items, listId, sort, groupBy, anyData) {
   list.innerHTML = gr.map(g => {
     const [main, ...rest] = g;
     const anyLow = g.some(d => d.record_low);
+    const anySoon = g.some(soon24);
     // Widoczność linii tradycyjnych, gdy reprezentant jest tani.
     let legacy = "";
     if (main.category !== "full") {
@@ -900,13 +926,13 @@ function renderList(items, listId, sort, groupBy, anyData) {
         rest.map(d => `
           <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
              data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
-            ${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
+            ${soon24(d) ? '<span class="soon mini">24h</span>' : ""}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
             · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
           </a>`).join("") + "</div></details>"
       : "";
-    return '<div class="group">' + kartaHtml(main, anyLow) + legacy +
+    return '<div class="group">' + kartaHtml(main, anyLow, anySoon) + legacy +
       '<div class="chips">' + alts + histDetails(main) + "</div></div>";
   }).join("");
 }
