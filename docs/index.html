@@ -65,45 +65,133 @@
     line-height: 1.45;
   }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
-  header { padding: 8px 4px; }
-  .wrap > header {
-    padding: 14px 16px 10px; margin-top: 16px;
-    background: rgba(255,255,255,.5); border-radius: 14px;
+  /* Sticky pasek: tytuł + zakładki */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    margin: 0 -16px; padding: 8px 16px 10px;
+    background: rgba(238,245,252,.92);
+    border-bottom: 1px solid rgba(128,128,128,.2);
+  }
+  @supports (backdrop-filter: blur(10px)) {
+    .topbar {
+      background: rgba(200,225,252,.55);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    }
   }
   @media (prefers-color-scheme: dark) {
-    .wrap > header { background: rgba(255,255,255,.07); }
+    .topbar { background: rgba(23,28,43,.92); }
+    @supports (backdrop-filter: blur(10px)) {
+      .topbar {
+        background: rgba(18,28,52,.55);
+        -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      }
+    }
   }
-  h1 { font-size: 1.5rem; margin: 0 0 4px; }
-  .updated, .desc { color: var(--muted); font-size: 0.85rem; margin: 0 0 4px; }
+  .topbar header { padding: 0; }
+  .hrow { display: flex; align-items: center; justify-content: space-between; }
+  h1 { font-size: 1.15rem; margin: 0; }
+  .topbar .coffee { margin: 0; }
+  .topbar .coffee img { height: 32px; width: auto; }
+  .updated { margin: 0; }
+  .updated, .desc { color: var(--muted); font-size: 0.85rem; }
+  .desc { margin: 0 0 4px; }
+  details.info summary {
+    color: var(--muted); font-size: 0.8rem; cursor: pointer;
+    list-style: none; padding: 2px 0;
+  }
+  details.info summary::-webkit-details-marker { display: none; }
+  details.info[open] summary { margin-bottom: 4px; }
+  /* Segmentowany przełącznik zakładek */
   .tabs {
-    display: flex; gap: 4px; padding: 8px 4px 0;
-    border-bottom: 1px solid rgba(128,128,128,.25);
+    display: flex; gap: 2px; margin-top: 6px; padding: 3px;
+    background: rgba(0,0,0,.06); border-radius: 999px;
+  }
+  @media (prefers-color-scheme: dark) {
+    .tabs { background: rgba(255,255,255,.08); }
   }
   .tabs button {
-    flex: 1; max-width: 200px; min-height: 44px;
-    font-size: 1rem; font-weight: 600;
+    flex: 1; min-height: 36px; padding: 0 10px;
+    font-size: 0.95rem; font-weight: 600;
     background: none; border: none; color: var(--muted);
-    border-bottom: 3px solid transparent; cursor: pointer;
+    border-radius: 999px; cursor: pointer;
+    transition: background .15s, color .15s, box-shadow .15s;
   }
-  .tabs button.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .tabs button.active {
+    color: var(--accent); background: var(--card);
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  /* Filtry jako chipy — mobile: poziome przewijanie */
   .controls {
-    display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
-    padding: 8px 4px 16px;
+    display: flex; gap: 8px; flex-wrap: nowrap; align-items: center;
+    padding: 10px 16px 14px; margin: 0 -16px;
+    scroll-padding: 0 16px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  .controls label { font-size: 0.95rem; display: flex; align-items: center; gap: 6px; }
-  .controls input[type=checkbox] { width: 20px; height: 20px; }
+  .controls::-webkit-scrollbar { display: none; }
+  .controls label {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 36px; padding: 0 12px; white-space: nowrap;
+    font-size: 0.9rem; cursor: pointer;
+    border: 1px solid rgba(128,128,128,.45); border-radius: 999px;
+    background: var(--card); color: var(--text);
+  }
+  .controls input[type=checkbox] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .controls label:has(:checked) {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .controls label:has(:checked) select { color: #fff; }
+  .controls label:has(:checked) select option { color: var(--text); }
   .controls select {
-    font-size: 0.95rem; padding: 8px 10px; border-radius: 8px;
-    border: 1px solid var(--muted); background: var(--card); color: var(--text);
+    font-size: 0.9rem; padding: 0; border: none; border-radius: 0;
+    background: transparent; color: inherit; min-height: 30px;
   }
   main, #settings { padding: 0 0 40px; }
+  /* Karta — mobile: pionowy stos (grid-template-areas);
+     desktop ≥720px: lewa kolumna z ceną. */
   .card {
-    display: block; text-decoration: none; color: inherit;
-    background: var(--card); border-radius: 14px; padding: 16px;
-    margin-bottom: 12px; box-shadow: 0 2px 10px rgba(20,60,120,.15);
+    position: relative; overflow: hidden;
+    display: grid; gap: 2px 14px;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "badge badge" "city price" "dates dates" "air air" "extra extra";
+    text-decoration: none; color: inherit;
+    background: var(--card); border-radius: 16px;
+    padding: 12px 16px 14px;
+    margin-bottom: 12px; box-shadow: 0 2px 12px rgba(20,60,120,.12);
     cursor: pointer;
   }
+  .card > *:not(.minimap) { position: relative; z-index: 1; }
   .card:active { transform: scale(.99); }
+  .badge { grid-area: badge; justify-self: start; }
+  .card-price {
+    grid-area: price; align-self: center;
+    display: flex; flex-direction: column; align-items: flex-end;
+    white-space: nowrap;
+  }
+  .card-body { display: contents; }
+  .crow1 { grid-area: city; }
+  .crow2 { grid-area: dates; }
+  .crow3 { grid-area: air; }
+  .cextra { grid-area: extra; }
+  .cextra:empty { display: none; }
+  /* Mini-mapa trasy — prawa połowa karty, fade od lewej */
+  .minimap {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 45%;
+    z-index: 0; width: auto; height: auto; pointer-events: none;
+    color: var(--accent);
+    -webkit-mask-image: linear-gradient(to left, #000 35%, transparent);
+    mask-image: linear-gradient(to left, #000 35%, transparent);
+  }
+  .minimap use { opacity: .14; }
+  @media (prefers-color-scheme: dark) { .minimap use { opacity: .2; } }
+  .minimap .mline {
+    stroke: var(--accent); stroke-width: .35; stroke-dasharray: 1.4 1.4;
+    fill: none; opacity: .5;
+  }
+  .minimap .mdot { fill: var(--accent); }
   .offers { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
   .offers a { color: var(--accent); text-decoration: none; }
   .direct {
@@ -113,35 +201,71 @@
     text-decoration: none;
   }
   .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-  .price { font-size: 1.6rem; font-weight: 700; color: var(--price); }
-  .route { font-weight: 600; font-size: 1.05rem; }
-  .city { font-size: 1.1rem; font-weight: 600; }
+  .price { font-size: 1.5rem; font-weight: 700; color: var(--price); }
+  .route { font-weight: 500; font-size: 0.8rem; color: var(--muted); }
+  .city { font-size: 1.05rem; font-weight: 600; }
   .country, .times, .airline { color: var(--muted); font-size: 0.9rem; }
   .note { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
   .badge {
     display: inline-block; background: var(--badge); color: #fff;
-    font-size: 0.72rem; font-weight: 700; letter-spacing: .03em;
-    padding: 3px 8px; border-radius: 999px; margin-top: 8px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: .03em;
+    padding: 3px 8px; border-radius: 999px; margin-bottom: 2px;
   }
   .badge small { font-weight: 400; opacity: .9; }
-  .group { display: block; margin-bottom: 12px; }
-  .group .card { margin-bottom: 0; }
-  details summary {
-    color: var(--muted); font-size: 0.85rem; cursor: pointer;
-    padding: 8px 4px 0; list-style-position: inside;
+  /* Grupa = biały kafelek; karta wewnątrz bez własnego tła */
+  .group {
+    display: block; margin-bottom: 12px; overflow: hidden;
+    background: var(--card); border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(20,60,120,.12);
+    transition: box-shadow .15s, transform .15s;
   }
+  @media (hover: hover) {
+    .group:hover {
+      box-shadow: 0 6px 20px rgba(20,60,120,.2); transform: translateY(-1px);
+    }
+    .card:hover { box-shadow: 0 6px 20px rgba(20,60,120,.2);
+                  transform: translateY(-1px); }
+  }
+  .card { transition: box-shadow .15s, transform .15s; }
+  .group .card {
+    background: transparent; box-shadow: none; border-radius: 0;
+    margin-bottom: 0; overflow: visible;
+  }
+  .group .card:hover { box-shadow: none; transform: none; }
+  /* Pasek chipów wewnątrz kafelka grupy */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 8px 16px 12px;
+    border-top: 1px solid rgba(128,128,128,.15);
+  }
+  .chips details { display: contents; }
+  .chips details > summary {
+    display: inline-flex; align-items: center; min-height: 34px;
+    padding: 0 14px; list-style: none; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; color: var(--accent);
+    border: 1px solid rgba(128,128,128,.45); border-radius: 999px;
+    background: var(--card);
+  }
+  .chips details > summary::-webkit-details-marker { display: none; }
+  .chips details[open] > summary { background: var(--accent); color: #fff;
+    border-color: var(--accent); }
+  .chips .chip-body, .chips .hist-body {
+    flex: 1 0 100%; order: 10;
+    background: rgba(128,128,128,.06); border-radius: 10px;
+    padding: 8px 12px;
+  }
+  details summary { color: var(--muted); font-size: 0.85rem; cursor: pointer; }
   .alt {
     display: block; text-decoration: none; color: var(--text);
-    font-size: 0.9rem; padding: 7px 4px;
+    font-size: 0.9rem; padding: 8px 10px;
     border-bottom: 1px solid rgba(128,128,128,.15);
   }
   .alt:last-child { border-bottom: none; }
   .alt .muted { color: var(--muted); }
-  .vs { font-size: 0.8rem; font-weight: 600; }
+  .vs { font-size: 0.75rem; font-weight: 600; }
   .vs.neg { color: var(--price); }
   .vs.neu { color: var(--muted); font-weight: 400; }
   .vs.pos { color: var(--badge); }
-  details.hist summary { font-size: 0.8rem; }
   .hist-body { padding: 4px; }
   .hist-cap { font-size: 0.75rem; color: var(--muted); display: flex;
               justify-content: space-between; }
@@ -196,8 +320,22 @@
   .coffee { display: inline-block; margin-top: 10px; line-height: 0; }
   .coffee img { height: 46px; width: auto; border-radius: 999px; }
   .coffee:hover img { filter: brightness(1.1); }
+  /* Mobile: kod trasy tylko w wierszu linii (r2); desktop: w wierszu miasta */
+  .crow1 .route { display: none; }
   @media (min-width: 720px) {
-    h1 { font-size: 1.9rem; }
+    h1 { font-size: 1.4rem; }
+    .tabs { max-width: 420px; }
+    .controls { flex-wrap: wrap; overflow-x: visible; }
+    .minimap { left: 55%; }
+    .card {
+      grid-template-columns: 96px 1fr;
+      grid-template-areas: "badge badge" "price body";
+      row-gap: 6px;
+    }
+    .card-body { display: block; grid-area: body; }
+    .card-price { grid-area: price; align-items: flex-start; }
+    .crow1 .route { display: inline; white-space: nowrap; }
+    .route.r2 { display: none; }
   }
   @media (min-width: 960px) {
     .wrap { max-width: 1100px; }
@@ -209,23 +347,36 @@
     main .card, .group { margin-bottom: 0; }
     #settings { max-width: 728px; margin: 0 auto; }
   }
+  @media (min-width: 1400px) {
+    .wrap { max-width: 1400px; }
+    main { grid-template-columns: 1fr 1fr 1fr; }
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
+<div class="topbar">
 <header>
-  <h1>Tanie loty z Warszawy</h1>
+  <div class="hrow">
+    <h1>Tanie loty z Warszawy</h1>
+    <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
+       onclick="track('buy_coffee', {})"><img src="postaw-kawe.png" alt="Postaw kawę" width="121" height="32"></a>
+  </div>
   <p class="updated" id="updated"></p>
-  <p class="desc" id="desc"></p>
-  <p class="desc" id="countsLine"></p>
-  <p class="desc" id="settingsLine"></p>
-  <p class="desc" id="srcwarn"></p>
+  <details class="info">
+    <summary>ⓘ Jak to działa</summary>
+    <p class="desc" id="desc"></p>
+    <p class="desc" id="countsLine"></p>
+    <p class="desc" id="settingsLine"></p>
+    <p class="desc" id="srcwarn"></p>
+  </details>
 </header>
 
 <div class="tabs">
   <button id="tabOkazje" class="active">Okazje</button>
   <button id="tabDaleko">Daleko</button>
   <button id="tabUstawienia">Ustawienia</button>
+</div>
 </div>
 
 <div id="viewOkazje">
@@ -288,7 +439,12 @@
 </div>
 
 <section id="settings" style="display:none">
-  <div class="field">
+  <div class="actions" style="margin-top:4px">
+    <button class="btn primary" id="sSaveTop">Zapisz</button>
+    <button class="btn" id="sResetTop">Przywróć domyślne</button>
+  </div>
+
+  <div class="field" style="margin-top:18px">
     <label class="t" for="sPriceLcc">Maksymalna cena — tanie linie (zł)</label>
     <div class="help" id="sPriceLccHelp"></div>
     <input type="number" id="sPriceLcc" min="0" step="10">
@@ -574,6 +730,46 @@ function dealLink(d) {
   return d.link || ((d.offers || [])[0] || {}).link || "";
 }
 
+/* Kod kraju ISO2 → emoji flagi (regional indicator symbols). */
+function flag(cc) {
+  if (!cc || cc.length !== 2) return "";
+  return String.fromCodePoint.apply(null,
+    [...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
+/* Mini-mapa trasy: wykadrowany SVG ze sylwetką lądów (#world, ładowane
+   z world.svg) + łuk Warszawa → kierunek. Współrzędne: x=lon+180,
+   y=90-lat. Kadr: kierunek w prawej ~1/3, Warszawa może wypaść. */
+const WAW_GEO = [52.17, 20.97];
+function mapSvg(d) {
+  if (!d.dest_geo) return "";
+  const parts = String(d.dest_geo).split(",").map(Number);
+  if (parts.length !== 2 || parts.some(isNaN)) return "";
+  const px = lon => lon + 180, py = lat => 90 - lat;
+  const x1 = px(WAW_GEO[1]), y1 = py(WAW_GEO[0]);
+  const x2 = px(parts[1]), y2 = py(parts[0]);
+  let w = Math.max(Math.abs(x2 - x1) + 12, 24);
+  let h = Math.max(Math.abs(y2 - y1) + 8, 12);
+  if (w / h > 2) h = w / 2; else w = h * 2;
+  let vx = x2 - w * 0.72;              // kierunek w prawej części kadru…
+  let vy = y2 - h * 0.68;              // …i poniżej środka (pod ceną)
+  vx = Math.max(0, Math.min(360 - w, vx));
+  vy = Math.max(0, Math.min(180 - h, vy));
+  const r2 = Math.min(1.4, Math.max(0.6, w * 0.022));
+  const r1 = r2 * 0.55, halo = r2 * 0.45;
+  const mx = (x1 + x2) / 2, my = Math.min(y1, y2) - h * 0.18;
+  const r = n => Math.round(n * 100) / 100;
+  return '<svg class="minimap" viewBox="' + [r(vx), r(vy), r(w), r(h)].join(" ") +
+    '" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+    '<use href="#world"></use>' +
+    '<path class="mline" d="M' + r(x1) + " " + r(y1) + " Q" + r(mx) + " " +
+    r(my) + " " + r(x2) + " " + r(y2) + '"/>' +
+    '<circle class="mdot" cx="' + r(x1) + '" cy="' + r(y1) + '" r="' + r(r1) + '"/>' +
+    '<circle class="mdot" cx="' + r(x2) + '" cy="' + r(y2) + '" r="' + r(r2) +
+    '" style="stroke:var(--card);stroke-width:' + r(halo) + '"/>' +
+    "</svg>";
+}
+
 function kartaHtml(d, showBadge) {
   const low = showBadge !== undefined ? showBadge : d.record_low;
   const offers = d.offers || [];
@@ -586,34 +782,40 @@ function kartaHtml(d, showBadge) {
     ? `<a class="direct" href="${d.direct_link}" target="_blank" rel="noopener"` +
       ` data-id="${d.id}" data-via="direct">Kup bezpośrednio: ${d.direct_label} →</a>`
     : "";
+  const vsHtml = (d.vs_typical !== null && d.vs_typical !== undefined)
+    ? '<span class="vs ' + (d.vs_typical <= -15 ? "neg" :
+        d.vs_typical > 15 ? "pos" : "neu") + '">' +
+        (d.vs_typical > 0 ? "+" : "") + d.vs_typical +
+        "% vs " + fmtCena(d.typical_price) + "</span>"
+    : "";
   return `
     <div class="card" data-href="${dealLink(d)}" data-id="${d.id}" data-via="${offers[0] ? offers[0].label : ""}">
-      <div class="row">
-        <span class="price">${fmtCena(d.price)}</span>
-        <span class="route">${d.origin} → ${d.dest}</span>
-      </div>
-      ${d.vs_typical !== null && d.vs_typical !== undefined
-        ? '<div><span class="vs ' + (d.vs_typical <= -15 ? "neg" :
-          d.vs_typical > 15 ? "pos" : "neu") + '">' +
-          (d.vs_typical > 0 ? "+" : "") + d.vs_typical +
-          "% vs typowo " + fmtCena(d.typical_price) + "</span></div>"
-        : ""}
-      <div class="row">
-        <span class="city">${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
-        <span class="times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})</span>
-      </div>
-      <div class="row">
-        <span class="times">${d.time_out} – ${d.time_in}</span>
-        <span class="airline">${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
-      </div>
-      ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
-      ${d.transfers_out !== undefined
-        ? '<div class="note">' + transferText(d) + '</div>' : ''}
-      ${offersHtml}
-      ${directHtml}
+      ${mapSvg(d)}
       ${low ? '<span class="badge">REKORDOWO TANIO' +
-        (d.median_price ? ' <small>· mediana ' + fmtCena(d.median_price) + '</small>' : '') +
+        (d.median_price ? ' <small>· med. ' + fmtCena(d.median_price) + '</small>' : '') +
         '</span>' : ''}
+      <div class="card-price">
+        <span class="price">${fmtCena(d.price)}</span>
+        ${vsHtml}
+      </div>
+      <div class="card-body">
+        <div class="crow1 row">
+          <span class="city">${flag(d.country_code)} ${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
+          <span class="route">${d.origin} → ${d.dest}</span>
+        </div>
+        <div class="crow2 times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}</div>
+        <div class="crow3 row">
+          <span class="airline">✈ ${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+          <span class="route r2">${d.origin} → ${d.dest}</span>
+        </div>
+        <div class="cextra">
+          ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
+          ${d.transfers_out !== undefined
+            ? '<div class="note">' + transferText(d) + '</div>' : ''}
+          ${offersHtml}
+          ${directHtml}
+        </div>
+      </div>
     </div>`;
 }
 
@@ -690,8 +892,9 @@ function renderList(items, listId, sort, groupBy, anyData) {
     }
     const alts = rest.length
       ? `<details><summary>+${rest.length} ` +
-        (rest.length === 1 ? "inny termin" : rest.length <= 4 ? "inne terminy" : "innych terminów") +
-        ` (od ${fmtCena(rest[0].price)})</summary>` +
+        (rest.length === 1 ? "termin" : "terminów") +
+        `</summary>` +
+        '<div class="chip-body">' +
         rest.map(d => `
           <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
              data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
@@ -699,10 +902,10 @@ function renderList(items, listId, sort, groupBy, anyData) {
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
             · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
-          </a>`).join("") + "</details>"
+          </a>`).join("") + "</div></details>"
       : "";
-    return '<div class="group">' + kartaHtml(main, anyLow) + legacy + alts +
-      histDetails(main) + "</div>";
+    return '<div class="group">' + kartaHtml(main, anyLow) + legacy +
+      '<div class="chips">' + alts + histDetails(main) + "</div></div>";
   }).join("");
 }
 
@@ -710,9 +913,28 @@ function renderList(items, listId, sort, groupBy, anyData) {
 
 function histDetails(d) {
   return '<details class="hist" data-route="' + d.origin + '-' + d.dest + '">' +
-    '<summary>Historia ceny ▸ ' + d.origin + ' → ' + d.dest + '</summary>' +
+    '<summary>Historia ceny</summary>' +
     '<div class="hist-body"></div></details>';
 }
+
+/* Sylwetka lądów do mini-map — jedna grupa #world w dokumencie.
+   Po wypełnieniu path ponownie ustawiamy href w <use>, żeby wymusić
+   podpięcie symbolu (wcześniej nieistniejącego). */
+fetch("world.svg").then(r => r.ok ? r.text() : Promise.reject(r.status))
+  .then(t => {
+    const m = t.match(/d="([^"]+)"/);
+    if (!m) return;
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("aria-hidden", "true");
+    s.setAttribute("style", "position:absolute;width:0;height:0;overflow:hidden");
+    // Zwykła grupa (nie <symbol> z viewBox) — współrzędne 1:1 z kadrem.
+    s.innerHTML = '<defs><g id="world">' +
+      '<path fill="currentColor" d="' + m[1] + '"/></g></defs>';
+    document.body.appendChild(s);
+    document.querySelectorAll(".minimap use")
+      .forEach(u => u.setAttribute("href", "#world"));
+  })
+  .catch(() => {});
 
 // Fetch z timeoutem — do zapytań do API (baza może nie odpowiadać).
 function apiGet(path, ms) {
@@ -1040,6 +1262,11 @@ document.getElementById("sReset").onclick = () => {
   settings = defaults();
   fillSettingsForm();
 };
+// Te same akcje u góry ustawień.
+document.getElementById("sSaveTop").onclick =
+  document.getElementById("sSave").onclick;
+document.getElementById("sResetTop").onclick =
+  document.getElementById("sReset").onclick;
 
 /* ---------- start ---------- */
 
