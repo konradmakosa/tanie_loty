@@ -31,7 +31,8 @@ return [
     'DB_USER' => %s,
     'DB_PASS' => %s,
     'INGEST_KEY' => %s,
-    'ALLOWED_ORIGIN' => 'https://loty.makosa.org',
+    'ALLOWED_ORIGINS' => ['https://loty.makosa.org', 'https://polataj.se',
+                          'https://www.polataj.se', 'https://makosa.org'],
 ];
 """
 

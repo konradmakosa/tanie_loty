@@ -2,8 +2,7 @@
 // GET /typical.php — typowe ceny wszystkich tras (mediana daily 90 dni).
 require __DIR__ . '/db.php';
 
-header('Access-Control-Allow-Origin: ' . (cfg()['ALLOWED_ORIGIN'] ?? '*'));
-header('Vary: Origin');
+cors();
 header('Cache-Control: public, max-age=3600');
 
 $pdo = db();

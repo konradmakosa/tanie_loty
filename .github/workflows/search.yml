@@ -40,11 +40,20 @@ jobs:
           TL_INGEST_KEY: ${{ secrets.TL_INGEST_KEY }}
         run: python ingest.py
 
+      - name: Wgraj stronę na home.pl
+        continue-on-error: true
+        env:
+          TL_FTP_HOST: ${{ secrets.TL_FTP_HOST }}
+          TL_FTP_USER: ${{ secrets.TL_FTP_USER }}
+          TL_FTP_PASS: ${{ secrets.TL_FTP_PASS }}
+          TL_WEB_DIR: ${{ secrets.TL_WEB_DIR }}
+        run: python deploy_site.py
+
       - name: Zapisz wyniki
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/deals.json docs/far.json docs/history/ data/history.jsonl
+          git add docs/zwarszawy/ data/history.jsonl
           git diff --cached --quiet && exit 0
           git commit -m "Aktualizacja okazji"
           # Pliki generowane: przy konflikcie z równoległym przebiegiem

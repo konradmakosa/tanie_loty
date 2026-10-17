@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tanie loty z Warszawy</title>
+<meta name="description" content="Wyjątkowo tanie loty w obie strony z Warszawy (Modlin i Okęcie). Lista okazji odświeżana co 6 godzin, z linkiem do zakupu.">
+<link rel="canonical" href="https://loty.makosa.org/zwarszawy/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tanie loty z Warszawy">
+<meta property="og:title" content="Tanie loty z Warszawy">
+<meta property="og:description" content="Okazje na loty w obie strony z Warszawy — lista odświeżana co 6 godzin, z linkiem do zakupu.">
+<meta property="og:url" content="https://loty.makosa.org/zwarszawy/">
+<meta property="og:image" content="https://loty.makosa.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Tanie loty z Warszawy — mapa z trasami">
+<meta property="og:locale" content="pl_PL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tanie loty z Warszawy">
+<meta name="twitter:description" content="Okazje na loty w obie strony z Warszawy — odświeżane co 6 godzin.">
+<meta name="twitter:image" content="https://loty.makosa.org/og.png">
+<script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.setAttribute("data-cmp-ab","2");
+      script.src = 'https://emrldtp.cc/NTgzNzY3.js?t=583767';
+      document.head.appendChild(script);
+  })();
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CTFYNF714B"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
+</script>
+<style>
+  :root {
+    --bg: #eef5fc;
+    --card: #ffffff;
+    --text: #1a1d21;
+    --muted: #5c6470;
+    --accent: #073590;
+    --price: #0a7d3b;
+    --badge: #d92d20;
+  }
+  /* Motyw ciemny (nocne niebo) jest domyślny na każdym urządzeniu;
+     jasna paleta wyżej zostaje jako baza na wypadek przełącznika. */
+  @media all {
+    :root {
+      --bg: #171c2b;
+      --card: #1b2030;
+      --text: #e8eaf0;
+      --muted: #9aa3b2;
+      --accent: #7aa2ff;
+      --price: #4ade80;
+      --badge: #ff6b5e;
+    }
+  }
+  * { box-sizing: border-box; }
+  /* Niebo: gradient na <html> (zapobiega „urwaniu" tła przy przewijaniu
+     na iOS, gdzie background-attachment: fixed nie działa). */
+  html {
+    min-height: 100%;
+    background: var(--bg)
+      linear-gradient(180deg, #8ec5ff 0%, #c9e4ff 45%, #eef5fc 100%)
+      no-repeat fixed;
+  }
+  @media all {
+    html {
+      background: var(--bg)
+        linear-gradient(180deg, #0b1733 0%, #121c34 50%, #171c2b 100%)
+        no-repeat fixed;
+    }
+  }
+  body {
+    margin: 0;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+  /* Sticky pasek: tytuł + zakładki */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    margin: 0 -16px; padding: 8px 16px 10px;
+    background: rgba(238,245,252,.92);
+    border-bottom: 1px solid rgba(128,128,128,.2);
+  }
+  @supports (backdrop-filter: blur(10px)) {
+    .topbar {
+      background: rgba(200,225,252,.55);
+      -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    }
+  }
+  @media all {
+    .topbar { background: rgba(23,28,43,.92); }
+    @supports (backdrop-filter: blur(10px)) {
+      .topbar {
+        background: rgba(18,28,52,.55);
+        -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+      }
+    }
+  }
+  .topbar header { padding: 0; }
+  .hrow { display: flex; align-items: center; justify-content: space-between; }
+  h1 { font-size: 1.15rem; margin: 0; }
+  .topbar .coffee { margin: 0; }
+  .topbar .coffee img { height: 32px; width: auto; }
+  .updated { margin: 0; }
+  .updated, .desc { color: var(--muted); font-size: 0.85rem; }
+  .apt {
+    display: inline-block; padding: 1px 9px; margin-left: 4px;
+    border: 1px solid var(--line); border-radius: 999px;
+    background: var(--card); color: var(--accent);
+    font-size: .78rem; text-decoration: none; vertical-align: 1px;
+  }
+  .desc { margin: 0 0 4px; }
+  details.info summary {
+    color: var(--muted); font-size: 0.8rem; cursor: pointer;
+    list-style: none; padding: 2px 0;
+  }
+  details.info summary::-webkit-details-marker { display: none; }
+  details.info[open] summary { margin-bottom: 4px; }
+  /* Segmentowany przełącznik zakładek */
+  .tabs {
+    display: flex; gap: 2px; margin-top: 6px; padding: 3px;
+    background: rgba(0,0,0,.06); border-radius: 999px;
+  }
+  @media all {
+    .tabs { background: rgba(255,255,255,.08); }
+  }
+  .tabs button {
+    flex: 1; min-height: 36px; padding: 0 10px;
+    font-size: 0.95rem; font-weight: 600;
+    background: none; border: none; color: var(--muted);
+    border-radius: 999px; cursor: pointer;
+    transition: background .15s, color .15s, box-shadow .15s;
+  }
+  .tabs button.active {
+    color: var(--accent); background: var(--card);
+    box-shadow: 0 1px 4px rgba(0,0,0,.15);
+  }
+  /* Filtry jako chipy — mobile: poziome przewijanie */
+  .controls {
+    display: flex; gap: 8px; flex-wrap: nowrap; align-items: center;
+    padding: 10px 16px 14px; margin: 0 -16px;
+    scroll-padding: 0 16px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .controls::-webkit-scrollbar { display: none; }
+  .controls label {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 36px; padding: 0 12px; white-space: nowrap;
+    font-size: 0.9rem; cursor: pointer;
+    border: 1px solid rgba(128,128,128,.45); border-radius: 999px;
+    background: var(--card); color: var(--text);
+  }
+  .controls input[type=checkbox] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .controls label:has(:checked) {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
+  .controls label:has(:checked) select { color: #fff; }
+  .controls label:has(:checked) select option { color: var(--text); }
+  .controls select {
+    font-size: 0.9rem; padding: 0; border: none; border-radius: 0;
+    background: transparent; color: inherit; min-height: 30px;
+  }
+  main, #settings { padding: 0 0 40px; }
+  /* Karta — mobile: pionowy stos (grid-template-areas);
+     desktop ≥720px: lewa kolumna z ceną. */
+  .card {
+    position: relative; overflow: hidden;
+    display: grid; gap: 2px 14px;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "badge badge" "city price" "dates dates" "air air" "extra extra";
+    text-decoration: none; color: inherit;
+    background: var(--card); border-radius: 16px;
+    padding: 12px 16px 14px;
+    margin-bottom: 12px; box-shadow: 0 2px 12px rgba(20,60,120,.12);
+    cursor: pointer;
+  }
+  .card > *:not(.minimap) { position: relative; z-index: 1; }
+  .card:active { transform: scale(.99); }
+  .badge { grid-area: badge; justify-self: start; }
+  .card-price {
+    grid-area: price; align-self: center;
+    display: flex; flex-direction: column; align-items: flex-end;
+    white-space: nowrap;
+  }
+  .card-body { display: contents; }
+  .crow1 { grid-area: city; }
+  .crow2 { grid-area: dates; }
+  .crow3 { grid-area: air; }
+  .cextra { grid-area: extra; }
+  .cextra:empty { display: none; }
+  /* Mini-mapa trasy — prawa połowa karty, fade od lewej */
+  .minimap {
+    position: absolute; top: 0; right: 0; bottom: 0; left: 45%;
+    z-index: 0; width: auto; height: auto; pointer-events: none;
+    color: var(--accent);
+    -webkit-mask-image: linear-gradient(to left, #000 35%, transparent);
+    mask-image: linear-gradient(to left, #000 35%, transparent);
+  }
+  .minimap use { opacity: .14; }
+  @media all { .minimap use { opacity: .2; } }
+  .minimap .mline {
+    stroke: var(--accent); stroke-width: .35; stroke-dasharray: 1.4 1.4;
+    fill: none; opacity: .5;
+  }
+  .minimap .mdot { fill: var(--accent); }
+  .offers { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+  .offers a { color: var(--accent); text-decoration: none; }
+  .direct {
+    display: inline-block; margin-top: 8px; padding: 6px 14px;
+    border: 1px solid var(--accent); border-radius: 999px;
+    color: var(--accent); font-size: 0.85rem; font-weight: 600;
+    text-decoration: none;
+  }
+  .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .price { font-size: 1.5rem; font-weight: 700; color: var(--price); }
+  .route { font-weight: 500; font-size: 0.8rem; color: var(--muted); }
+  .city { font-size: 1.05rem; font-weight: 600; }
+  .country, .times, .airline { color: var(--muted); font-size: 0.9rem; }
+  .note { color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+  .badge {
+    display: inline-block; background: var(--badge); color: #fff;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: .03em;
+    padding: 3px 8px; border-radius: 999px; margin-bottom: 2px;
+  }
+  .badge small { font-weight: 400; opacity: .9; }
+  /* Alarm: wylot w ciągu 24 h — czerwone kółko, pulsuje */
+  .soon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; margin-right: 6px; border-radius: 50%;
+    background: var(--badge); color: #fff; font-size: 0.62rem; font-weight: 800;
+    letter-spacing: .02em; vertical-align: middle; flex: none;
+    box-shadow: 0 0 0 0 rgba(217,45,32,.7);
+    animation: soonPulse 1.6s ease-out infinite;
+  }
+  @keyframes soonPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(217,45,32,.7); }
+    70%  { box-shadow: 0 0 0 9px rgba(217,45,32,0); }
+    100% { box-shadow: 0 0 0 0 rgba(217,45,32,0); }
+  }
+  .soon.mini { width: 22px; height: 22px; font-size: 0.5rem; margin-right: 4px; }
+  .soon.s48 { background: #e8891c; animation: none; }
+  @media (prefers-reduced-motion: reduce) { .soon { animation: none; } }
+  /* Grupa = biały kafelek; karta wewnątrz bez własnego tła */
+  .group {
+    display: block; margin-bottom: 12px; overflow: hidden;
+    background: var(--card); border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(20,60,120,.12);
+    transition: box-shadow .15s, transform .15s;
+  }
+  @media (hover: hover) {
+    .group:hover {
+      box-shadow: 0 6px 20px rgba(20,60,120,.2); transform: translateY(-1px);
+    }
+    .card:hover { box-shadow: 0 6px 20px rgba(20,60,120,.2);
+                  transform: translateY(-1px); }
+  }
+  .card { transition: box-shadow .15s, transform .15s; }
+  .group .card {
+    background: transparent; box-shadow: none; border-radius: 0;
+    margin-bottom: 0; overflow: visible;
+  }
+  .group .card:hover { box-shadow: none; transform: none; }
+  /* Pasek chipów wewnątrz kafelka grupy */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 8px 16px 12px;
+    border-top: 1px solid rgba(128,128,128,.15);
+  }
+  .chips details { display: contents; }
+  .chips details > summary {
+    display: inline-flex; align-items: center; min-height: 34px;
+    padding: 0 14px; list-style: none; cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; color: var(--accent);
+    border: 1px solid rgba(128,128,128,.45); border-radius: 999px;
+    background: var(--card);
+  }
+  .chips details > summary::-webkit-details-marker { display: none; }
+  .chips details[open] > summary { background: var(--accent); color: #fff;
+    border-color: var(--accent); }
+  .chips .chip-body, .chips .hist-body {
+    flex: 1 0 100%; order: 10;
+    background: rgba(128,128,128,.06); border-radius: 10px;
+    padding: 8px 12px;
+  }
+  details summary { color: var(--muted); font-size: 0.85rem; cursor: pointer; }
+  .alt {
+    display: block; text-decoration: none; color: var(--text);
+    font-size: 0.9rem; padding: 8px 10px;
+    border-bottom: 1px solid rgba(128,128,128,.15);
+  }
+  .alt:last-child { border-bottom: none; }
+  .alt .muted { color: var(--muted); }
+  .vs { font-size: 0.75rem; font-weight: 600; }
+  .vs.neg { color: var(--price); }
+  .vs.neu { color: var(--muted); font-weight: 400; }
+  .vs.pos { color: var(--badge); }
+  .hist-body { padding: 4px; }
+  .hist-cap { font-size: 0.75rem; color: var(--muted); display: flex;
+              justify-content: space-between; }
+  .empty, .error { text-align: center; color: var(--muted); padding: 48px 16px; }
+  .empty a { color: var(--accent); }
+  /* Ustawienia */
+  .field { margin-bottom: 18px; }
+  .field label.t { display: block; font-weight: 600; margin-bottom: 4px; }
+  .field .help { color: var(--muted); font-size: 0.8rem; margin-bottom: 6px; }
+  .field input[type=number] {
+    width: 110px; min-height: 44px; font-size: 1rem;
+    padding: 8px 10px; border-radius: 8px;
+    border: 1px solid var(--muted); background: var(--card); color: var(--text);
+  }
+  .field .inline { display: flex; gap: 10px; align-items: center; }
+  .pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pill {
+    min-width: 44px; min-height: 44px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid var(--muted);
+    background: var(--card); color: var(--muted);
+    font-size: 0.9rem; cursor: pointer;
+  }
+  .pill.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .checks { display: flex; flex-direction: column; gap: 2px; }
+  .checks label {
+    display: flex; align-items: center; gap: 10px;
+    min-height: 44px; font-size: 0.95rem;
+  }
+  .checks input[type=checkbox], .field > label input[type=checkbox] {
+    width: 22px; height: 22px;
+  }
+  .btn {
+    min-height: 44px; padding: 0 20px; border-radius: 10px;
+    border: 1px solid var(--muted); background: var(--card); color: var(--text);
+    font-size: 0.95rem; cursor: pointer;
+  }
+  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .actions { display: flex; gap: 10px; margin-top: 24px; }
+  .mini { font-size: 0.8rem; color: var(--accent); background: none;
+          border: none; cursor: pointer; padding: 4px; }
+  .toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+    background: var(--accent); color: #fff; padding: 10px 22px;
+    border-radius: 999px; font-size: 0.95rem; opacity: 0;
+    transition: opacity .3s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  footer {
+    margin: 32px auto 48px;
+    text-align: center; font-size: 0.85rem; color: var(--muted);
+  }
+  .coffee { display: inline-block; margin-top: 10px; line-height: 0; }
+  .coffee img { height: 46px; width: auto; border-radius: 999px; }
+  .coffee:hover img { filter: brightness(1.1); }
+  /* Mobile: kod trasy tylko w wierszu linii (r2); desktop: w wierszu miasta */
+  .crow1 .route { display: none; }
+  @media (min-width: 720px) {
+    h1 { font-size: 1.4rem; }
+    .tabs { max-width: 420px; }
+    .controls { flex-wrap: wrap; overflow-x: visible; }
+    .minimap { left: 55%; }
+    .card {
+      grid-template-columns: 96px 1fr;
+      grid-template-areas: "badge badge" "price body";
+      row-gap: 6px;
+    }
+    .card-body { display: block; grid-area: body; }
+    .card-price { grid-area: price; align-items: flex-start; }
+    .crow1 .route { display: inline; white-space: nowrap; }
+    .route.r2 { display: none; }
+  }
+  @media (min-width: 960px) {
+    .wrap { max-width: 1100px; }
+    main {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; align-items: start;
+    }
+    main > .empty, main > .error { grid-column: 1 / -1; }
+    main .card, .group { margin-bottom: 0; }
+    #settings { max-width: 728px; margin: 0 auto; }
+  }
+  @media (min-width: 1400px) {
+    .wrap { max-width: 1400px; }
+    main { grid-template-columns: 1fr 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="topbar">
+<header>
+  <div class="hrow">
+    <h1>Tanie loty z Warszawy</h1>
+    <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
+       onclick="track('buy_coffee', {})"><img src="../postaw-kawe.png" alt="Postaw kawę" width="121" height="32"></a>
+  </div>
+  <p class="updated"><span id="updated"></span> <a class="apt" href="../?wybor=1">✈ Warszawa · zmień lotnisko</a></p>
+  <details class="info">
+    <summary>ⓘ Jak to działa</summary>
+    <p class="desc" id="desc"></p>
+    <p class="desc" id="countsLine"></p>
+    <p class="desc" id="settingsLine"></p>
+    <p class="desc" id="srcwarn"></p>
+  </details>
+</header>
+
+<div class="tabs">
+  <button id="tabOkazje" class="active">Okazje</button>
+  <button id="tabDaleko">Daleko</button>
+  <button id="tabUstawienia">Ustawienia</button>
+</div>
+</div>
+
+<div id="viewOkazje">
+<div class="controls">
+  <label><input type="checkbox" id="onlyLow"> Tylko rekordowe</label>
+  <label>Sortuj:
+    <select id="sort">
+      <option value="price">po cenie</option>
+      <option value="date">po dacie</option>
+    </select>
+  </label>
+  <label>Linia:
+    <select id="airline">
+      <option value="">wszystkie linie</option>
+    </select>
+  </label>
+  <label>Kategoria:
+    <select id="category">
+      <option value="">wszystkie</option>
+      <option value="lcc">tanie linie</option>
+      <option value="full">tradycyjne</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="groupBy" checked> Grupuj po kierunku</label>
+</div>
+
+<main id="list"></main>
+</div>
+
+<div id="viewDaleko" style="display:none">
+<header style="padding-top:8px">
+  <p class="desc" id="farDesc"></p>
+  <p class="desc" id="farCounts"></p>
+  <p class="desc" id="farSettingsLine"></p>
+  <p class="desc" id="farUpdated"></p>
+</header>
+
+<div class="controls">
+  <label>Sortuj:
+    <select id="fSort">
+      <option value="price">po cenie</option>
+      <option value="date">po dacie</option>
+    </select>
+  </label>
+  <label>Linia:
+    <select id="fAirline">
+      <option value="">wszystkie linie</option>
+    </select>
+  </label>
+  <label>Przesiadki:
+    <select id="fTransfers">
+      <option value="">wszystkie</option>
+      <option value="0">tylko bezpośrednie</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="fGroupBy" checked> Grupuj po kierunku</label>
+</div>
+
+<main id="listFar"></main>
+</div>
+
+<section id="settings" style="display:none">
+  <div class="actions" style="margin-top:4px">
+    <button class="btn primary" id="sSaveTop">Zapisz</button>
+    <button class="btn" id="sResetTop">Przywróć domyślne</button>
+  </div>
+
+  <div class="field" style="margin-top:18px">
+    <label class="t" for="sPriceLcc">Maksymalna cena — tanie linie (zł)</label>
+    <div class="help" id="sPriceLccHelp"></div>
+    <input type="number" id="sPriceLcc" min="0" step="10">
+  </div>
+
+  <div class="field">
+    <label class="t" for="sPriceFull">Maksymalna cena — linie tradycyjne (zł)</label>
+    <div class="help" id="sPriceFullHelp"></div>
+    <input type="number" id="sPriceFull" min="0" step="10">
+  </div>
+
+  <div class="field">
+    <label class="t">Liczba nocy</label>
+    <div class="help" id="sNightsHelp"></div>
+    <div class="inline">
+      <input type="number" id="sNightsMin" min="1" step="1"> od
+      <input type="number" id="sNightsMax" min="1" step="1"> do
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="t">Dni wylotu</label>
+    <div class="pills" id="sDaysOut"></div>
+  </div>
+
+  <div class="field">
+    <label class="t">Dni powrotu</label>
+    <div class="pills" id="sDaysIn"></div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sHorizon">Horyzont wyszukiwania</label>
+    <div class="help" id="sHorizonHelp"></div>
+    <div class="inline">wyloty w ciągu najbliższych
+      <input type="number" id="sHorizon" min="1" step="1"> dni</div>
+  </div>
+
+  <div class="field">
+    <label class="t">Lotniska wylotu</label>
+    <div class="checks" id="sOrigins"></div>
+  </div>
+
+  <div class="field">
+    <label class="t">Kraje
+      <button class="mini" id="sCountriesAll">zaznacz wszystkie</button>
+      <button class="mini" id="sCountriesNone">odznacz wszystkie</button>
+    </label>
+    <div class="help">Nowe kraje w ofertach są zaznaczane automatycznie.</div>
+    <div class="checks" id="sCountries"></div>
+  </div>
+
+
+  <div class="field">
+    <label><input type="checkbox" id="sDirect"> Tylko loty bezpośrednie</label>
+  </div>
+
+  <div class="field">
+    <label><input type="checkbox" id="sDomestic"> Pokazuj loty krajowe</label>
+    <div class="help">Np. Warszawa–Kraków — domyślnie ukryte.</div>
+  </div>
+
+  <h2 style="font-size:1.1rem;margin:28px 0 8px">Daleko (poza Europą)</h2>
+
+  <div class="field">
+    <label class="t" for="sFarPrice">Maksymalna cena (zł)</label>
+    <div class="help" id="sFarPriceHelp"></div>
+    <input type="number" id="sFarPrice" min="0" step="50">
+  </div>
+
+  <div class="field">
+    <label class="t">Liczba nocy</label>
+    <div class="help" id="sFarNightsHelp"></div>
+    <div class="inline">
+      <input type="number" id="sFarNightsMin" min="1" step="1"> od
+      <input type="number" id="sFarNightsMax" min="1" step="1"> do
+    </div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sFarHorizon">Horyzont wyszukiwania</label>
+    <div class="help" id="sFarHorizonHelp"></div>
+    <div class="inline">wyloty w ciągu najbliższych
+      <input type="number" id="sFarHorizon" min="1" step="1"> dni</div>
+  </div>
+
+  <div class="field">
+    <label class="t" for="sFarTransfers">Maks. przesiadek w każdą stronę</label>
+    <select id="sFarTransfers" class="btn" style="min-height:44px">
+      <option value="1">1</option>
+      <option value="0">0 (tylko bezpośrednie)</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label class="t">Kraje — Daleko
+      <button class="mini" id="sFarCountriesAll">zaznacz wszystkie</button>
+      <button class="mini" id="sFarCountriesNone">odznacz wszystkie</button>
+    </label>
+    <div class="checks" id="sFarCountries"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" id="sSave">Zapisz</button>
+    <button class="btn" id="sReset">Przywróć domyślne</button>
+  </div>
+</section>
+
+<footer>
+  Apka jest darmowa i bez reklam. Jeśli trafiłeś dzięki niej na okazję:<br>
+  <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
+     onclick="track('buy_coffee', {})"><img src="../postaw-kawe.png" alt="Postaw kawę" width="175" height="46"></a>
+</footer>
+</div>
+
+<div class="toast" id="toast">Zapisano</div>
+
+<script>
+const API_BASE = "https://makosa.org/tanie_loty/api";
+
+const DNI = ["nd", "pn", "wt", "śr", "cz", "pt", "so"];
+const DNI_KROTKIE = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
+
+function fmtData(iso) {
+  const d = new Date(iso + "T00:00:00");
+  return DNI[d.getDay()] + " " +
+    String(d.getDate()).padStart(2, "0") + "." +
+    String(d.getMonth() + 1).padStart(2, "0");
+}
+
+function fmtCena(v) {
+  return Math.round(v) + " zł";
+}
+
+const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " nocy");
+
+let deals = [], cfg = {}, settings = null;
+let farDeals = [], farCfg = {};
+let activeTab = "okazje";
+
+/* GA4 — bez awarii przy zablokowanym skrypcie. */
+function track(name, params) {
+  if (typeof gtag === "function") gtag("event", name, params);
+}
+
+/* ---------- ustawienia ---------- */
+
+function defaults() {
+  return {
+    maxPriceLcc: 250,
+    maxPriceFull: 700,
+    nightsMin: 2,
+    nightsMax: 5,
+    daysOut: [0, 1, 2, 3, 4, 5, 6],   // 0=pn … 6=nd
+    daysIn: [0, 1, 2, 3, 4, 5, 6],
+    horizonDays: cfg.days_ahead || 120,
+    origins: null,                   // null = wszystkie z danych
+    excludedCountries: [],
+    directOnly: true,
+    showDomestic: false,
+    // Zakładka „Daleko" — osobne filtry (prefiks far*).
+    farMaxPrice: 2500,
+    farNightsMin: 7,
+    farNightsMax: 21,
+    farHorizonDays: farCfg.days_ahead || 270,
+    farMaxTransfers: 1,
+    farExcludedCountries: []
+  };
+}
+
+function loadSettings() {
+  let s;
+  try {
+    s = Object.assign({}, defaults(),
+      JSON.parse(localStorage.getItem("tl_settings") || "{}"));
+  } catch (e) {
+    return defaults();
+  }
+  // Migracja ze starego klucza maxPrice.
+  if ("maxPrice" in s) {
+    s.maxPriceLcc = s.maxPrice;
+    delete s.maxPrice;
+  }
+  return s;
+}
+
+function saveSettings(s) {
+  localStorage.setItem("tl_settings", JSON.stringify(s));
+}
+
+/* Czysta funkcja filtrująca — testowalna poza DOM. */
+function applySettings(deals, s, cfg, today) {
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() + (s.horizonDays || cfg.days_ahead || 365));
+  const horizonIso = horizon.toISOString().slice(0, 10);
+  const origins = s.origins || null;
+  const excl = new Set(s.excludedCountries || []);
+  return deals.filter(d =>
+    d.price <= (d.category === "lcc" ? s.maxPriceLcc : s.maxPriceFull) &&
+    d.nights >= s.nightsMin && d.nights <= s.nightsMax &&
+    s.daysOut.includes(d.weekday_out) &&
+    s.daysIn.includes(d.weekday_in) &&
+    d.date_out <= horizonIso &&
+    (!origins || origins.includes(d.origin)) &&
+    !excl.has(d.dest_country) &&
+    (!s.directOnly || d.transfers === 0) &&
+    (s.showDomestic || !d.domestic)
+  );
+}
+
+/* Filtry zakładki „Daleko" — czysta funkcja, testowalna. */
+function applyFarSettings(deals, s, cfgFar, today) {
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() +
+                  (s.farHorizonDays || cfgFar.days_ahead || 365));
+  const horizonIso = horizon.toISOString().slice(0, 10);
+  const excl = new Set(s.farExcludedCountries || []);
+  const maxT = s.farMaxTransfers;
+  return deals.filter(d =>
+    d.price <= s.farMaxPrice &&
+    d.nights >= s.farNightsMin && d.nights <= s.farNightsMax &&
+    d.date_out <= horizonIso &&
+    (d.transfers_out === undefined || d.transfers_out <= maxT) &&
+    (d.transfers_in === undefined || d.transfers_in <= maxT) &&
+    !excl.has(d.dest_country)
+  );
+}
+
+function isDefault(s) {
+  return JSON.stringify(s) === JSON.stringify(defaults());
+}
+
+function settingsSummary(s) {
+  if (isDefault(s)) return "ustawienia domyślne";
+  const parts = ["tanie do " + s.maxPriceLcc + " zł",
+    "tradycyjne do " + s.maxPriceFull + " zł",
+    s.nightsMin + "–" + s.nightsMax + " nocy"];
+  if (s.daysOut.length < 7) {
+    const labels = s.daysOut.slice().sort().map(i => DNI_KROTKIE[i].toLowerCase());
+    parts.push("wylot " + labels.join(", "));
+  }
+  if (s.daysIn.length < 7) {
+    const labels = s.daysIn.slice().sort().map(i => DNI_KROTKIE[i].toLowerCase());
+    parts.push("powrót " + labels.join(", "));
+  }
+  if (s.horizonDays < (cfg.days_ahead || Infinity))
+    parts.push("do " + s.horizonDays + " dni");
+  if (s.origins && s.origins.length < allOrigins().length)
+    parts.push("z " + s.origins.join(", "));
+  const excl = s.excludedCountries || [];
+  if (excl.length)
+    parts.push("bez: " + excl.slice(0, 2).join(", ") +
+      (excl.length > 2 ? " (+" + (excl.length - 2) + ")" : ""));
+  if (!s.directOnly) parts.push("również z przesiadką");
+  if (s.showDomestic) parts.push("+ krajowe");
+  return parts.join(" · ");
+}
+
+function allOrigins() {
+  return [...new Set(deals.map(d => d.origin))].sort();
+}
+
+function allCountries() {
+  return [...new Set(deals.map(d => d.dest_country).filter(Boolean))].sort();
+}
+
+/* ---------- renderowanie kart ---------- */
+
+function fmtDur(min) {
+  if (!min) return "";
+  return Math.floor(min / 60) + "h " + String(min % 60).padStart(2, "0");
+}
+
+function transferText(d) {
+  const t = [d.transfers_out, d.transfers_in];
+  const legs = t.map(n => n === 0 ? "bezpośrednio" : n + " przesiadka")
+    .join(", z powrotem ");
+  const dur = [fmtDur(d.duration_out_min), fmtDur(d.duration_in_min)]
+    .filter(Boolean).join(" / ");
+  return legs + (dur ? " · ≈ " + dur : "");
+}
+
+function dealLink(d) {
+  return d.link || ((d.offers || [])[0] || {}).link || "";
+}
+
+/* Kod kraju ISO2 → emoji flagi (regional indicator symbols). */
+function flag(cc) {
+  if (!cc || cc.length !== 2) return "";
+  return String.fromCodePoint.apply(null,
+    [...cc.toUpperCase()].map(c => 0x1F1E6 + c.charCodeAt(0) - 65));
+}
+
+/* Mini-mapa trasy: wykadrowany SVG ze sylwetką lądów (#world, ładowane
+   z world.svg) + łuk Warszawa → kierunek. Współrzędne: x=lon+180,
+   y=90-lat. Kadr: kierunek w prawej ~1/3, Warszawa może wypaść. */
+const WAW_GEO = [52.17, 20.97];
+function mapSvg(d) {
+  if (!d.dest_geo) return "";
+  const parts = String(d.dest_geo).split(",").map(Number);
+  if (parts.length !== 2 || parts.some(isNaN)) return "";
+  const px = lon => lon + 180, py = lat => 90 - lat;
+  const x1 = px(WAW_GEO[1]), y1 = py(WAW_GEO[0]);
+  const x2 = px(parts[1]), y2 = py(parts[0]);
+  let w = Math.max(Math.abs(x2 - x1) + 12, 36);
+  let h = Math.max(Math.abs(y2 - y1) + 8, 18);
+  if (w / h > 2) h = w / 2; else w = h * 2;
+  let vx = x2 - w * 0.84;              // kierunek w prawej części kadru…
+  let vy = y2 - h * 0.80;              // …i poniżej środka (pod ceną)
+  vx = Math.max(0, Math.min(360 - w, vx));
+  vy = Math.max(0, Math.min(180 - h, vy));
+  const r2 = Math.min(1.4, Math.max(0.6, w * 0.022));
+  const r1 = r2 * 0.55, halo = r2 * 0.45;
+  const mx = (x1 + x2) / 2, my = Math.min(y1, y2) - h * 0.18;
+  const r = n => Math.round(n * 100) / 100;
+  return '<svg class="minimap" viewBox="' + [r(vx), r(vy), r(w), r(h)].join(" ") +
+    '" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+    '<use href="#world"></use>' +
+    '<path class="mline" d="M' + r(x1) + " " + r(y1) + " Q" + r(mx) + " " +
+    r(my) + " " + r(x2) + " " + r(y2) + '"/>' +
+    '<circle class="mdot" cx="' + r(x1) + '" cy="' + r(y1) + '" r="' + r(r1) + '"/>' +
+    '<circle class="mdot" cx="' + r(x2) + '" cy="' + r(y2) + '" r="' + r(r2) +
+    '" style="stroke:var(--card);stroke-width:' + r(halo) + '"/>' +
+    "</svg>";
+}
+
+/* Pilność wylotu (wg lokalnego czasu przeglądarki): 24 = w ciągu doby,
+   48 = w ciągu dwóch dób, 0 = brak. */
+function soonLevel(d) {
+  const dep = new Date(d.date_out + "T" + (d.time_out || "23:59") + ":00");
+  const h = (dep - Date.now()) / 3600000;
+  return h <= 0 ? 0 : h <= 24 ? 24 : h <= 48 ? 48 : 0;
+}
+function soonHtmlFor(level, mini) {
+  if (!level) return "";
+  return '<span class="soon s' + level + (mini ? " mini" : "") +
+    '" title="Wylot w ciągu ' + level + ' godzin">' + level + 'h</span>';
+}
+
+function kartaHtml(d, showBadge, soonLvl) {
+  const low = showBadge !== undefined ? showBadge : d.record_low;
+  const soonHtml = soonHtmlFor(soonLvl !== undefined ? soonLvl : soonLevel(d));
+  const offers = d.offers || [];
+  const offersHtml = offers.length > 1
+    ? '<div class="offers">Ceny: ' + offers.map(o =>
+        `<a href="${o.link}" target="_blank" rel="noopener" data-id="${d.id}" data-via="${o.label}">` +
+        `${o.label} ${fmtCena(o.price)}</a>`).join(" · ") + "</div>"
+    : "";
+  const directHtml = (d.direct_link && d.source !== "ryanair")
+    ? `<a class="direct" href="${d.direct_link}" target="_blank" rel="noopener"` +
+      ` data-id="${d.id}" data-via="direct">Kup bezpośrednio: ${d.direct_label} →</a>`
+    : "";
+  const vsHtml = (d.vs_typical !== null && d.vs_typical !== undefined)
+    ? '<span class="vs ' + (d.vs_typical <= -15 ? "neg" :
+        d.vs_typical > 15 ? "pos" : "neu") + '">' +
+        (d.vs_typical > 0 ? "+" : "") + d.vs_typical +
+        "% vs " + fmtCena(d.typical_price) + "</span>"
+    : "";
+  return `
+    <div class="card" data-href="${dealLink(d)}" data-id="${d.id}" data-via="${offers[0] ? offers[0].label : ""}">
+      ${mapSvg(d)}
+      ${low ? '<span class="badge">REKORDOWO TANIO' +
+        (d.median_price ? ' <small>· med. ' + fmtCena(d.median_price) + '</small>' : '') +
+        '</span>' : ''}
+      <div class="card-price">
+        <span class="price">${fmtCena(d.price)}</span>
+        ${vsHtml}
+      </div>
+      <div class="card-body">
+        <div class="crow1 row">
+          <span class="city">${soonHtml}${flag(d.country_code)} ${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
+          <span class="route">${d.origin} → ${d.dest}</span>
+        </div>
+        <div class="crow2 times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}</div>
+        <div class="crow3 row">
+          <span class="airline">✈ ${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+          <span class="route r2">${d.origin} → ${d.dest}</span>
+        </div>
+        <div class="cextra">
+          ${d.note ? '<div class="note">' + d.note + '</div>' : ''}
+          ${d.transfers_out !== undefined
+            ? '<div class="note">' + transferText(d) + '</div>' : ''}
+          ${offersHtml}
+          ${directHtml}
+        </div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const onlyLow = document.getElementById("onlyLow").checked;
+  const sort = document.getElementById("sort").value;
+  const airline = document.getElementById("airline").value;
+  const category = document.getElementById("category").value;
+  const groupBy = document.getElementById("groupBy").checked;
+
+  // Najpierw ustawienia użytkownika, potem szybkie filtry.
+  let items = applySettings(deals, settings, cfg, new Date());
+  items = items.filter(d => (!onlyLow || d.record_low) &&
+                            (!airline || d.airline === airline) &&
+                            (!category || d.category === category));
+  renderList(items, "list", sort, groupBy, deals.length > 0);
+}
+
+function renderFar() {
+  const sort = document.getElementById("fSort").value;
+  const airline = document.getElementById("fAirline").value;
+  const onlyDirect = document.getElementById("fTransfers").value === "0";
+  const groupBy = document.getElementById("fGroupBy").checked;
+
+  let items = applyFarSettings(farDeals, settings, farCfg, new Date());
+  items = items.filter(d => (!airline || d.airline === airline) &&
+                            (!onlyDirect || d.transfers === 0));
+  renderList(items, "listFar", sort, groupBy, farDeals.length > 0);
+}
+
+function renderList(items, listId, sort, groupBy, anyData) {
+  const list = document.getElementById(listId);
+  items = items.slice().sort((a, b) => sort === "date"
+    ? a.date_out.localeCompare(b.date_out) || a.price - b.price
+    : a.price - b.price);
+
+  if (!items.length) {
+    list.innerHTML = anyData
+      ? '<p class="empty">Brak okazji dla tych ustawień — ' +
+        '<a href="#ustawienia">poluzuj filtry w zakładce Ustawienia</a></p>'
+      : '<p class="empty">Brak danych — poczekaj na następne wyszukiwanie</p>';
+    return;
+  }
+
+  if (!groupBy) {
+    list.innerHTML = items.map(d => kartaHtml(d)).join("");
+    return;
+  }
+
+  // Grupy po mieście docelowym (kilka lotnisk jednego miasta = jedna grupa).
+  const groups = new Map();
+  for (const d of items) {
+    const key = (d.dest_city || d.dest) + "|" + (d.dest_country || "");
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(d);
+  }
+  let gr = [...groups.values()];
+  gr.forEach(g => g.sort((a, b) => a.price - b.price));
+  gr.sort((a, b) => sort === "date"
+    ? a[0].date_out.localeCompare(b[0].date_out) || a[0].price - b[0].price
+    : a[0].price - b[0].price);
+
+  list.innerHTML = gr.map(g => {
+    const [main, ...rest] = g;
+    const anyLow = g.some(d => d.record_low);
+    // Najpilniejszy termin w grupie (24 przed 48).
+    const anySoon = g.reduce((m, d) => {
+      const l = soonLevel(d); return l && (!m || l < m) ? l : m; }, 0);
+    // Widoczność linii tradycyjnych, gdy reprezentant jest tani.
+    let legacy = "";
+    if (main.category !== "full") {
+      const f = g.find(d => d.category === "full");
+      if (f)
+        legacy = `<div class="offers"><a href="${dealLink(f)}" ` +
+          `target="_blank" rel="noopener" data-id="${f.id}">` +
+          `Linią tradycyjną od ${fmtCena(f.price)} (${f.airline})</a></div>`;
+    }
+    const alts = rest.length
+      ? `<details><summary>+${rest.length} ` +
+        (rest.length === 1 ? "termin" : "terminów") +
+        `</summary>` +
+        '<div class="chip-body">' +
+        rest.map(d => `
+          <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
+             data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
+            ${soonHtmlFor(soonLevel(d), true)}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
+            · <strong>${fmtCena(d.price)}</strong>
+            · ${d.airline} <span class="muted">· ${d.dest}
+            · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+          </a>`).join("") + "</div></details>"
+      : "";
+    return '<div class="group">' + kartaHtml(main, anyLow, anySoon) + legacy +
+      '<div class="chips">' + alts + histDetails(main) + "</div></div>";
+  }).join("");
+}
+
+/* ---------- historia cen (mini-wykres) ---------- */
+
+function histDetails(d) {
+  return '<details class="hist" data-route="' + d.origin + '-' + d.dest + '">' +
+    '<summary>Historia ceny</summary>' +
+    '<div class="hist-body"></div></details>';
+}
+
+/* Sylwetka lądów do mini-map — jedna grupa #world w dokumencie.
+   Po wypełnieniu path ponownie ustawiamy href w <use>, żeby wymusić
+   podpięcie symbolu (wcześniej nieistniejącego). */
+fetch("../world.svg").then(r => r.ok ? r.text() : Promise.reject(r.status))
+  .then(t => {
+    const m = t.match(/d="([^"]+)"/);
+    if (!m) return;
+    const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    s.setAttribute("aria-hidden", "true");
+    s.setAttribute("style", "position:absolute;width:0;height:0;overflow:hidden");
+    // Zwykła grupa (nie <symbol> z viewBox) — współrzędne 1:1 z kadrem.
+    s.innerHTML = '<defs><g id="world">' +
+      '<path fill="currentColor" d="' + m[1] + '"/></g></defs>';
+    document.body.appendChild(s);
+    document.querySelectorAll(".minimap use")
+      .forEach(u => u.setAttribute("href", "#world"));
+  })
+  .catch(() => {});
+
+// Fetch z timeoutem — do zapytań do API (baza może nie odpowiadać).
+function apiGet(path, ms) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), ms || 4000);
+  return fetch(API_BASE + path, { signal: ctl.signal })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .finally(() => clearTimeout(t));
+}
+
+// Typowa cena z pełnej bazy (nadpisuje statyczną, gdy >= 5 dni danych).
+function applyApiTypical(list, tab, rerender) {
+  apiGet("/typical.php?tab=" + tab).then(map => {
+    if (!map || typeof map !== "object") return;
+    let changed = false;
+    list.forEach(d => {
+      const t = map[d.origin + "-" + d.dest];
+      if (t && t.n_days >= 5 && t.typical_90d) {
+        d.typical_price = t.typical_90d;
+        d.vs_typical = Math.round((d.price / t.typical_90d - 1) * 100);
+        changed = true;
+      }
+    });
+    if (changed) rerender();
+  }).catch(() => {});
+}
+
+/* Czysta funkcja skalująca — testowalna poza DOM. */
+function scalePoints(points, w, h) {
+  const xs = points.map(p => Date.parse(p[0]));
+  const ys = points.map(p => p[1]);
+  const x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+  const y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  const dx = (x1 - x0) || 1, dy = (y1 - y0) || 1;
+  return points.map(p => ({
+    x: (Date.parse(p[0]) - x0) / dx * (w - 16) + 8,
+    y: h - 12 - (p[1] - y0) / dy * (h - 20)
+  }));
+}
+
+function drawHistory(canvas, pts, route) {
+  const w = canvas.width, h = canvas.height;
+  const ctx = canvas.getContext("2d");
+  const css = getComputedStyle(document.documentElement);
+  const line = css.getPropertyValue("--accent").trim() || "#073590";
+  const dot = css.getPropertyValue("--price").trim() || "#0a7d3b";
+  const muted = css.getPropertyValue("--muted").trim() || "#888";
+
+  const scaled = scalePoints(pts, w, h);
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  scaled.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+  ctx.stroke();
+  const last = scaled[scaled.length - 1];
+  ctx.fillStyle = dot;
+  ctx.beginPath();
+  ctx.arc(last.x, last.y, 3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = muted;
+  ctx.font = "10px sans-serif";
+  const prices = pts.map(p => p[1]);
+  ctx.fillText(Math.round(Math.min.apply(null, prices)) + " zł", 8, h - 2);
+  ctx.fillText("max " + Math.round(Math.max.apply(null, prices)) + " zł",
+               w - 70, 12);
+  ctx.fillText(route, 8, 12);
+}
+
+// Leniwy fetch po rozwinięciu <details.hist>.
+document.getElementById("list").addEventListener("toggle", onHistToggle, true);
+document.getElementById("listFar").addEventListener("toggle", onHistToggle, true);
+function onHistToggle(e) {
+  const det = e.target;
+  if (!(det instanceof HTMLDetailsElement) || !det.open ||
+      !det.classList.contains("hist") || det.dataset.loaded)
+    return;
+  det.dataset.loaded = "1";
+  const route = det.dataset.route;
+  track("view_history", { route: route });
+  const body = det.querySelector(".hist-body");
+  // Najpierw pełna historia z API; fallback na statyczny plik trasy.
+  apiGet("/history.php?route=" + route).then(data => {
+    const pts = (data.daily || []).slice(-90);
+    if (pts.length < 3) throw new Error("mało danych");
+    const c = document.createElement("canvas");
+    c.width = 320; c.height = 80;
+    body.appendChild(c);
+    drawHistory(c, pts, route);
+    const cap = document.createElement("div");
+    cap.className = "hist-cap";
+    cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
+      "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
+    body.appendChild(cap);
+    // Typowa cena wg miesiąca wylotu (mediany z >= 3 dniami, maks. 6).
+    const mo = data.by_month || {};
+    const lines = Object.keys(mo).sort().slice(0, 6).map(m => {
+      const vals = mo[m].map(p => p[1]).sort((a, b) => a - b);
+      if (vals.length < 3) return null;
+      const med = vals.length % 2 ? vals[(vals.length - 1) / 2]
+        : (vals[vals.length / 2 - 1] + vals[vals.length / 2]) / 2;
+      return m + " wylotu: typowo " + Math.round(med) + " zł";
+    }).filter(Boolean);
+    if (lines.length) {
+      const div = document.createElement("div");
+      div.className = "hist-cap muted";
+      div.textContent = lines.join(" · ");
+      body.appendChild(div);
+    }
+  }).catch(() => {
+    fetch("history/" + route + ".json", { cache: "default" })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        const pts = (data.points || []).slice(-90);
+        if (pts.length < 3) {
+          const first = pts.length ? pts[0][0].slice(0, 10) : "?";
+          body.textContent = "Za mało danych (zbieramy od " + first + ")";
+          return;
+        }
+        const c = document.createElement("canvas");
+        c.width = 320; c.height = 80;
+        body.appendChild(c);
+        drawHistory(c, pts, route);
+        const cap = document.createElement("div");
+        cap.className = "hist-cap";
+        cap.innerHTML = "<span>" + pts[0][0].slice(0, 10) + "</span>" +
+          "<span>dziś: " + Math.round(pts[pts.length - 1][1]) + " zł</span>";
+        body.appendChild(cap);
+      })
+      .catch(() => { body.textContent = "Brak historii tej trasy."; });
+  });
+}
+
+/* ---------- zakładki ---------- */
+
+function showTab(tab) {
+  activeTab = tab;
+  track("view_tab", { tab: tab });
+  document.getElementById("tabOkazje").classList.toggle("active", tab === "okazje");
+  document.getElementById("tabDaleko").classList.toggle("active", tab === "daleko");
+  document.getElementById("tabUstawienia").classList.toggle("active", tab === "ustawienia");
+  document.getElementById("viewOkazje").style.display = tab === "okazje" ? "" : "none";
+  document.getElementById("viewDaleko").style.display = tab === "daleko" ? "" : "none";
+  document.getElementById("settings").style.display = tab === "ustawienia" ? "" : "none";
+}
+
+document.getElementById("tabOkazje").onclick = () => { location.hash = ""; showTab("okazje"); };
+document.getElementById("tabDaleko").onclick = () => { location.hash = "daleko"; showTab("daleko"); };
+document.getElementById("tabUstawienia").onclick = () => { location.hash = "ustawienia"; showTab("ustawienia"); };
+window.addEventListener("hashchange", () => showTab(tabFromHash()));
+
+function tabFromHash() {
+  if (location.hash === "#ustawienia") return "ustawienia";
+  if (location.hash === "#daleko") return "daleko";
+  return "okazje";
+}
+
+/* ---------- formularz ustawień ---------- */
+
+function pillGroup(el, key) {
+  const box = document.getElementById(el);
+  box.innerHTML = "";
+  DNI_KROTKIE.forEach((label, i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "pill" + (settings[key].includes(i) ? " on" : "");
+    b.textContent = label;
+    b.onclick = () => {
+      const arr = settings[key];
+      const idx = arr.indexOf(i);
+      if (idx >= 0) arr.splice(idx, 1); else arr.push(i);
+      b.classList.toggle("on");
+    };
+    box.appendChild(b);
+  });
+}
+
+function fillSettingsForm() {
+  const mp = cfg.max_price_pln || {};
+  document.getElementById("sPriceLcc").value = settings.maxPriceLcc;
+  document.getElementById("sPriceLcc").max = mp.lcc || "";
+  document.getElementById("sPriceLccHelp").textContent =
+    "koperta skryptu: " + mp.lcc + " zł (tanie) / " + mp.full + " zł (tradycyjne)";
+  document.getElementById("sPriceFull").value = settings.maxPriceFull;
+  document.getElementById("sPriceFull").max = mp.full || "";
+  document.getElementById("sPriceFullHelp").textContent =
+    "linie jak LOT, Lufthansa, KLM — skrypt zbiera do " + mp.full + " zł";
+  document.getElementById("sNightsMin").value = settings.nightsMin;
+  document.getElementById("sNightsMax").value = settings.nightsMax;
+  document.getElementById("sNightsHelp").textContent =
+    "koperta skryptu: " + cfg.min_nights + "–" + cfg.max_nights + " nocy";
+  document.getElementById("sHorizon").value = settings.horizonDays;
+  document.getElementById("sHorizon").max = cfg.days_ahead || "";
+  document.getElementById("sHorizonHelp").textContent =
+    "maks. " + cfg.days_ahead + " dni (tyle zbiera skrypt)";
+  document.getElementById("sDirect").checked = settings.directOnly;
+  document.getElementById("sDomestic").checked = settings.showDomestic;
+
+  document.getElementById("sFarPrice").value = settings.farMaxPrice;
+  document.getElementById("sFarPrice").max = farCfg.max_price_pln || "";
+  document.getElementById("sFarPriceHelp").textContent =
+    "koperta skryptu: " + (farCfg.max_price_pln || "—") + " zł";
+  document.getElementById("sFarNightsMin").value = settings.farNightsMin;
+  document.getElementById("sFarNightsMax").value = settings.farNightsMax;
+  document.getElementById("sFarNightsHelp").textContent =
+    "koperta skryptu: " + farCfg.min_nights + "–" + farCfg.max_nights + " nocy";
+  document.getElementById("sFarHorizon").value = settings.farHorizonDays;
+  document.getElementById("sFarHorizon").max = farCfg.days_ahead || "";
+  document.getElementById("sFarHorizonHelp").textContent =
+    "maks. " + farCfg.days_ahead + " dni (tyle zbiera skrypt)";
+  document.getElementById("sFarTransfers").value = String(settings.farMaxTransfers);
+
+  pillGroup("sDaysOut", "daysOut");
+  pillGroup("sDaysIn", "daysIn");
+
+  const origins = settings.origins || allOrigins();
+  document.getElementById("sOrigins").innerHTML = allOrigins().map(o => `
+    <label><input type="checkbox" data-origin="${o}"
+      ${origins.includes(o) ? "checked" : ""}> ${o}</label>`).join("");
+
+  renderCountries();
+  renderFarCountries();
+}
+
+function renderCountries() {
+  const excl = new Set(settings.excludedCountries);
+  document.getElementById("sCountries").innerHTML = allCountries().map(c => `
+    <label><input type="checkbox" data-country="${c}"
+      ${excl.has(c) ? "" : "checked"}> ${c}</label>`).join("");
+  document.querySelectorAll("#sCountries input").forEach(cb =>
+    cb.addEventListener("change", () => {
+      const set = new Set(settings.excludedCountries);
+      if (cb.checked) set.delete(cb.dataset.country);
+      else set.add(cb.dataset.country);
+      settings.excludedCountries = [...set];
+    }));
+}
+
+document.getElementById("sCountriesAll").onclick = () => {
+  settings.excludedCountries = [];
+  renderCountries();
+};
+document.getElementById("sCountriesNone").onclick = () => {
+  settings.excludedCountries = allCountries();
+  renderCountries();
+};
+
+function farCountries() {
+  return [...new Set(farDeals.map(d => d.dest_country).filter(Boolean))].sort();
+}
+
+function renderFarCountries() {
+  const excl = new Set(settings.farExcludedCountries || []);
+  document.getElementById("sFarCountries").innerHTML = farCountries().map(c => `
+    <label><input type="checkbox" data-country="${c}"
+      ${excl.has(c) ? "" : "checked"}> ${c}</label>`).join("");
+  document.querySelectorAll("#sFarCountries input").forEach(cb =>
+    cb.addEventListener("change", () => {
+      const set = new Set(settings.farExcludedCountries || []);
+      if (cb.checked) set.delete(cb.dataset.country);
+      else set.add(cb.dataset.country);
+      settings.farExcludedCountries = [...set];
+    }));
+}
+
+document.getElementById("sFarCountriesAll").onclick = () => {
+  settings.farExcludedCountries = [];
+  renderFarCountries();
+};
+document.getElementById("sFarCountriesNone").onclick = () => {
+  settings.farExcludedCountries = farCountries();
+  renderFarCountries();
+};
+
+function farSummary(s) {
+  const parts = ["do " + s.farMaxPrice + " zł",
+    s.farNightsMin + "–" + s.farNightsMax + " nocy",
+    "maks. " + s.farMaxTransfers + " przesiadka"];
+  const excl = s.farExcludedCountries || [];
+  if (excl.length)
+    parts.push("bez: " + excl.slice(0, 2).join(", ") +
+      (excl.length > 2 ? " (+" + (excl.length - 2) + ")" : ""));
+  return parts.join(" · ");
+}
+
+document.getElementById("sSave").onclick = () => {
+  settings.maxPriceLcc = +document.getElementById("sPriceLcc").value || 0;
+  settings.maxPriceFull = +document.getElementById("sPriceFull").value || 0;
+  settings.nightsMin = +document.getElementById("sNightsMin").value || 1;
+  settings.nightsMax = +document.getElementById("sNightsMax").value || 1;
+  settings.horizonDays = Math.min(+document.getElementById("sHorizon").value || cfg.days_ahead,
+                                cfg.days_ahead);
+  settings.directOnly = document.getElementById("sDirect").checked;
+  settings.showDomestic = document.getElementById("sDomestic").checked;
+  settings.farMaxPrice = +document.getElementById("sFarPrice").value || 0;
+  settings.farNightsMin = +document.getElementById("sFarNightsMin").value || 1;
+  settings.farNightsMax = +document.getElementById("sFarNightsMax").value || 1;
+  settings.farHorizonDays = Math.min(
+    +document.getElementById("sFarHorizon").value || farCfg.days_ahead,
+    farCfg.days_ahead || 365);
+  settings.farMaxTransfers = +document.getElementById("sFarTransfers").value;
+  const checked = [...document.querySelectorAll("#sOrigins input:checked")]
+    .map(cb => cb.dataset.origin);
+  settings.origins = checked.length === allOrigins().length ? null : checked;
+  saveSettings(settings);
+  track("save_settings", {
+    max_price_lcc: settings.maxPriceLcc,
+    max_price_full: settings.maxPriceFull,
+    nights: settings.nightsMin + "-" + settings.nightsMax,
+    days_out: settings.daysOut.length,
+    excluded_countries: (settings.excludedCountries || []).length,
+    direct_only: settings.directOnly
+  });
+  document.getElementById("settingsLine").textContent = settingsSummary(settings);
+  document.getElementById("farSettingsLine").textContent = farSummary(settings);
+  const t = document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 2000);
+  location.hash = "";
+  showTab("okazje");
+  render();
+  renderFar();
+};
+
+document.getElementById("sReset").onclick = () => {
+  settings = defaults();
+  fillSettingsForm();
+};
+// Te same akcje u góry ustawień.
+document.getElementById("sSaveTop").onclick =
+  document.getElementById("sSave").onclick;
+document.getElementById("sResetTop").onclick =
+  document.getElementById("sReset").onclick;
+
+/* ---------- start ---------- */
+
+document.getElementById("onlyLow").addEventListener("change", render);
+document.getElementById("sort").addEventListener("change", render);
+document.getElementById("airline").addEventListener("change", render);
+document.getElementById("category").addEventListener("change", render);
+document.getElementById("groupBy").addEventListener("change", render);
+document.getElementById("fSort").addEventListener("change", renderFar);
+document.getElementById("fAirline").addEventListener("change", renderFar);
+document.getElementById("fTransfers").addEventListener("change", renderFar);
+document.getElementById("fGroupBy").addEventListener("change", renderFar);
+
+// Kliknięcia w oferty (delegacja na obie listy).
+["list", "listFar"].forEach(id =>
+  document.getElementById(id).addEventListener("click", e => {
+  const el = e.target.closest("[data-id]");
+  if (!el) return;
+  const d = deals.find(x => x.id === el.dataset.id) ||
+            farDeals.find(x => x.id === el.dataset.id);
+  if (!d) return;
+  track("select_deal", {
+    deal_id: d.id, destination: d.dest_city, country: d.dest_country,
+    country_code: d.country_code || "", dest_geo: d.dest_geo || "",
+    dest_airport: d.dest,
+    price: d.price, airline: d.airline, source: d.source, nights: d.nights,
+    category: d.category, via: el.dataset.via || "", tab: activeTab
+  });
+  // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
+  if (!e.target.closest("a") && el.dataset.href)
+    window.open(el.dataset.href, "_blank", "noopener");
+}));
+
+Promise.all([
+  fetch("deals.json", { cache: "no-store" }).then(r => {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }),
+  // far.json może jeszcze nie istnieć — zakładka Daleko pokaże stan pusty.
+  fetch("far.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null)
+    .catch(() => null)
+]).then(([data, farData]) => {
+    deals = data.deals || [];
+    cfg = data.config || {};
+    settings = loadSettings();
+    document.getElementById("updated").textContent =
+      "Zaktualizowano: " + new Date(data.generated_at).toLocaleString("pl-PL");
+    const mp = cfg.max_price_pln || {};
+    document.getElementById("desc").textContent =
+      "Skrypt zbiera oferty do " + (mp.lcc || cfg.max_price_pln) +
+      " zł (tanie) / " + mp.full + " zł (tradycyjne), " +
+      cfg.min_nights + "–" + cfg.max_nights + " nocy, najbliższe " +
+      cfg.days_ahead + " dni — zawęź w Ustawieniach";
+    const c = data.counts || {};
+    const cParts = [];
+    if (c.ryanair) cParts.push("Ryanair " + c.ryanair + " ofert");
+    if (c.aviasales) cParts.push("Aviasales " + c.aviasales + " ofert");
+    if (cParts.length)
+      document.getElementById("countsLine").textContent =
+        "Źródła: " + cParts.join(" · ");
+    document.getElementById("settingsLine").textContent = settingsSummary(settings);
+    if (!(data.sources || []).includes("aviasales")) {
+      document.getElementById("srcwarn").textContent =
+        "Źródło: tylko Ryanair (Aviasales nieaktywne — brak tokena)";
+    }
+    const sel = document.getElementById("airline");
+    [...new Set(deals.map(d => d.airline).filter(Boolean))].sort()
+      .forEach(a => {
+        const o = document.createElement("option");
+        o.value = a; o.textContent = a;
+        sel.appendChild(o);
+      });
+    fillSettingsForm();
+
+    // Zakładka „Daleko".
+    if (farData) {
+      farDeals = farData.deals || [];
+      farCfg = farData.config || {};
+      document.getElementById("farUpdated").textContent =
+        "Zaktualizowano: " + new Date(farData.generated_at).toLocaleString("pl-PL");
+      document.getElementById("farDesc").textContent =
+        "Skrypt zbiera oferty poza Europą do " + farCfg.max_price_pln +
+        " zł, " + farCfg.min_nights + "–" + farCfg.max_nights +
+        " nocy, do " + farCfg.max_transfers_each_way +
+        " przesiadki, najbliższe " + farCfg.days_ahead + " dni";
+      const fc = (farData.counts || {}).aviasales;
+      if (fc) document.getElementById("farCounts").textContent =
+        "Źródło: Aviasales " + fc + " ofert";
+      const fSel = document.getElementById("fAirline");
+      [...new Set(farDeals.map(d => d.airline).filter(Boolean))].sort()
+        .forEach(a => {
+          const o = document.createElement("option");
+          o.value = a; o.textContent = a;
+          fSel.appendChild(o);
+        });
+    }
+    // Po wczytaniu farCfg odświeżamy domyślny horyzont i formularz.
+    document.getElementById("farSettingsLine").textContent = farSummary(settings);
+    fillSettingsForm();
+
+    showTab(tabFromHash());
+    render();
+    renderFar();
+    // Typowe ceny z pełnej bazy (API może nie działać — wtedy statyczne).
+    applyApiTypical(deals, "okazje", render);
+    applyApiTypical(farDeals, "daleko", renderFar);
+  })
+  .catch(e => {
+    document.getElementById("list").innerHTML =
+      '<p class="error">Nie udało się wczytać okazji (' + e.message +
+      '). Odśwież stronę za chwilę.</p>';
+  });
+</script>
+</body>
+</html>

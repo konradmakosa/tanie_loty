@@ -2,7 +2,7 @@
 
 Prosty łowca okazji: skrypt pobiera najtańsze loty w obie strony z warszawskich
 lotnisk (Modlin WMI + Okęcie WAW) z publicznego API Ryanaira i zapisuje je do
-`docs/deals.json`. Plik `docs/index.html` wyświetla je jako listę kart —
+`docs/zwarszawy/deals.json`. Plik `docs/index.html` wyświetla je jako listę kart —
 można go hostować za darmo na GitHub Pages.
 
 Źródłem danych jest tylko Ryanair — API Kiwi Tequila jest zamknięte dla nowych
@@ -26,7 +26,7 @@ Potem otwórz http://localhost:8000 w przeglądarce.
 3. **Settings → Actions → General → Workflow permissions: Read and write**
    (żeby workflow mógł commitować wyniki).
 4. Workflow `Szukaj tanich lotów` uruchamia się co 6 h (oraz ręcznie przez
-   „Run workflow") i commituje `docs/deals.json` + historię cen.
+   „Run workflow") i commituje `docs/zwarszawy/deals.json` + historię cen.
 
 Strona będzie pod `https://<użytkownik>.github.io/<repo>/` (tu: własna domena `loty.makosa.org` przez plik `docs/CNAME`).
 
@@ -66,7 +66,7 @@ Jej „koperta" to sekcja `far` w `config.json`
 
 Skrypt zapisuje najniższą cenę każdej trasy z każdego uruchomienia —
 w `data/history.jsonl` (surowe, do mediany/rekordów) oraz jako wykresowe
-`docs/history/{ORIGIN}-{DEST}.json` (punkt `[czas, cena, miesiąc wylotu]`,
+`docs/zwarszawy/history/{ORIGIN}-{DEST}.json` (punkt `[czas, cena, miesiąc wylotu]`,
 przycinane do 400 dni). Na karcie widać „typową cenę" — medianę
 z ostatnich 90 dni — i rozwijany mini-wykres historii trasy.
 

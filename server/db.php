@@ -140,3 +140,17 @@ function json_out($data, int $status = 200): void {
 function json_err(string $msg, int $status): void {
     json_out(['ok' => false, 'error' => $msg], $status);
 }
+
+function cors(): void {
+    // Lista dozwolonych originów; gdy brak nagłówka Origin (same-origin
+    // z makosa.org) nie wysyłamy CORS-ów wcale.
+    $allowed = cfg()['ALLOWED_ORIGINS']
+        ?? [cfg()['ALLOWED_ORIGIN'] ?? 'https://loty.makosa.org'];
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if ($origin === '') {
+        return;
+    }
+    header('Access-Control-Allow-Origin: '
+        . (in_array($origin, $allowed, true) ? $origin : $allowed[0]));
+    header('Vary: Origin', false);
+}

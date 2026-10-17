@@ -2,8 +2,7 @@
 // GET /history.php?route=WAW-BKK&days=365 — historia trasy z route_daily.
 require __DIR__ . '/db.php';
 
-header('Access-Control-Allow-Origin: ' . (cfg()['ALLOWED_ORIGIN'] ?? '*'));
-header('Vary: Origin');
+cors();
 header('Cache-Control: public, max-age=1800');
 
 $route = $_GET['route'] ?? '';

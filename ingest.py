@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Wysyła oferty z docs/deals.json i docs/far.json do bazy MySQL
+"""Wysyła oferty z docs/zwarszawy/{deals,far}.json do bazy
 przez API PHP (ingest.php). Bez TL_API_BASE/TL_INGEST_KEY — pomija."""
 
 import gzip
@@ -84,7 +84,7 @@ def main():
         return
 
     ts = None
-    deals_path = ROOT / "docs" / "deals.json"
+    deals_path = ROOT / "docs" / "zwarszawy" / "deals.json"
     if deals_path.exists():
         ts = json.loads(deals_path.read_text(encoding="utf-8")) \
             .get("generated_at")
@@ -92,7 +92,7 @@ def main():
     ts = ts or datetime.now(timezone.utc).isoformat()
 
     for path, tab in [(deals_path, "okazje"),
-                      (ROOT / "docs" / "far.json", "daleko")]:
+                      (ROOT / "docs" / "zwarszawy" / "far.json", "daleko")]:
         payload = build_payload(path, tab, ts)
         if not payload or not payload["offers"]:
             print("ingest: brak ofert dla %s — pomijam" % tab)

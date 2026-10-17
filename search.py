@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Łowca tanich lotów z Warszawy — pobiera okazje z publicznych API
-(Ryanair + Aviasales/Travelpayouts) i zapisuje je do docs/deals.json
+(Ryanair + Aviasales/Travelpayouts) i zapisuje je do docs/zwarszawy/deals.json
 (podgląd: docs/index.html)."""
 
 import json
@@ -17,9 +17,9 @@ ROOT = Path(__file__).resolve().parent
 CONFIG_PATH = ROOT / "config.json"
 ENV_PATH = ROOT / ".env"
 HISTORY_PATH = ROOT / "data" / "history.jsonl"
-DEALS_PATH = ROOT / "docs" / "deals.json"
-FAR_PATH = ROOT / "docs" / "far.json"
-HISTORY_DIR = ROOT / "docs" / "history"
+DEALS_PATH = ROOT / "docs" / "zwarszawy" / "deals.json"
+FAR_PATH = ROOT / "docs" / "zwarszawy" / "far.json"
+HISTORY_DIR = ROOT / "docs" / "zwarszawy" / "history"
 CACHE_DIR = ROOT / "data" / "cache"
 
 RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
@@ -44,7 +44,7 @@ AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
 
 HISTORY_DAYS = 400
-HISTORY_POINTS_DAYS = 400   # okno przycinania punktów w docs/history/*.json
+HISTORY_POINTS_DAYS = 400   # okno przycinania punktów w docs/zwarszawy/history/*.json
 TYPICAL_DAYS = 90           # okno mediany „typowej ceny"
 TYPICAL_MIN_POINTS = 5
 CACHE_MAX_AGE_DAYS = 30
@@ -241,7 +241,7 @@ def load_route_file(origin, dest):
 
 
 def backfill_history():
-    """Jednorazowo: buduje docs/history/*.json z data/history.jsonl
+    """Jednorazowo: buduje docs/zwarszawy/history/*.json z data/history.jsonl
     (miesiąc wylotu nieznany -> null). Wołane gdy katalog nie istnieje."""
     if HISTORY_DIR.exists() or not HISTORY_PATH.exists():
         return
