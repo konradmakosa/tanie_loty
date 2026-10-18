@@ -61,9 +61,12 @@ def main():
         rel = p.relative_to(DOCS_DIR).as_posix()
         remote = target + "/" + rel
         size = p.stat().st_size
-        # .json zawsze (zmieniają się co przebieg); reszta tylko gdy
-        # rozmiar się różni lub plik nie istnieje.
-        if p.suffix != ".json" and remote_size(ftp, remote) == size:
+        # .json/.html/.htaccess zawsze (json zmienia się co przebieg,
+        # html/.htaccess są małe — porównanie po rozmiarze bywało
+        # fałszywie dodatnie przy edycjach tej samej długości);
+        # reszta tylko gdy rozmiar się różni lub plik nie istnieje.
+        if (p.suffix not in (".json", ".html") and p.name != ".htaccess"
+                and remote_size(ftp, remote) == size):
             skipped += 1
             continue
         mkdirs(ftp, remote.rsplit("/", 1)[0])
