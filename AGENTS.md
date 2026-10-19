@@ -52,6 +52,17 @@
   `v=spf1 a mx ~all` obejmuje IP serwera). Brak DKIM. `MAIL_DEBUG_DIR`
   w config.php → .eml do plików (testy lokalne, sqlite).
 - Tabele: `subscribers`, `alerts_sent` (db.php automigracja + schema.sql).
+- Zweryfikowane na żywo 2026-10-19: mail z home.pl dochodzi, potwierdzenie
+  działa (1 subskrybent potwierdzony).
+- Podgląd bazy: panel home.pl → Bazy danych → phpPgAdmin (`subscribers`,
+  `alerts_sent`) lub
+  `curl -H "X-Ingest-Key: $TL_INGEST_KEY" https://makosa.org/tanie_loty/api/subscribers.php`.
+
+## Social / branding
+
+- `docs/og.png` (1200×630) generowany przez `tools/make_og.py` (Pillow,
+  czcionki systemowe macOS; czyta granicę Polski z `docs/index.html`).
+  Nowy port → dopisać do `PORTS`/`ROUTES` i odpalić ponownie.
 
 ## Deploy
 
@@ -60,26 +71,32 @@
   `docs/CNAME` nie jest wgrywany na home.pl.
 - API: `python3 deploy.py` lub workflow `deploy-api.yml`.
 
+## Zrobione (2026-10)
+
+- Migracja na home.pl + polataj.se, SSL, przekierowania, GA4 (URL strumienia
+  → polataj.se), geolokalizacja (miękka), 6 portów + Radom w Warszawie,
+  nowe `og.png`, linki zakupu bez Aviasales, alerty e-mail.
+
 ## Do zrobienia
 
-1. **GA4:** zmienić URL strumienia `loty.makosa.org` → `polataj.se`
-   (Admin → Data streams → Stream URL). Historia zostaje.
-2. **loty.makosa.org:** gdy redirect skryptowy się sprawdzi i Google
-   przeczyta canonical — rozważyć wyłączenie GitHub Pages / CNAME.
-3. ~~Geolokalizacja~~ — zrobione (geojs + miękka sugestia).
-4. ~~Drugie lotnisko (Kraków)~~ — zrobione: `/zkrakowa/`, `search.py
-   zkrakowa`, znacznik KRK aktywny na mapie. Kolejne wg danych
-   `geo_suggest`. Apka per port to wciąż kopia pliku — przy 3. porcie
-   warto zrobić wspólny szablon + config JS.
+1. **Wspólny szablon apki:** 6× `docs/z*/index.html` to kopie różniące się
+   38 liniami (teksty, canonical/og, `HOME_GEO`). Generator z jednego
+   szablonu + config per port zanim dojdzie 7. port.
+2. **Zamiennik źródła cen** za Travelpayouts (Wizz/LOT/„Daleko") — dziś brak
+   darmowej alternatywy; obserwować. Bez niego zostaje sam Ryanair.
+3. **Monetyzacja** (kolejność): lista mailowa rośnie → przy >5k UU/mies.
+   aplikować do afiliacji Skyscanner (impact.com; hotele/auta też tam) →
+   ewentualnie płatne alerty własne (kierunek/kryteria).
+4. **Alerty — rozwój:** własne kryteria (kraj, max cena), digest dzienny
+   zamiast per przebieg, DKIM (home.pl: czy wspiera dla `mail()`?), Brevo/SMTP
+   gdy dostarczalność zacznie szwankować. Monitorować `alerts_sent`.
 5. **Niezależność od GitHub Actions:** przepisać `search.py` na PHP
    i puścić z crona home.pl (panel: „Zadania cron"). GitHub zostaje tylko
    jako repo kodu.
-6. Drobne: `favicon.ico` (404), ewentualnie `og.png` pod markę Polataj.se.
-7. **Search Console:** jeśli używana — dodać usługę Domain dla polataj.se,
-   w starej „Change of Address".
-
-## Podgląd subskrybentów
-
-- Panel home.pl → Bazy danych → phpPgAdmin → tabela `subscribers` / `alerts_sent`.
-- Lub: `curl -H "X-Ingest-Key: $TL_INGEST_KEY" https://makosa.org/tanie_loty/api/subscribers.php`
-  (liczniki + lista; klucz z `.env`).
+6. **loty.makosa.org:** gdy Google przeczyta canonical — wyłączyć GitHub
+   Pages / CNAME.
+7. **Kolejne porty** wg `geo_suggest`: Rzeszów (baza Ryanaira) najsensowniejszy;
+   Szczecin/Łódź/Bydgoszcz/Lublin mają po kilka tras. Radom (RDO): żadne
+   źródło nie zwraca dziś cen — sprawdzać okresowo.
+8. **Search Console:** usługa Domain dla polataj.se, w starej „Change of Address".
+9. Drobne: `favicon.ico` (404), odświeżyć cache podglądu FB/LinkedIn dla og.png.
