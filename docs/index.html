@@ -70,6 +70,9 @@ svg.pl text {
 .ap.on line { stroke: var(--price); stroke-width: .05 }
 .ap.on .iata { fill: var(--price); font-weight: 700; font-size: .24px }
 .ap.on .city { fill: #eaf3ec; font-size: .16px }
+.ap.off.near circle, .ap.off.near line { stroke: var(--accent); fill: var(--accent) }
+.ap.off.near .iata { fill: var(--accent) }
+.ap.off.near { opacity: 1 }
 .ap.on .pulse { fill: none; stroke: var(--price); stroke-width: .04; opacity: .7;
   transform-box: fill-box; transform-origin: center;
   animation: pulse 2s ease-out infinite }
@@ -142,12 +145,89 @@ document.querySelectorAll('a.ap.on').forEach(function (a) {
   try { saved = localStorage.getItem("airport"); } catch (e) {}
   var bar = document.getElementById("bar");
   var msg = document.getElementById("barmsg");
-  if (wybor || saved) return;   // ?wybor: tylko wskazówka; saved: redirect w head
+
+  // Geolokalizacja po IP — miękka sugestia najbliższego lotniska.
+  // Baza IP≈miasto bywa mylna na LTE (często "Warszawa"), więc to
+  // tylko podpowiedź w pasku + podświetlenie znacznika, nie redirect.
+  var near = null;
+  var APS = [
+    ["WAW", "Warszawa", 52.30, 20.80],   // Okęcie + Modlin
+    ["KRK", "Kraków", 50.0777, 19.7848],
+    ["GDN", "Gdańsk", 54.3776, 18.4662],
+    ["KTW", "Katowice", 50.4743, 19.08],
+    ["WRO", "Wrocław", 51.1027, 16.8858],
+    ["POZ", "Poznań", 52.421, 16.8263],
+    ["RZE", "Rzeszów", 50.11, 22.019],
+    ["LUZ", "Lublin", 51.2403, 22.7136],
+    ["BZG", "Bydgoszcz", 53.0968, 17.9777],
+    ["SZZ", "Szczecin", 53.5847, 14.9022],
+    ["LCJ", "Łódź", 51.7219, 19.3981]
+  ];
+  function dist(lat1, lon1, lat2, lon2) {
+    var r = Math.PI / 180, dlat = (lat2 - lat1) * r, dlon = (lon2 - lon1) * r;
+    var a = Math.sin(dlat / 2) * Math.sin(dlat / 2) +
+      Math.cos(lat1 * r) * Math.cos(lat2 * r) *
+      Math.sin(dlon / 2) * Math.sin(dlon / 2);
+    return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+  function suggest() {
+    if (!near || near.iata === "WAW") return "";
+    return (mob ? "Najbliżej: " + near.iata + " (wkrótce) · "
+                : "Najbliższe Ci: " + near.city + " — wkrótce. ");
+  }
+  function paintNear() {
+    document.querySelectorAll(".ap").forEach(function (g) {
+      var t = g.querySelector(".iata");
+      if (t && near && t.textContent.indexOf(near.iata) === 0) {
+        g.classList.add("near");
+      }
+    });
+  }
+  try {
+    var ac = new AbortController();
+    var to = setTimeout(function () { ac.abort(); }, 2500);
+    fetch("https://get.geojs.io/v1/ip/geo.json", { signal: ac.signal })
+      .then(function (r) { return r.json(); })
+      .then(function (g) {
+        var lat = parseFloat(g.latitude), lon = parseFloat(g.longitude);
+        if (!isFinite(lat) || !isFinite(lon)) return;
+        var best = null, bd = 1e9;
+        APS.forEach(function (a) {
+          var d = dist(lat, lon, a[2], a[3]);
+          if (d < bd) { bd = d; best = a; }
+        });
+        if (best && bd < 300) {
+          near = { iata: best[0], city: best[1], km: Math.round(bd) };
+          paintNear();
+          gtag("event", "geo_suggest",
+               { airport: near.iata, distance_km: near.km });
+          render();
+        }
+      })
+      .catch(function () {})
+      .finally(function () { clearTimeout(to); });
+  } catch (e) {}
+
+  function render(n) {
+    var s = suggest();
+    if (n === undefined) {           // stan "zostań / wybierz"
+      msg.textContent = near
+        ? s + (mob ? "Wybierz lotnisko" : "Wybierz lotnisko wylotu")
+        : (mob ? "Wybierz lotnisko" : "Wybierz lotnisko wylotu");
+      return;
+    }
+    msg.innerHTML = s + (mob
+      ? "Do Warszawy za <b>" + n + "…</b>"
+      : "Przenoszę do lotów z Warszawy za <b>" + n + "…</b>");
+  }
+
+  if (wybor || saved) {              // ?wybor: tylko wskazówka; saved: redirect w head
+    render();
+    return;
+  }
   var n = 3, t;
   function tick() {
-    msg.innerHTML = mob
-      ? "Do Warszawy za <b>" + n + "…</b>"
-      : "Przenoszę do lotów z Warszawy za <b>" + n + "…</b>";
+    render(n);
     if (n <= 0) { location.replace("zwarszawy/"); return; }
     n -= 1; t = setTimeout(tick, 1000);
   }
@@ -155,7 +235,7 @@ document.querySelectorAll('a.ap.on').forEach(function (a) {
   btn.textContent = mob ? "Zostań" : "Zostań na mapie";
   btn.addEventListener("click", function () {
     clearTimeout(t);
-    msg.textContent = mob ? "Wybierz lotnisko" : "Wybierz lotnisko wylotu";
+    render();
     btn.remove();
   });
   bar.appendChild(btn);
