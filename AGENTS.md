@@ -2,7 +2,8 @@
 
 ## Stan (po migracji na home.pl + polataj.se)
 
-- **Domena główna:** `https://polataj.se/` (mapa lotnisk) → `/zwarszawy/` (apka).
+- **Domena główna:** `https://polataj.se/` (mapa lotnisk) → `/zwarszawy/`
+  i `/zkrakowa/` (apki per port).
 - **Hosting:** home.pl, serwer `entropia`, FTP root `/makosa.org`, strona w `/makosa.org/polataj`.
 - **DNS:** `polataj.se` wydelegowana na dns.home.pl/dns2/dns3 (rejestracja w OVH, bez poczty).
 - **SSL:** homeSSL Start dla polataj.se + www (do 2027-10-18), auto-instalacja.
@@ -12,9 +13,19 @@
   Pages nie robi 301 serwerowych.
 - **GA4:** jeden tag `G-CTFYNF714B` dla wszystkich domen; rozróżnienie po
   wymiarze Hostname. Historia nienaruszona.
-- **Pipeline:** GitHub Actions co 6 h: `search.py` → ingest do bazy (PHP API
+- **Pipeline:** GitHub Actions co 6 h: `search.py <port>` dla każdego portu
+  z `config.json → ports` → `ingest.py <port>` do bazy (PHP API
   na `makosa.org/tanie_loty/api`) → `deploy_site.py` (FTP na home.pl) →
-  commit danych do `docs/zwarszawy/`.
+  commit danych do `docs/<port>/`.
+- **Geolokalizacja:** `docs/index.html` pyta get.geojs.io (timeout 2,5 s),
+  podświetla najbliższy port i kieruje odliczanie do najbliższego
+  AKTYWNEGO lotniska (mapowanie ACTIVE w skrypcie). Sugestia, nie redirect.
+  Event GA4: `geo_suggest`.
+- **Nowy port:** dodaj wpis w `config.json → ports` (`airports`,
+  `avi_origin`), katalog `docs/<port>/index.html` (kopia apki — teksty,
+  canonical/og, `HOME_GEO`), przebieg `search.py <port>` +
+  `ingest.py <port>` w `search.yml`, aktywuj `<a class="ap on" data-ap=…>`
+  na mapie + dopisz do mapowań `port` (head) i `ACTIVE`.
 
 ## Deploy
 
@@ -29,12 +40,11 @@
    (Admin → Data streams → Stream URL). Historia zostaje.
 2. **loty.makosa.org:** gdy redirect skryptowy się sprawdzi i Google
    przeczyta canonical — rozważyć wyłączenie GitHub Pages / CNAME.
-3. **Geolokalizacja** jako miękka sugestia lotniska (NIE twardy redirect —
-   mobilne IP często pokazują Warszawę). Opcje: MaxMind GeoLite2 na home.pl
-   lub Cloudflare przed stroną. Wybór użytkownika (localStorage) i tak
-   najważniejszy.
-4. **Drugie lotnisko** (np. Kraków): `search.py` parametryzować po porcie,
-   ścieżki `/zkrakowa/`, osobne `deals.json`; mapa: aktywować znacznik.
+3. ~~Geolokalizacja~~ — zrobione (geojs + miękka sugestia).
+4. ~~Drugie lotnisko (Kraków)~~ — zrobione: `/zkrakowa/`, `search.py
+   zkrakowa`, znacznik KRK aktywny na mapie. Kolejne wg danych
+   `geo_suggest`. Apka per port to wciąż kopia pliku — przy 3. porcie
+   warto zrobić wspólny szablon + config JS.
 5. **Niezależność od GitHub Actions:** przepisać `search.py` na PHP
    i puścić z crona home.pl (panel: „Zadania cron"). GitHub zostaje tylko
    jako repo kodu.

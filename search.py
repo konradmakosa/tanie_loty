@@ -6,6 +6,7 @@
 import json
 import os
 import statistics
+import sys
 import time
 import urllib.error
 import urllib.parse
@@ -17,9 +18,13 @@ ROOT = Path(__file__).resolve().parent
 CONFIG_PATH = ROOT / "config.json"
 ENV_PATH = ROOT / ".env"
 HISTORY_PATH = ROOT / "data" / "history.jsonl"
-DEALS_PATH = ROOT / "docs" / "zwarszawy" / "deals.json"
-FAR_PATH = ROOT / "docs" / "zwarszawy" / "far.json"
-HISTORY_DIR = ROOT / "docs" / "zwarszawy" / "history"
+# Port wylotu: python search.py zkrakowa (domyślnie zwarszawy).
+# Sekcja "ports" w config.json nadpisuje airports/avi_origin.
+PORT = sys.argv[1] if len(sys.argv) > 1 else "zwarszawy"
+OUT_DIR = ROOT / "docs" / PORT
+DEALS_PATH = OUT_DIR / "deals.json"
+FAR_PATH = OUT_DIR / "far.json"
+HISTORY_DIR = OUT_DIR / "history"
 CACHE_DIR = ROOT / "data" / "cache"
 
 RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
@@ -189,7 +194,11 @@ def cached_json(name, url, max_age_days=CACHE_MAX_AGE_DAYS):
 
 def load_config():
     with open(CONFIG_PATH, encoding="utf-8") as f:
-        return json.load(f)
+        cfg = json.load(f)
+    port = cfg.pop("ports", {}).get(PORT)
+    if port:
+        cfg.update(port)
+    return cfg
 
 
 def load_history():
@@ -240,9 +249,10 @@ def load_route_file(origin, dest):
             "points": []}
 
 
-def backfill_history():
-    """Jednorazowo: buduje docs/zwarszawy/history/*.json z data/history.jsonl
-    (miesiąc wylotu nieznany -> null). Wołane gdy katalog nie istnieje."""
+def backfill_history(origins):
+    """Jednorazowo: buduje docs/<port>/history/*.json z data/history.jsonl
+    (miesiąc wylotu nieznany -> null). Wołane gdy katalog nie istnieje.
+    Tylko trasy z portów tego przebiegu (origins)."""
     if HISTORY_DIR.exists() or not HISTORY_PATH.exists():
         return
     HISTORY_DIR.mkdir(parents=True, exist_ok=True)
@@ -255,6 +265,8 @@ def backfill_history():
             try:
                 e = json.loads(line)
             except ValueError:
+                continue
+            if e["origin"] not in origins:
                 continue
             key = (e["origin"], e["dest"])
             ts = (e["ts"] or "")[:16]
@@ -537,7 +549,8 @@ def fetch_aviasales(cfg, token, marker, maps):
     deals = []
     for month in months:
         data = aviasales_month(month, token, direct=True,
-                               price_cap=cfg["max_price_pln"]["full"])
+                               price_cap=cfg["max_price_pln"]["full"],
+                               origin=cfg["avi_origin"])
         ok = 0
         for r in data:
             try:
@@ -555,14 +568,14 @@ def fetch_aviasales(cfg, token, marker, maps):
     return deals
 
 
-def aviasales_month(month, token, direct, price_cap):
+def aviasales_month(month, token, direct, price_cap, origin):
     """Jeden miesiąc z prices_for_dates; stronicowanie gdy strona pełna
     (1000) i najdroższa cena wciąż pod progiem (max 3 strony)."""
     data = []
     pages = 0
     for page in range(1, 4):
         params = {
-            "origin": "WAW",  # kod miasta — obejmuje WAW i WMI
+            "origin": origin,  # kod miasta — np. WAW obejmuje WAW i WMI
             "departure_at": month,
             "one_way": "false",
             "direct": "true" if direct else "false",
@@ -598,7 +611,7 @@ def aviasales_month(month, token, direct, price_cap):
     return data
 
 
-def fetch_aviasales_far(far, token, marker, maps):
+def fetch_aviasales_far(far, token, marker, maps, avi_origin):
     """Okazje poza Europę (zakładka „Daleko"): max 1 przesiadka w stronę,
     kraje spoza EUROPE_CC, cap MAX_PER_ROUTE_FAR na trasę."""
     if not token:
@@ -612,7 +625,8 @@ def fetch_aviasales_far(far, token, marker, maps):
     deals = []
     for month in months:
         data = aviasales_month(month, token, direct=False,
-                               price_cap=far["max_price_pln"])
+                               price_cap=far["max_price_pln"],
+                               origin=avi_origin)
         raw += len(data)
         ok = 0
         for r in data:
@@ -858,7 +872,7 @@ def main():
     marker = os.environ.get("TRAVELPAYOUTS_MARKER")
 
     history = load_history()
-    backfill_history()
+    backfill_history(set(cfg["airports"]))
     history_by_route = {}
     for e in history:
         history_by_route.setdefault((e["origin"], e["dest"]),
@@ -878,8 +892,8 @@ def main():
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
     # Zakładka „Daleko" — okazje poza Europą, osobny plik.
-    far_raw = fetch_aviasales_far(cfg.get("far") or {}, token, marker, maps) \
-        if token else []
+    far_raw = fetch_aviasales_far(cfg.get("far") or {}, token, marker, maps,
+                                  cfg["avi_origin"]) if token else []
     far_deals = merge_offers(far_raw)
     annotate_record_low(far_deals, history_by_route, cfg)
     annotate_typical(far_deals)

@@ -1,16 +1,22 @@
 #!/usr/bin/env python3
-"""Wysyła oferty z docs/zwarszawy/{deals,far}.json do bazy
-przez API PHP (ingest.php). Bez TL_API_BASE/TL_INGEST_KEY — pomija."""
+"""Wysyła oferty z docs/<port>/{deals,far}.json do bazy
+przez API PHP (ingest.php). Bez TL_API_BASE/TL_INGEST_KEY — pomija.
+Użycie: python ingest.py [port] (domyślnie zwarszawy)."""
 
 import gzip
 import json
 import os
+import sys
 import urllib.error
 import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 ENV_PATH = ROOT / ".env"
+
+# Port wylotu: python ingest.py zkrakowa (domyślnie zwarszawy).
+PORT = sys.argv[1] if len(sys.argv) > 1 else "zwarszawy"
+PORT_DIR = ROOT / "docs" / PORT
 
 OFFER_KEYS = ("origin", "dest", "dest_city", "country", "country_code",
               "date_out", "date_in", "nights", "price", "airline_code",
@@ -84,7 +90,7 @@ def main():
         return
 
     ts = None
-    deals_path = ROOT / "docs" / "zwarszawy" / "deals.json"
+    deals_path = PORT_DIR / "deals.json"
     if deals_path.exists():
         ts = json.loads(deals_path.read_text(encoding="utf-8")) \
             .get("generated_at")
@@ -92,7 +98,7 @@ def main():
     ts = ts or datetime.now(timezone.utc).isoformat()
 
     for path, tab in [(deals_path, "okazje"),
-                      (ROOT / "docs" / "zwarszawy" / "far.json", "daleko")]:
+                      (PORT_DIR / "far.json", "daleko")]:
         payload = build_payload(path, tab, ts)
         if not payload or not payload["offers"]:
             print("ingest: brak ofert dla %s — pomijam" % tab)
