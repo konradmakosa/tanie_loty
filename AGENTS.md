@@ -28,6 +28,17 @@
   `ingest.py <port>` w `search.yml`, aktywuj `<a class="ap on" data-ap=…>`
   na mapie + dopisz do mapowań `port` (head) i `ACTIVE`.
 
+## Linki zakupu (od 2025-10)
+
+- Użytkownik NIE trafia do Aviasales. `search.py: buy_link()` → strona linii
+  (Ryanair, Wizz, LOT, easyJet, LEGACY_LINKS), fallback **Skyscanner**
+  (neutralny deep link, bez afiliacji). Loty z przesiadkami → zawsze Skyscanner.
+- Travelpayouts zostaje tylko jako źródło cen w backendzie (`TRAVELPAYOUTS_TOKEN`);
+  `TRAVELPAYOUTS_MARKER` nieużywany. Ryzyko: ich Data API jest formalnie dla
+  partnerów afiliacyjnych — szukać zamiennika źródła cen Wizz/LOT/„Daleko".
+- Monetyzacja: afiliacja Skyscanner (impact.com) wymaga >5k UU/mies.; API
+  Skyscannera >100k — poza zasięgiem. Plan: hotele/auta pod okazją, alerty.
+
 ## Deploy
 
 - Frontend: `python3 deploy_site.py` (wymaga TL_FTP_*, TL_WEB_DIR=/makosa.org).

@@ -777,6 +777,10 @@ function dealLink(d) {
   return d.link || ((d.offers || [])[0] || {}).link || "";
 }
 
+function viaLabel(d) {
+  return d.via || (d.source === "ryanair" ? "ryanair.com" : "Skyscanner");
+}
+
 /* Kod kraju ISO2 → emoji flagi (regional indicator symbols). */
 function flag(cc) {
   if (!cc || cc.length !== 2) return "";
@@ -866,7 +870,7 @@ function kartaHtml(d, showBadge, soonLvl) {
         </div>
         <div class="crow2 times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}</div>
         <div class="crow3 row">
-          <span class="airline">✈ ${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+          <span class="airline">✈ ${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${viaLabel(d)}</span>
           <span class="route r2">${d.origin} → ${d.dest}</span>
         </div>
         <div class="cextra">
@@ -961,11 +965,11 @@ function renderList(items, listId, sort, groupBy, anyData) {
         '<div class="chip-body">' +
         rest.map(d => `
           <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
-             data-via="${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}">
+             data-via="${viaLabel(d)}">
             ${soonHtmlFor(soonLevel(d), true)}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
-            · ${d.source === "aviasales" ? "Aviasales" : "ryanair.com"}</span>
+            · ${viaLabel(d)}</span>
           </a>`).join("") + "</div></details>"
       : "";
     return '<div class="group">' + kartaHtml(main, anyLow, anySoon) + legacy +
@@ -1387,14 +1391,14 @@ Promise.all([
     const c = data.counts || {};
     const cParts = [];
     if (c.ryanair) cParts.push("Ryanair " + c.ryanair + " ofert");
-    if (c.aviasales) cParts.push("Aviasales " + c.aviasales + " ofert");
+    if (c.aviasales) cParts.push("wyszukiwarki " + c.aviasales + " ofert");
     if (cParts.length)
       document.getElementById("countsLine").textContent =
         "Źródła: " + cParts.join(" · ");
     document.getElementById("settingsLine").textContent = settingsSummary(settings);
     if (!(data.sources || []).includes("aviasales")) {
       document.getElementById("srcwarn").textContent =
-        "Źródło: tylko Ryanair (Aviasales nieaktywne — brak tokena)";
+        "Źródło: tylko Ryanair (drugie źródło cen nieaktywne)";
     }
     const sel = document.getElementById("airline");
     [...new Set(deals.map(d => d.airline).filter(Boolean))].sort()
@@ -1418,7 +1422,7 @@ Promise.all([
         " przesiadki, najbliższe " + farCfg.days_ahead + " dni";
       const fc = (farData.counts || {}).aviasales;
       if (fc) document.getElementById("farCounts").textContent =
-        "Źródło: Aviasales " + fc + " ofert";
+        "Źródło: dane wyszukiwarek, " + fc + " ofert";
       const fSel = document.getElementById("fAirline");
       [...new Set(farDeals.map(d => d.airline).filter(Boolean))].sort()
         .forEach(a => {

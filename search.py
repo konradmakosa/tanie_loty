@@ -76,10 +76,18 @@ RYANAIR_LINK = (
     "&tpOriginIata={origin}&tpDestinationIata={dest}"
 )
 
+# Neutralny link do wyszukiwarki, gdy nie znamy linku do strony linii
+# (loty z przesiadkami, linie bez wzorca URL). Bez afiliacji.
+SKYSCANNER_LINK = (
+    "https://www.skyscanner.pl/transport/loty/{origin}/{dest}/"
+    "{out_yymmdd}/{in_yymmdd}/?adultsv2=1&cabinclass=economy&rtn=1"
+)
+SKYSCANNER_LABEL = "Skyscanner"
+
 NOTE_RYANAIR = "cena bez bagażu rejestrowanego"
-NOTE_AVIASALES = "cena z ostatnich 48 h, sprawdź przy zakupie"
-NOTE_AVIASALES_LOWCOST = ("cena pośrednika z ostatnich 48 h — "
-                          "przy Ryanair/Wizz lepiej kupić bezpośrednio")
+NOTE_AVIASALES = "cena sprzed maks. 48 h, sprawdź przy zakupie"
+NOTE_AVIASALES_LOWCOST = ("cena z wyszukiwarki sprzed maks. 48 h — "
+                          "sprawdź na stronie linii")
 LOWCOST_CODES = {"FR", "RK", "RR", "MW", "W6", "W4", "W9"}
 
 # Linie niskokosztowe (+ tanie czartery/regionalne) — reszta to "full".
@@ -99,6 +107,37 @@ LEGACY_LINKS = {
 
 def category_for(code):
     return "lcc" if code in LCC_CODES else "full"
+
+
+def _yymmdd(d):
+    return d[2:4] + d[5:7] + d[8:10]
+
+
+def buy_link(code, origin, dest, date_out, date_in):
+    """(url, label) linku zakupu. Fallback: Skyscanner (neutralny)."""
+    if code in ("FR", "RK", "RR", "MW"):
+        return (RYANAIR_LINK.format(origin=origin, dest=dest,
+                                    date_out=date_out, date_in=date_in),
+                "ryanair.com")
+    if code in ("W6", "W4", "W9"):
+        return ("https://wizzair.com/pl-pl/booking/select-flight/"
+                "{}/{}/{}/{}/1/0/0/null".format(origin, dest,
+                                                date_out, date_in),
+                "wizzair.com")
+    if code == "LO":
+        return ("https://www.lot.com/pl/pl/booking/flights"
+                "?from={}&to={}&departure={}&return={}".format(
+                    origin, dest, date_out, date_in), "lot.com")
+    if code in ("U2", "EJU"):
+        return ("https://www.easyjet.com/deeplink?lang=PL&dep=%s&dest=%s"
+                "&dd=%s&rd=%s&apax=1&isOneWay=off"
+                % (origin, dest, date_out, date_in), "easyjet.com")
+    if code in LEGACY_LINKS:
+        return LEGACY_LINKS[code], "strona linii"
+    return (SKYSCANNER_LINK.format(origin=origin.lower(), dest=dest.lower(),
+                                   out_yymmdd=_yymmdd(date_out),
+                                   in_yymmdd=_yymmdd(date_in)),
+            SKYSCANNER_LABEL)
 
 
 def price_limit(cfg, code):
@@ -475,6 +514,7 @@ def ryanair_deal(origin, dest, arr, fo, fi, total, nights):
         "note": NOTE_RYANAIR,
         "link": RYANAIR_LINK.format(origin=origin, dest=dest,
                                     date_out=date_out, date_in=date_in),
+        "via": "ryanair.com",
     }
 
 
@@ -696,17 +736,14 @@ def aviasales_far_deal(r, far, marker, maps, jutro, koniec):
     dest = r.get("destination_airport") or dest_city_code
     dest_country = tp_country_name(maps, cc)
 
-    link = r.get("link")
-    if link:
-        url = AVIASALES_SITE + link
+    if t_out + t_in > 0:
+        # Link do strony linii nie odda połączenia z przesiadką — Skyscanner.
+        url = SKYSCANNER_LINK.format(
+            origin=origin.lower(), dest=dest.lower(),
+            out_yymmdd=_yymmdd(date_out), in_yymmdd=_yymmdd(date_in))
+        via = SKYSCANNER_LABEL
     else:
-        url = ("%s/search/%s%s%s%s1"
-               % (AVIASALES_SITE, r.get("origin") or origin,
-                  date_out[8:10] + date_out[5:7],
-                  dest_city_code,
-                  date_in[8:10] + date_in[5:7]))
-    if marker:
-        url += ("&" if "?" in url else "?") + "marker=" + urllib.parse.quote(marker)
+        url, via = buy_link(code, origin, dest, date_out, date_in)
 
     return {
         "id": "%s-%s-%s-%s" % (origin, dest, date_out, date_in),
@@ -739,6 +776,7 @@ def aviasales_far_deal(r, far, marker, maps, jutro, koniec):
         "source": "aviasales",
         "note": NOTE_AVIASALES,
         "link": url,
+        "via": via,
     }
 
 
@@ -770,17 +808,7 @@ def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
     origin_city = r.get("origin") or origin
     dest_city_code = r.get("destination") or dest
 
-    link = r.get("link")
-    if link:
-        url = AVIASALES_SITE + link
-    else:
-        url = ("%s/search/%s%s%s%s1"
-               % (AVIASALES_SITE, origin_city,
-                  date_out[8:10] + date_out[5:7],
-                  dest_city_code,
-                  date_in[8:10] + date_in[5:7]))
-    if marker:
-        url += ("&" if "?" in url else "?") + "marker=" + urllib.parse.quote(marker)
+    url, via = buy_link(code, origin, dest, date_out, date_in)
 
     origin_name = (maps["airports"].get(origin) or {}).get("name") or origin
     dest_country = tp_country_name(maps, dest_city_code)
@@ -813,10 +841,11 @@ def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
         "note": (NOTE_AVIASALES_LOWCOST if code in LOWCOST_CODES
                  else NOTE_AVIASALES),
         "link": url,
+        "via": via,
     }
 
 
-SOURCE_LABELS = {"ryanair": "ryanair.com", "aviasales": "Aviasales"}
+SOURCE_LABELS = {"ryanair": "ryanair.com", "aviasales": "Skyscanner"}
 
 
 def direct_for(d, group):
@@ -825,24 +854,12 @@ def direct_for(d, group):
     for g in group:
         if g["source"] == "ryanair":
             return g["link"], "ryanair.com"
-    code = d.get("airline_code")
-    if code in ("FR", "RK", "RR", "MW"):
-        return RYANAIR_LINK.format(origin=d["origin"], dest=d["dest"],
-                                   date_out=d["date_out"],
-                                   date_in=d["date_in"]), "ryanair.com"
-    if code in ("W6", "W4", "W9"):
-        return ("https://wizzair.com/pl-pl/booking/select-flight/"
-                "{}/{}/{}/{}/1/0/0/null".format(d["origin"], d["dest"],
-                                                d["date_out"], d["date_in"]),
-                "wizzair.com")
-    if code == "LO":
-        return ("https://www.lot.com/pl/pl/booking/flights"
-                "?from={}&to={}&departure={}&return={}".format(
-                    d["origin"], d["dest"], d["date_out"], d["date_in"]),
-                "lot.com")
-    if code in LEGACY_LINKS:
-        return LEGACY_LINKS[code], "strona linii"
-    return None, None
+    url, label = buy_link(d.get("airline_code"), d["origin"], d["dest"],
+                          d["date_out"], d["date_in"])
+    if label == SKYSCANNER_LABEL:
+        # Fallback wyszukiwarki już jest w offers[] — nie dublujemy.
+        return None, None
+    return url, label
 
 
 def merge_offers(deals):
@@ -857,13 +874,22 @@ def merge_offers(deals):
     for group in groups.values():
         group.sort(key=lambda d: d["price"])
         main = dict(group[0])
-        main["offers"] = [
-            {"source": g["source"], "price": g["price"], "link": g["link"],
-             "label": SOURCE_LABELS.get(g["source"], g["source"]),
-             "airline": g["airline"]}
-            for g in group
-        ]
+        # Dedupe po linku — grupa posortowana po cenie, zostaje najtańsza.
+        seen = set()
+        main["offers"] = []
+        for g in group:
+            if g["link"] in seen:
+                continue
+            seen.add(g["link"])
+            main["offers"].append({
+                "source": g["source"], "price": g["price"], "link": g["link"],
+                "label": g.get("via")
+                        or SOURCE_LABELS.get(g["source"], g["source"]),
+                "airline": g["airline"]})
         main["direct_link"], main["direct_label"] = direct_for(main, group)
+        if main["offers"] and main["direct_link"] == main["offers"][0]["link"]:
+            main["direct_link"] = None
+            main["direct_label"] = None
         # Top-level link == offers[0].link — oszczędzamy ~600 B na rekord.
         del main["link"]
         merged.append(main)
