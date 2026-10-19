@@ -10,4 +10,8 @@ return [
     'ALLOWED_ORIGINS' => ['https://loty.makosa.org',
         'https://polataj.se', 'https://www.polataj.se',
         'https://makosa.org'],
+    'MAIL_FROM' => 'alerty@polataj.se',
+    'SITE_BASE' => 'https://polataj.se',
+    'API_BASE' => 'https://makosa.org/tanie_loty/api',
+    // 'MAIL_DEBUG_DIR' => '/tmp/tl_mail',
 ];

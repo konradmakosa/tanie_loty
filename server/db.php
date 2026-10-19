@@ -50,6 +50,17 @@ function db_migrate(PDO $pdo): void {
             dep_month CHAR(7) NOT NULL, min_price NUMERIC(9,2) NOT NULL,
             n INT NOT NULL DEFAULT 1,
             PRIMARY KEY (day, origin, dest, dep_month))");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS subscribers (
+            id SERIAL PRIMARY KEY,
+            email VARCHAR(190) NOT NULL, port VARCHAR(16) NOT NULL,
+            token CHAR(32) NOT NULL UNIQUE,
+            confirmed_at TIMESTAMP NULL, created_at TIMESTAMP NOT NULL,
+            last_sent_at TIMESTAMP NULL,
+            UNIQUE (email, port))");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS alerts_sent (
+            deal_id VARCHAR(48) NOT NULL, port VARCHAR(16) NOT NULL,
+            sent_at TIMESTAMP NOT NULL,
+            PRIMARY KEY (deal_id, port))");
         return;
     }
     if ($drv === 'sqlite') {
@@ -73,6 +84,17 @@ function db_migrate(PDO $pdo): void {
             dep_month CHAR(7) NOT NULL, min_price NUMERIC(9,2) NOT NULL,
             n INT NOT NULL DEFAULT 1,
             PRIMARY KEY (day, origin, dest, dep_month))");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email VARCHAR(190) NOT NULL, port VARCHAR(16) NOT NULL,
+            token CHAR(32) NOT NULL UNIQUE,
+            confirmed_at DATETIME NULL, created_at DATETIME NOT NULL,
+            last_sent_at DATETIME NULL,
+            UNIQUE (email, port))");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS alerts_sent (
+            deal_id VARCHAR(48) NOT NULL, port VARCHAR(16) NOT NULL,
+            sent_at DATETIME NOT NULL,
+            PRIMARY KEY (deal_id, port))");
         return;
     }
     // MySQL — zgodnie ze schema.sql.

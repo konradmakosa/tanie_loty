@@ -109,6 +109,28 @@ def main():
         except Exception as e:
             print("ingest %s: błąd (%s)" % (tab, e))
 
+    # Alerty e-mail: rekordowo tanie loty → notify.php.
+    lows = [d for d in (json.loads(deals_path.read_text(encoding="utf-8"))
+                        .get("deals") or [])
+            if d.get("record_low")] if deals_path.exists() else []
+    if not lows:
+        print("notify: brak rekordów — pomijam")
+        return
+    payload = {"port": PORT, "deals": [{
+        "id": d["id"], "origin": d["origin"], "dest": d["dest"],
+        "dest_city": d.get("dest_city"), "dest_country": d.get("dest_country"),
+        "date_out": d["date_out"], "date_in": d["date_in"],
+        "nights": d.get("nights"), "price": d["price"],
+        "airline": d.get("airline"), "median_price": d.get("typical_price"),
+        "link": (d.get("offers") or [{}])[0].get("link")
+                or d.get("direct_link") or "",
+    } for d in lows]}
+    try:
+        resp = post_json(base + "/notify.php", key, payload)
+        print("notify: %s" % resp)
+    except Exception as e:
+        print("notify: błąd (%s)" % e)
+
 
 if __name__ == "__main__":
     main()

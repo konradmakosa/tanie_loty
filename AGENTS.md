@@ -39,6 +39,20 @@
 - Monetyzacja: afiliacja Skyscanner (impact.com) wymaga >5k UU/mies.; API
   Skyscannera >100k — poza zasięgiem. Plan: hotele/auta pod okazją, alerty.
 
+## Alerty e-mail (double opt-in)
+
+- Formularz na każdej stronie portu → `server/subscribe.php` (form-urlencoded,
+  honeypot `hp`, ponowny mail potwierdzający najwcześniej po 10 min) →
+  `confirm.php?t=` → redirect `/<port>/?alert=ok`; `unsubscribe.php?t=`
+  (GET/POST one-click) → `?alert=wypisano`.
+- `ingest.py <port>` po ingescie POST-uje `record_low` do `notify.php`
+  (X-Ingest-Key); nowe `deal_id` lądują w `alerts_sent` ZAWSZE (także bez
+  subskrybentów), mail (max 12 najtańszych) do potwierdzonych z portu.
+- Wysyłka: PHP `mail()` z home.pl, From `alerty@polataj.se` (SPF polataj.se
+  `v=spf1 a mx ~all` obejmuje IP serwera). Brak DKIM. `MAIL_DEBUG_DIR`
+  w config.php → .eml do plików (testy lokalne, sqlite).
+- Tabele: `subscribers`, `alerts_sent` (db.php automigracja + schema.sql).
+
 ## Deploy
 
 - Frontend: `python3 deploy_site.py` (wymaga TL_FTP_*, TL_WEB_DIR=/makosa.org).

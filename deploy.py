@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent
 ENV_PATH = ROOT / ".env"
 SERVER_DIR = ROOT / "server"
 FILES = ["db.php", "ingest.php", "history.php", "typical.php",
+         "ports.php", "mail.php", "subscribe.php", "confirm.php",
+         "unsubscribe.php", "notify.php",
          "config.php", "config.sample.php", "schema.sql", ".htaccess"]
 
 # Kandydaci docroota dla makosa.org (kolejność jak w home.pl i typowych).
@@ -33,6 +35,10 @@ return [
     'INGEST_KEY' => %s,
     'ALLOWED_ORIGINS' => ['https://loty.makosa.org', 'https://polataj.se',
                           'https://www.polataj.se', 'https://makosa.org'],
+    'MAIL_FROM' => 'alerty@polataj.se',
+    'SITE_BASE' => 'https://polataj.se',
+    'API_BASE' => 'https://makosa.org/tanie_loty/api',
+    // 'MAIL_DEBUG_DIR' => '/tmp/tl_mail',   // testy lokalne: zapis .eml
 ];
 """
 

@@ -398,6 +398,20 @@ if (location.hostname === "loty.makosa.org") {
     .wrap { max-width: 1400px; }
     main { grid-template-columns: 1fr 1fr 1fr; }
   }
+
+  /* formularz alertów e-mail */
+  .alerts { max-width: 480px; margin: 24px auto 8px; padding: 0 4px; }
+  .alerts form { background: var(--card); border: 1px solid var(--line);
+    border-radius: 16px; padding: 14px 16px; }
+  .alerts .desc { margin-bottom: 10px; }
+  .alerts .desc.small { font-size: .78rem; margin: 8px 0 0; }
+  .arow { display: flex; gap: 8px; }
+  .arow input {
+    flex: 1; min-width: 0; min-height: 40px; padding: 8px 14px;
+    border-radius: 999px; border: 1px solid var(--line);
+    background: var(--card); color: inherit; font: inherit; }
+  .arow .btn { min-height: 40px; white-space: nowrap; }
+  #alertHp { position: absolute; left: -9999px; opacity: 0; }
 </style>
 </head>
 <body>
@@ -599,6 +613,15 @@ if (location.hostname === "loty.makosa.org") {
   </div>
 </section>
 
+
+<section class="alerts">
+  <form id="alertForm">
+    <p class="desc">Powiadom mnie mailem o rekordowo tanich lotach z Warszawy</p>
+    <div class="arow"><input type="email" id="alertEmail" placeholder="twój e-mail" required autocomplete="email"><button class="btn" type="submit">Zapisz</button></div>
+    <input type="text" id="alertHp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="desc small">Tylko rekordy cenowe, zwykle kilka maili w miesiącu. Wypisanie jednym kliknięciem.</p>
+  </form>
+</section>
 <footer>
   Apka jest darmowa i bez reklam. Jeśli trafiłeś dzięki niej na okazję:<br>
   <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
@@ -1317,9 +1340,7 @@ document.getElementById("sSave").onclick = () => {
   });
   document.getElementById("settingsLine").textContent = settingsSummary(settings);
   document.getElementById("farSettingsLine").textContent = farSummary(settings);
-  const t = document.getElementById("toast");
-  t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), 2000);
+  toast("Zapisano");
   location.hash = "";
   showTab("okazje");
   render();
@@ -1447,6 +1468,46 @@ Promise.all([
       '<p class="error">Nie udało się wczytać okazji (' + e.message +
       '). Odśwież stronę za chwilę.</p>';
   });
+
+/* Toasty z dowolnym tekstem (domyślnie „Zapisano"). */
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg || "Zapisano";
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), (msg || "").length > 20 ? 4500 : 2000);
+}
+
+/* Alerty e-mail — double opt-in przez API. */
+const PORT = location.pathname.split("/").filter(Boolean).pop() || "zwarszawy";
+{
+  const alert = new URLSearchParams(location.search).get("alert");
+  if (alert) {
+    const msg = { ok: "Alerty włączone ✓", wypisano: "Wypisano z alertów",
+                  blad: "Nieprawidłowy link" }[alert];
+    if (msg) toast(msg);
+    if (alert === "ok") track("alert_confirm", { port: PORT });
+    history.replaceState(null, "", location.pathname + location.hash);
+  }
+}
+document.getElementById("alertForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const email = document.getElementById("alertEmail").value;
+  const hp = document.getElementById("alertHp").value;
+  fetch(API_BASE + "/subscribe.php", {
+    method: "POST",
+    body: new URLSearchParams({ email: email, port: PORT, hp: hp })
+  })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(r => {
+      toast(r.status === "already"
+        ? "Ten adres już jest zapisany"
+        : "Sprawdź skrzynkę i kliknij link potwierdzający");
+      track("alert_subscribe", { port: PORT });
+      document.getElementById("alertEmail").value = "";
+    })
+    .catch(() => toast("Nie udało się zapisać, spróbuj później"));
+});
+
 </script>
 </body>
 </html>

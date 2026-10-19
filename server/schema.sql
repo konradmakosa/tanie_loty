@@ -38,3 +38,21 @@ CREATE TABLE IF NOT EXISTS route_daily (
   n INT NOT NULL DEFAULT 1,
   PRIMARY KEY (day, origin, dest, dep_month)
 );
+
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(190) NOT NULL,
+  port VARCHAR(16) NOT NULL,
+  token CHAR(32) NOT NULL UNIQUE,
+  confirmed_at DATETIME NULL,
+  created_at DATETIME NOT NULL,
+  last_sent_at DATETIME NULL,
+  UNIQUE KEY uq_email_port (email, port)
+);
+
+CREATE TABLE IF NOT EXISTS alerts_sent (
+  deal_id VARCHAR(48) NOT NULL,
+  port VARCHAR(16) NOT NULL,
+  sent_at DATETIME NOT NULL,
+  PRIMARY KEY (deal_id, port)
+);
