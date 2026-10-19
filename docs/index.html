@@ -2,6 +2,10 @@
 <html lang="pl">
 <head>
 <script>
+// Stara domena (GitHub Pages) → polataj.se; zachowuje ?wybor / #wybor.
+if (location.hostname === "loty.makosa.org") {
+  location.replace("https://polataj.se/" + location.search + location.hash);
+}
 // Zapamiętany wybór lotniska — przekieruj, chyba że ?wybor / #wybor.
 try {
   if (localStorage.getItem("airport") &&
@@ -14,12 +18,12 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Polataj.se — tanie loty z Twojego lotniska</title>
 <meta name="description" content="Wybierz lotnisko wylotu i zobacz tanie loty w obie strony. Lista okazji odświeżana co 6 godzin.">
-<link rel="canonical" href="https://loty.makosa.org/">
+<link rel="canonical" href="https://polataj.se/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Polataj.se — tanie loty z Polski">
 <meta property="og:description" content="Wybierz lotnisko wylotu — okazje na loty w obie strony, odświeżane co 6 godzin.">
-<meta property="og:url" content="https://loty.makosa.org/">
-<meta property="og:image" content="https://loty.makosa.org/og.png">
+<meta property="og:url" content="https://polataj.se/">
+<meta property="og:image" content="https://polataj.se/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CTFYNF714B"></script>

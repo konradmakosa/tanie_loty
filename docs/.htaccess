@@ -1,6 +1,17 @@
 AddDefaultCharset UTF-8
 Options -Indexes
 
+# www → bez www; http → https (tylko dla polataj.se —
+# makosa.org/polataj zostaje bez zmian)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_HOST} ^www\.polataj\.se$ [NC]
+  RewriteRule ^ https://polataj.se%{REQUEST_URI} [R=301,L]
+  RewriteCond %{HTTP_HOST} ^polataj\.se$ [NC]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://polataj.se%{REQUEST_URI} [R=301,L]
+</IfModule>
+
 <IfModule mod_headers.c>
   <FilesMatch "\.json$">
     Header set Cache-Control "no-cache"
