@@ -36,6 +36,8 @@ jobs:
           python search.py zkrakowa
           python search.py zgdanska
           python search.py zpoznania
+          python search.py zwroclawia
+          python search.py zkatowic
 
       - name: Wyślij do bazy
         continue-on-error: true
@@ -47,6 +49,8 @@ jobs:
           python ingest.py zkrakowa
           python ingest.py zgdanska
           python ingest.py zpoznania
+          python ingest.py zwroclawia
+          python ingest.py zkatowic
 
       - name: Wgraj stronę na home.pl
         continue-on-error: true

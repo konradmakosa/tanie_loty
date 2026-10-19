@@ -3,7 +3,8 @@
 ## Stan (po migracji na home.pl + polataj.se)
 
 - **Domena główna:** `https://polataj.se/` (mapa lotnisk) → `/zwarszawy/`
-  i `/zkrakowa/` + `/zgdanska/` + `/zpoznania/` (apki per port).
+  + `/zkrakowa/` `/zgdanska/` `/zpoznania/` `/zwroclawia/` `/zkatowic/`
+  (apki per port — aktywne: WAW/WMI, KRK, GDN, POZ, WRO, KTW).
 - **Hosting:** home.pl, serwer `entropia`, FTP root `/makosa.org`, strona w `/makosa.org/polataj`.
 - **DNS:** `polataj.se` wydelegowana na dns.home.pl/dns2/dns3 (rejestracja w OVH, bez poczty).
 - **SSL:** homeSSL Start dla polataj.se + www (do 2027-10-18), auto-instalacja.

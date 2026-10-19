@@ -10,6 +10,8 @@
     "zwarszawy": {"airports": ["WMI", "WAW"], "avi_origin": "WAW"},
     "zkrakowa": {"airports": ["KRK"], "avi_origin": "KRK"},
     "zgdanska": {"airports": ["GDN"], "avi_origin": "GDN"},
-    "zpoznania": {"airports": ["POZ"], "avi_origin": "POZ"}
+    "zpoznania": {"airports": ["POZ"], "avi_origin": "POZ"},
+    "zwroclawia": {"airports": ["WRO"], "avi_origin": "WRO"},
+    "zkatowic": {"airports": ["KTW"], "avi_origin": "KTW"}
   }
 }
