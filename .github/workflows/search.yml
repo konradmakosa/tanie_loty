@@ -34,6 +34,7 @@ jobs:
         run: |
           python search.py zwarszawy
           python search.py zkrakowa
+          python search.py zgdanska
 
       - name: Wyślij do bazy
         continue-on-error: true
@@ -43,6 +44,7 @@ jobs:
         run: |
           python ingest.py zwarszawy
           python ingest.py zkrakowa
+          python ingest.py zgdanska
 
       - name: Wgraj stronę na home.pl
         continue-on-error: true

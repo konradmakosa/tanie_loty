@@ -8,6 +8,7 @@
   "record_low_min_samples": 5,
   "ports": {
     "zwarszawy": {"airports": ["WMI", "WAW"], "avi_origin": "WAW"},
-    "zkrakowa": {"airports": ["KRK"], "avi_origin": "KRK"}
+    "zkrakowa": {"airports": ["KRK"], "avi_origin": "KRK"},
+    "zgdanska": {"airports": ["GDN"], "avi_origin": "GDN"}
   }
 }
