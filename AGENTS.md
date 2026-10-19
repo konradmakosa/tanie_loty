@@ -77,3 +77,9 @@
 6. Drobne: `favicon.ico` (404), ewentualnie `og.png` pod markę Polataj.se.
 7. **Search Console:** jeśli używana — dodać usługę Domain dla polataj.se,
    w starej „Change of Address".
+
+## Podgląd subskrybentów
+
+- Panel home.pl → Bazy danych → phpPgAdmin → tabela `subscribers` / `alerts_sent`.
+- Lub: `curl -H "X-Ingest-Key: $TL_INGEST_KEY" https://makosa.org/tanie_loty/api/subscribers.php`
+  (liczniki + lista; klucz z `.env`).
