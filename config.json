@@ -7,7 +7,8 @@
   "record_low_ratio": 0.8,
   "record_low_min_samples": 5,
   "ports": {
-    "zwarszawy": {"airports": ["WMI", "WAW"], "avi_origin": "WAW"},
+    "zwarszawy": {"airports": ["WMI", "WAW", "RDO"],
+                  "avi_origins": ["WAW", "RDO"]},
     "zkrakowa": {"airports": ["KRK"], "avi_origin": "KRK"},
     "zgdanska": {"airports": ["GDN"], "avi_origin": "GDN"},
     "zpoznania": {"airports": ["POZ"], "avi_origin": "POZ"},

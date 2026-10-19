@@ -547,10 +547,13 @@ def fetch_aviasales(cfg, token, marker, maps):
     months = [m[:7] for m in month_starts(jutro, koniec)]
 
     deals = []
+    origins = cfg.get("avi_origins") or [cfg["avi_origin"]]
     for month in months:
-        data = aviasales_month(month, token, direct=True,
-                               price_cap=cfg["max_price_pln"]["full"],
-                               origin=cfg["avi_origin"])
+        data = []
+        for org in origins:
+            data += aviasales_month(month, token, direct=True,
+                                    price_cap=cfg["max_price_pln"]["full"],
+                                    origin=org)
         ok = 0
         for r in data:
             try:
@@ -624,9 +627,11 @@ def fetch_aviasales_far(far, token, marker, maps, avi_origin):
     raw = 0
     deals = []
     for month in months:
-        data = aviasales_month(month, token, direct=False,
-                               price_cap=far["max_price_pln"],
-                               origin=avi_origin)
+        data = []
+        for org in avi_origin:
+            data += aviasales_month(month, token, direct=False,
+                                    price_cap=far["max_price_pln"],
+                                    origin=org)
         raw += len(data)
         ok = 0
         for r in data:
@@ -892,8 +897,9 @@ def main():
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
     # Zakładka „Daleko" — okazje poza Europą, osobny plik.
-    far_raw = fetch_aviasales_far(cfg.get("far") or {}, token, marker, maps,
-                                  cfg["avi_origin"]) if token else []
+    far_raw = fetch_aviasales_far(
+        cfg.get("far") or {}, token, marker, maps,
+        cfg.get("avi_origins") or [cfg["avi_origin"]]) if token else []
     far_deals = merge_offers(far_raw)
     annotate_record_low(far_deals, history_by_route, cfg)
     annotate_typical(far_deals)
