@@ -9,6 +9,7 @@
   "ports": {
     "zwarszawy": {"airports": ["WMI", "WAW"], "avi_origin": "WAW"},
     "zkrakowa": {"airports": ["KRK"], "avi_origin": "KRK"},
-    "zgdanska": {"airports": ["GDN"], "avi_origin": "GDN"}
+    "zgdanska": {"airports": ["GDN"], "avi_origin": "GDN"},
+    "zpoznania": {"airports": ["POZ"], "avi_origin": "POZ"}
   }
 }
