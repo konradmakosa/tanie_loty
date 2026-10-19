@@ -99,4 +99,4 @@
    Szczecin/Łódź/Bydgoszcz/Lublin mają po kilka tras. Radom (RDO): żadne
    źródło nie zwraca dziś cen — sprawdzać okresowo.
 8. **Search Console:** usługa Domain dla polataj.se, w starej „Change of Address".
-9. Drobne: `favicon.ico` (404), odświeżyć cache podglądu FB/LinkedIn dla og.png.
+9. Drobne: odświeżyć cache podglądu FB/LinkedIn dla og.png.
