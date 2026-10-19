@@ -20,3 +20,6 @@ Options -Indexes
     Header set Cache-Control "public, max-age=86400"
   </FilesMatch>
 </IfModule>
+
+AddType application/manifest+json .webmanifest
+AddType image/svg+xml .svg
