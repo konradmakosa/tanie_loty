@@ -86,8 +86,8 @@
 - Kontakt: skrzynka `kontakt@polataj.se` (50 MB, przekierowanie na
   konrad@makosa.org). Adres w HTML składany z JS ze stałej `CONTACT`
   (templates/app.html, docs/index.html, docs/prywatnosc/index.html).
-  TODO po stronie panelu: alias `alerty@polataj.se → kontakt@`, ewentualnie
-  `rua=mailto:kontakt@polataj.se` w DMARC.
+  Alias `alerty@polataj.se → kontakt@` założony (odpowiedzi na alerty nie
+  odbijają). Opcjonalnie: `rua=mailto:kontakt@polataj.se` w DMARC.
 - Tabele: `subscribers`, `alerts_sent` (db.php automigracja + schema.sql).
 - Zweryfikowane na żywo 2026-10-19: mail z home.pl dochodzi, potwierdzenie
   działa (1 subskrybent potwierdzony).
