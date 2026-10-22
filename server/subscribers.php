@@ -9,6 +9,13 @@ if (!$expected || !hash_equals($expected, $key)) {
 }
 
 $pdo = db();
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $email = trim($_GET['email'] ?? '');
+    if ($email === '') json_err('brak email', 400);
+    $st = $pdo->prepare('DELETE FROM subscribers WHERE email=?');
+    $st->execute([$email]);
+    json_out(['ok' => true, 'deleted' => $st->rowCount()]);
+}
 $rows = $pdo->query(
     'SELECT email, port, confirmed_at, created_at, last_sent_at
      FROM subscribers ORDER BY created_at DESC')->fetchAll();
