@@ -107,6 +107,12 @@
   `.html`/`.json`/`.htaccess` wgrywane zawsze; reszta po rozmiarze.
   `docs/CNAME` nie jest wgrywany na home.pl.
 - API: `python3 deploy.py` lub workflow `deploy-api.yml`.
+- **Preferowany deploy strony: `gh workflow run deploy-api.yml`** (robi
+  API + stronę z aktualnego `main`). Lokalny FTP-TLS bywa blokowany przez
+  firewall sieci (kanał danych PASV w TLS → timeout) — wtedy tylko Actions.
+  Uwaga: przebieg `search.yml` też wgrywa stronę na końcu, ze swojego
+  checkoutu — commit po jego starcie może zostać nadpisany; wtedy
+  odpalić `deploy-api.yml` po jego zakończeniu.
 
 ## Zrobione (2026-10)
 
