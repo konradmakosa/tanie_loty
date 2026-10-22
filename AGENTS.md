@@ -76,9 +76,18 @@
 - `ingest.py <port>` po ingescie POST-uje `record_low` do `notify.php`
   (X-Ingest-Key); nowe `deal_id` lądują w `alerts_sent` ZAWSZE (także bez
   subskrybentów), mail (max 12 najtańszych) do potwierdzonych z portu.
-- Wysyłka: PHP `mail()` z home.pl, From `alerty@polataj.se` (SPF polataj.se
-  `v=spf1 a mx ~all` obejmuje IP serwera). Brak DKIM. `MAIL_DEBUG_DIR`
-  w config.php → .eml do plików (testy lokalne, sqlite).
+- Wysyłka: PHP `mail()` z home.pl, From `alerty@polataj.se`. Poczta domeny
+  skonfigurowana 2026-10-22 (support home.pl): MX `entropia.home.pl`, SPF
+  `ip4:79.96.54.14 a mx -all`, **DKIM** `dkim._domainkey` (serwer podpisuje
+  mail() automatycznie), DMARC `p=quarantine`. Zweryfikowane w Gmailu:
+  dkim/spf/dmarc = pass (Return-Path to `entropia@makosa.org`, DMARC
+  przechodzi po DKIM — nie ruszać). `MAIL_DEBUG_DIR` w config.php → .eml
+  do plików (testy lokalne, sqlite).
+- Kontakt: skrzynka `kontakt@polataj.se` (50 MB, przekierowanie na
+  konrad@makosa.org). Adres w HTML składany z JS ze stałej `CONTACT`
+  (templates/app.html, docs/index.html, docs/prywatnosc/index.html).
+  TODO po stronie panelu: alias `alerty@polataj.se → kontakt@`, ewentualnie
+  `rua=mailto:kontakt@polataj.se` w DMARC.
 - Tabele: `subscribers`, `alerts_sent` (db.php automigracja + schema.sql).
 - Zweryfikowane na żywo 2026-10-19: mail z home.pl dochodzi, potwierdzenie
   działa (1 subskrybent potwierdzony).
@@ -115,7 +124,7 @@
    aplikować do afiliacji Skyscanner (impact.com; hotele/auta też tam) →
    ewentualnie płatne alerty własne (kierunek/kryteria).
 4. **Alerty — rozwój:** własne kryteria (kraj, max cena), digest dzienny
-   zamiast per przebieg, DKIM (home.pl: czy wspiera dla `mail()`?), Brevo/SMTP
+   zamiast per przebieg (DKIM/SPF/DMARC już działają), Brevo/SMTP
    gdy dostarczalność zacznie szwankować. Monitorować `alerts_sent`.
 5. **Niezależność od GitHub Actions:** przepisać `search.py` na PHP
    i puścić z crona home.pl (panel: „Zadania cron"). GitHub zostaje tylko
