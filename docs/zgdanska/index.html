@@ -930,7 +930,7 @@ function kartaHtml(d, showBadge, soonLvl) {
     : "";
   const timesHtml = d.date_in
     ? `${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}`
-    : `${fmtData(d.date_out)} · w jedną stronę${d.time_out ? " · " + d.time_out : ""}`;
+    : `${fmtData(d.date_out)} · One way${d.time_out ? " · " + d.time_out : ""}`;
   const vsHtml = (d.vs_typical !== null && d.vs_typical !== undefined)
     ? '<span class="vs ' + (d.vs_typical <= -15 ? "neg" :
         d.vs_typical > 15 ? "pos" : "neu") + '">' +
@@ -1062,7 +1062,7 @@ function renderList(items, listId, sort, groupBy, anyData) {
              data-via="${viaLabel(d)}">
             ${soonHtmlFor(soonLevel(d), true)}${d.date_in
               ? fmtData(d.date_out) + " → " + fmtData(d.date_in) + " (" + noce(d.nights) + ")"
-              : fmtData(d.date_out) + " · w jedną stronę"}
+              : fmtData(d.date_out) + " · One way"}
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
             · ${viaLabel(d)}</span>
