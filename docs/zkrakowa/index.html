@@ -44,6 +44,7 @@ if (location.hostname === "loty.makosa.org") {
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
   gtag('js', new Date());
   gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
 </script>
@@ -378,6 +379,8 @@ if (location.hostname === "loty.makosa.org") {
     margin: 32px auto 48px;
     text-align: center; font-size: 0.85rem; color: var(--muted);
   }
+  footer a, .alerts .small a { color: var(--muted); text-decoration: underline; }
+  footer a:hover, .alerts .small a:hover { color: var(--text); }
   .coffee { display: inline-block; margin-top: 10px; line-height: 0; }
   .coffee img { height: 46px; width: auto; border-radius: 999px; }
   .coffee:hover img { filter: brightness(1.1); }
@@ -666,13 +669,14 @@ if (location.hostname === "loty.makosa.org") {
     <p class="desc">Powiadom mnie mailem o rekordowo tanich lotach z Krakowa</p>
     <div class="arow"><input type="email" id="alertEmail" placeholder="twój e-mail" required autocomplete="email"><button class="btn" type="submit">Zapisz</button></div>
     <input type="text" id="alertHp" tabindex="-1" autocomplete="off" aria-hidden="true">
-    <p class="desc small">Tylko rekordy cenowe, zwykle kilka maili w miesiącu. Wypisanie jednym kliknięciem.</p>
+    <p class="desc small">Tylko rekordy cenowe, zwykle kilka maili w miesiącu. Zapisując się, zgadzasz się na otrzymywanie alertów; administratorem danych jest Konrad Mąkosa. Wypisanie jednym kliknięciem. <a href="../prywatnosc/">Polityka prywatności</a>.</p>
   </form>
 </section>
 <footer>
   Apka jest darmowa i bez reklam. Jeśli trafiłeś dzięki niej na okazję:<br>
   <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"
      onclick="track('buy_coffee', {})"><img src="../postaw-kawe.png" alt="Postaw kawę" width="175" height="46"></a>
+  <p><a href="../prywatnosc/">Prywatność</a> · <a id="contactLink" href="#">Kontakt</a></p>
 </footer>
 </div>
 
@@ -680,6 +684,13 @@ if (location.hostname === "loty.makosa.org") {
 
 <script>
 const API_BASE = "https://makosa.org/tanie_loty/api";
+
+/* Adres kontaktowy składany w JS — nie występuje wprost w HTML. */
+const CONTACT = ["konrad", "makosa.org"];
+document.addEventListener("DOMContentLoaded", () => {
+  const a = document.getElementById("contactLink");
+  if (a) a.href = "mailto:" + CONTACT.join("@");
+});
 
 const DNI = ["nd", "pn", "wt", "śr", "cz", "pt", "so"];
 const DNI_KROTKIE = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];

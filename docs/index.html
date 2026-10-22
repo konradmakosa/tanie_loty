@@ -38,8 +38,9 @@ try {
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
+  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
   gtag('js', new Date());
-  gtag('config', 'G-CTFYNF714B');
+  gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
 </script>
 <style>
 :root {
@@ -99,6 +100,12 @@ svg.pl text {
   color: var(--muted); z-index: 2; backdrop-filter: blur(8px);
 }
 .bar b { color: var(--text); font-weight: 600 }
+.foot {
+  position: fixed; left: 0; right: 0; bottom: 64px;
+  text-align: center; font-size: .72rem; z-index: 2;
+}
+.foot a { color: var(--muted); text-decoration: none }
+.foot a:hover { color: var(--accent) }
 .bar button {
   background: rgba(122,162,255,.15); color: var(--accent);
   border: 1px solid rgba(122,162,255,.4); border-radius: 999px;
@@ -132,7 +139,14 @@ svg.pl text {
 </div>
 <div class="bar" id="bar"><span id="barmsg">Wybierz lotnisko wylotu</span><a class="coffee2" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"><img src="postaw-kawe.png" alt="Postaw kawę" style="height:24px;width:24px;object-fit:cover;object-position:left;display:block"></a></div>
 <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"><img src="postaw-kawe.png" alt="Postaw kawę"></a>
+<div class="foot"><a href="prywatnosc/">Prywatność</a> · <a id="contactLink" href="#">Kontakt</a></div>
 <script>
+/* Adres kontaktowy składany w JS — nie występuje wprost w HTML. */
+var CONTACT = ["konrad", "makosa.org"];
+document.addEventListener("DOMContentLoaded", function () {
+  var a = document.getElementById("contactLink");
+  if (a) a.href = "mailto:" + CONTACT.join("@");
+});
 document.querySelectorAll('a.ap.on').forEach(function (a) {
   a.addEventListener("click", function (e) {
     e.preventDefault();
