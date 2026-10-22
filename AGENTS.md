@@ -94,6 +94,7 @@
 - Podgląd bazy: panel home.pl → Bazy danych → phpPgAdmin (`subscribers`,
   `alerts_sent`) lub
   `curl -H "X-Ingest-Key: $TL_INGEST_KEY" https://makosa.org/tanie_loty/api/subscribers.php`.
+  Usunięcie wpisu: to samo z `-X DELETE "...subscribers.php?email=adres"`.
 
 ## Social / branding
 
