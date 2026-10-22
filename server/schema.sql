@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS subscribers (
   confirmed_at DATETIME NULL,
   created_at DATETIME NOT NULL,
   last_sent_at DATETIME NULL,
+  reminded_at DATETIME NULL,
   UNIQUE KEY uq_email_port (email, port)
 );
 

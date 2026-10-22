@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     json_out(['ok' => true, 'deleted' => $st->rowCount()]);
 }
 $rows = $pdo->query(
-    'SELECT email, port, confirmed_at, created_at, last_sent_at
+    'SELECT email, port, confirmed_at, created_at, last_sent_at, reminded_at
      FROM subscribers ORDER BY created_at DESC')->fetchAll();
 $sent = (int)$pdo->query('SELECT COUNT(*) FROM alerts_sent')->fetchColumn();
 json_out([

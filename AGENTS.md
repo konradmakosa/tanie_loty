@@ -88,7 +88,11 @@
   (templates/app.html, docs/index.html, docs/prywatnosc/index.html).
   Alias `alerty@polataj.se → kontakt@` założony (odpowiedzi na alerty nie
   odbijają). Opcjonalnie: `rua=mailto:kontakt@polataj.se` w DMARC.
-- Tabele: `subscribers`, `alerts_sent` (db.php automigracja + schema.sql).
+- Tabele: `subscribers` (z `reminded_at`), `alerts_sent` (db.php automigracja
+  + schema.sql).
+- `maintenance.php` (POST, X-Ingest-Key; wołany z `ingest.py` po każdym
+  porcie, idempotentny): JEDNO przypomnienie o potwierdzeniu 24–72 h po
+  zapisie (`reminded_at`), usuwanie niepotwierdzonych po 14 dniach.
 - Zweryfikowane na żywo 2026-10-19: mail z home.pl dochodzi, potwierdzenie
   działa (1 subskrybent potwierdzony).
 - Podgląd bazy: panel home.pl → Bazy danych → phpPgAdmin (`subscribers`,

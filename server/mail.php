@@ -38,3 +38,35 @@ function send_mail(string $to, string $subject, string $html, string $text,
     }
     return mail($to, $subj, $body, $headers);
 }
+
+// Mail potwierdzający zapis (double opt-in). $reminder=true → wariant
+// przypominający (jednorazowy, wysyłany przez maintenance.php).
+function send_confirm_mail(string $email, string $port, string $token,
+                           bool $reminder = false): bool {
+    require_once __DIR__ . '/ports.php';
+    $api = cfg()['API_BASE'] ?? 'https://makosa.org/tanie_loty/api';
+    $city = PORTS[$port] ?? $port;
+    $confirm = "$api/confirm.php?t=$token";
+
+    $intro_html = $reminder
+        ? '<p>Wczoraj ktoś zapisał ten adres na alerty o rekordowo '
+          . "tanich lotach z $city. Jeśli to Ty — kliknij poniżej. "
+          . 'Jeśli nie — zignoruj, to jedyne przypomnienie, '
+          . 'więcej nie napiszemy.</p>'
+        : '<p>Hej! Kliknij, by potwierdzić alerty o rekordowo '
+          . "tanich lotach z $city:</p>";
+    $subject = $reminder
+        ? "Przypomnienie: potwierdź alerty o tanich lotach z $city"
+        : "Potwierdź alerty o tanich lotach z $city";
+
+    $text = "Potwierdź zapis alertów o tanich lotach z $city:\n$confirm\n\n"
+        . "Jeśli to nie Ty — zignoruj tę wiadomość.\n";
+    $html = $intro_html
+        . '<p><a href="' . htmlspecialchars($confirm) . '" style="display:'
+        . 'inline-block;background:#4ade80;color:#0b1733;padding:10px 22px;'
+        . 'border-radius:999px;font-weight:700;text-decoration:none">'
+        . 'Potwierdzam zapis</a></p>'
+        . '<p style="color:#888;font-size:13px">Jeśli to nie Ty — zignoruj '
+        . 'tę wiadomość.</p>';
+    return send_mail($email, $subject, $html, $text);
+}

@@ -18,6 +18,7 @@ SERVER_DIR = ROOT / "server"
 FILES = ["db.php", "ingest.php", "history.php", "typical.php",
          "ports.php", "mail.php", "subscribe.php", "confirm.php",
          "unsubscribe.php", "notify.php", "subscribers.php",
+         "maintenance.php",
          "config.php", "config.sample.php", "schema.sql", ".htaccess"]
 
 # Kandydaci docroota dla makosa.org (kolejność jak w home.pl i typowych).

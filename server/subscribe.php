@@ -48,21 +48,5 @@ if ($row) {
                    date('Y-m-d H:i:s')]);
 }
 
-$site = cfg()['SITE_BASE'] ?? 'https://polataj.se';
-$api = cfg()['API_BASE'] ?? 'https://makosa.org/tanie_loty/api';
-$city = PORTS[$port];
-$confirm = "$api/confirm.php?t=$token";
-
-$text = "Potwierdź zapis alertów o tanich lotach z $city:\n$confirm\n\n"
-    . "Jeśli to nie Ty — zignoruj tę wiadomość.\n";
-$html = '<p>Hej! Kliknij, by potwierdzić alerty o rekordowo tanich lotach '
-    . "z $city:</p>"
-    . '<p><a href="' . htmlspecialchars($confirm) . '" style="display:'
-    . 'inline-block;background:#4ade80;color:#0b1733;padding:10px 22px;'
-    . 'border-radius:999px;font-weight:700;text-decoration:none">'
-    . 'Potwierdzam zapis</a></p>'
-    . '<p style="color:#888;font-size:13px">Jeśli to nie Ty — zignoruj '
-    . 'tę wiadomość.</p>';
-send_mail($email, "Potwierdź alerty o tanich lotach z $city",
-          $html, $text);
+send_confirm_mail($email, $port, $token);
 json_out(['ok' => true, 'status' => 'sent']);

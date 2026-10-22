@@ -55,8 +55,10 @@ function db_migrate(PDO $pdo): void {
             email VARCHAR(190) NOT NULL, port VARCHAR(16) NOT NULL,
             token CHAR(32) NOT NULL UNIQUE,
             confirmed_at TIMESTAMP NULL, created_at TIMESTAMP NOT NULL,
-            last_sent_at TIMESTAMP NULL,
+            last_sent_at TIMESTAMP NULL, reminded_at TIMESTAMP NULL,
             UNIQUE (email, port))");
+        $pdo->exec("ALTER TABLE subscribers
+            ADD COLUMN IF NOT EXISTS reminded_at TIMESTAMP NULL");
         $pdo->exec("CREATE TABLE IF NOT EXISTS alerts_sent (
             deal_id VARCHAR(48) NOT NULL, port VARCHAR(16) NOT NULL,
             sent_at TIMESTAMP NOT NULL,
@@ -89,8 +91,15 @@ function db_migrate(PDO $pdo): void {
             email VARCHAR(190) NOT NULL, port VARCHAR(16) NOT NULL,
             token CHAR(32) NOT NULL UNIQUE,
             confirmed_at DATETIME NULL, created_at DATETIME NOT NULL,
-            last_sent_at DATETIME NULL,
+            last_sent_at DATETIME NULL, reminded_at DATETIME NULL,
             UNIQUE (email, port))");
+        // SQLite nie zna ADD COLUMN IF NOT EXISTS — sprawdzamy PRAGMA.
+        $cols = array_column($pdo->query(
+            "PRAGMA table_info(subscribers)")->fetchAll(), 'name');
+        if (!in_array('reminded_at', $cols, true)) {
+            $pdo->exec("ALTER TABLE subscribers
+                ADD COLUMN reminded_at DATETIME NULL");
+        }
         $pdo->exec("CREATE TABLE IF NOT EXISTS alerts_sent (
             deal_id VARCHAR(48) NOT NULL, port VARCHAR(16) NOT NULL,
             sent_at DATETIME NOT NULL,
