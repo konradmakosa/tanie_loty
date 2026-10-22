@@ -24,6 +24,7 @@ PORT = sys.argv[1] if len(sys.argv) > 1 else "zwarszawy"
 OUT_DIR = ROOT / "docs" / PORT
 DEALS_PATH = OUT_DIR / "deals.json"
 FAR_PATH = OUT_DIR / "far.json"
+ONEWAY_PATH = OUT_DIR / "oneway.json"
 HISTORY_DIR = OUT_DIR / "history"
 CACHE_DIR = ROOT / "data" / "cache"
 
@@ -31,10 +32,13 @@ RYANAIR_ROUTES = ("https://www.ryanair.com/api/views/locate/searchWidget"
                   "/routes/pl/airport/{origin}")
 RYANAIR_CAL = ("https://www.ryanair.com/api/farfnd/v4/roundTripFares"
                "/{origin}/{dest}/cheapestPerDay")
+RYANAIR_OW = ("https://www.ryanair.com/api/farfnd/v4/oneWayFares"
+              "/{origin}/{dest}/cheapestPerDay")
 ROUTES_CACHE_DAYS = 7
 MAX_PER_ROUTE = 8
 MAX_PER_ROUTE_FULL = 15  # linie tradycyjne — cap na trasę po scaleniu
 MAX_PER_ROUTE_FAR = 20   # zakładka „Daleko" — cap na trasę
+MAX_PER_ROUTE_OW = 6     # zakładka „W jedną stronę" — cap na trasę
 
 # Kraje Europy (ISO2) — reszta świata trafia do zakładki „Daleko".
 EUROPE_CC = {
@@ -113,27 +117,38 @@ def _yymmdd(d):
     return d[2:4] + d[5:7] + d[8:10]
 
 
-def buy_link(code, origin, dest, date_out, date_in):
-    """(url, label) linku zakupu. Fallback: Skyscanner (neutralny)."""
+def buy_link(code, origin, dest, date_out, date_in=None):
+    """(url, label) linku zakupu. Fallback: Skyscanner (neutralny).
+    date_in=None → wariant w jedną stronę."""
     if code in ("FR", "RK", "RR", "MW"):
-        return (RYANAIR_LINK.format(origin=origin, dest=dest,
-                                    date_out=date_out, date_in=date_in),
-                "ryanair.com")
+        url = RYANAIR_LINK.format(origin=origin, dest=dest,
+                                  date_out=date_out, date_in=date_in or "")
+        if date_in is None:
+            url = url.replace("isReturn=true", "isReturn=false")
+        return url, "ryanair.com"
     if code in ("W6", "W4", "W9"):
         return ("https://wizzair.com/pl-pl/booking/select-flight/"
-                "{}/{}/{}/{}/1/0/0/null".format(origin, dest,
-                                                date_out, date_in),
+                "{}/{}/{}/{}/1/0/0/null".format(
+                    origin, dest, date_out, date_in or "null"),
                 "wizzair.com")
     if code == "LO":
+        ret = "&return=" + date_in if date_in else ""
         return ("https://www.lot.com/pl/pl/booking/flights"
-                "?from={}&to={}&departure={}&return={}".format(
-                    origin, dest, date_out, date_in), "lot.com")
+                "?from={}&to={}&departure={}{}".format(
+                    origin, dest, date_out, ret), "lot.com")
     if code in ("U2", "EJU"):
+        ret = "&rd=" + date_in if date_in else ""
         return ("https://www.easyjet.com/deeplink?lang=PL&dep=%s&dest=%s"
-                "&dd=%s&rd=%s&apax=1&isOneWay=off"
-                % (origin, dest, date_out, date_in), "easyjet.com")
+                "&dd=%s%s&apax=1&isOneWay=%s"
+                % (origin, dest, date_out, ret,
+                   "off" if date_in else "on"), "easyjet.com")
     if code in LEGACY_LINKS:
         return LEGACY_LINKS[code], "strona linii"
+    if date_in is None:
+        return ("https://www.skyscanner.pl/transport/loty/%s/%s/%s/"
+                "?adultsv2=1&cabinclass=economy&rtn=0"
+                % (origin.lower(), dest.lower(), _yymmdd(date_out)),
+                SKYSCANNER_LABEL)
     return (SKYSCANNER_LINK.format(origin=origin.lower(), dest=dest.lower(),
                                    out_yymmdd=_yymmdd(date_out),
                                    in_yymmdd=_yymmdd(date_in)),
@@ -305,6 +320,8 @@ def backfill_history(origins):
                 e = json.loads(line)
             except ValueError:
                 continue
+            if e.get("trip") == "oneway":
+                continue
             if e["origin"] not in origins:
                 continue
             key = (e["origin"], e["dest"])
@@ -473,6 +490,108 @@ def ryanair_route(origin, dest, arr, cfg, jutro, max_out, months):
             for total, fo, fi, nights in picked]
 
 
+def ryanair_ow_deal(origin, dest, arr, fo, price):
+    """Rekord lotu w jedną stronę (Ryanair)."""
+    dep_out = fo.get("departureDate") or (fo["day"] + "T00:00:00")
+    date_out, time_out = dep_out[:10], dep_out[11:16]
+    url, via = buy_link("FR", origin, dest, date_out)
+    return {
+        "id": "OW-%s-%s-%s" % (origin, dest, date_out),
+        "origin": origin,
+        "origin_name": origin,
+        "dest": dest,
+        "dest_city": (arr.get("city") or {}).get("name")
+                     or arr.get("name") or dest,
+        "dest_country": (arr.get("country") or {}).get("name", ""),
+        "country_code": ((arr.get("country") or {}).get("code") or "")
+                        .upper() or None,
+        "date_out": date_out,
+        "time_out": time_out,
+        "date_in": None,
+        "time_in": None,
+        "nights": None,
+        "price": round(price, 2),
+        "price_out": fo["price"]["value"],
+        "price_in": None,
+        "transfers": 0,
+        "weekday_out": date.fromisoformat(date_out).weekday(),
+        "weekday_in": None,
+        "airline_code": "FR",
+        "airline": "Ryanair",
+        "category": "lcc",
+        "domestic": (arr.get("country") or {}).get("name") == "Polska",
+        "source": "ryanair",
+        "note": NOTE_RYANAIR,
+        "trip": "oneway",
+        "link": url,
+        "via": via,
+    }
+
+
+def ryanair_oneway_route(origin, dest, arr, cap, jutro, max_out, months):
+    """Ceny w jedną stronę dla trasy, max MAX_PER_ROUTE_OW."""
+    fares = {}
+    for month in months:
+        url = (RYANAIR_OW.format(origin=origin, dest=dest)
+               + "?outboundMonthOfDate=%s&currency=PLN" % month)
+        try:
+            data = http_get_json(url)
+        except Exception as e:
+            print("Ryanair OW %s->%s %s: błąd (%s) — pomijam"
+                  % (origin, dest, month, e))
+            time.sleep(0.15)
+            continue
+        time.sleep(0.15)
+        for f in (data.get("outbound") or {}).get("fares") or []:
+            if fare_ok(f):
+                fares[f["day"]] = f
+
+    cands = []
+    for day, f in fares.items():
+        do = date.fromisoformat(day)
+        if not (jutro <= do <= max_out):
+            continue
+        price = f["price"]["value"]
+        if price > cap:
+            continue
+        cands.append((price, f))
+    cands.sort(key=lambda c: c[0])
+    picked = cands[:MAX_PER_ROUTE_OW]
+    seen = set(date.fromisoformat(c[1]["day"]).weekday() for c in picked)
+    for c in cands[MAX_PER_ROUTE_OW:]:
+        w = date.fromisoformat(c[1]["day"]).weekday()
+        if w not in seen:
+            picked.append(c)
+            seen.add(w)
+    return [ryanair_ow_deal(origin, dest, arr, f, price)
+            for price, f in picked]
+
+
+def fetch_ryanair_oneway(ow, cfg):
+    """Loty w jedną stronę Ryanair dla tras z konfiguracji."""
+    jutro = date.today() + timedelta(days=1)
+    max_out = jutro + timedelta(days=ow["days_ahead"])
+    months = month_starts(jutro, max_out)
+    cap = ow["max_price_pln"]["lcc"]
+    deals = []
+    for origin in cfg["airports"]:
+        routes = cached_json("routes_%s.json" % origin,
+                             RYANAIR_ROUTES.format(origin=origin),
+                             ROUTES_CACHE_DAYS)
+        if not routes:
+            continue
+        for r in routes:
+            arr = r.get("arrivalAirport") or {}
+            dest = arr.get("code")
+            if not dest or not r.get("operator"):
+                continue
+            deals.extend(ryanair_oneway_route(origin, dest, arr, cap,
+                                              jutro, max_out, months))
+        print("Ryanair OW %s: tras %d, %d ofert"
+              % (origin, len(routes), len(deals)))
+    return deals
+
+
 def fare_ok(f):
     """Czy wpis kalendarza ma realną cenę."""
     return (f.get("price") and not f.get("soldOut")
@@ -611,7 +730,7 @@ def fetch_aviasales(cfg, token, marker, maps):
     return deals
 
 
-def aviasales_month(month, token, direct, price_cap, origin):
+def aviasales_month(month, token, direct, price_cap, origin, one_way=False):
     """Jeden miesiąc z prices_for_dates; stronicowanie gdy strona pełna
     (1000) i najdroższa cena wciąż pod progiem (max 3 strony)."""
     data = []
@@ -620,7 +739,7 @@ def aviasales_month(month, token, direct, price_cap, origin):
         params = {
             "origin": origin,  # kod miasta — np. WAW obejmuje WAW i WMI
             "departure_at": month,
-            "one_way": "false",
+            "one_way": "true" if one_way else "false",
             "direct": "true" if direct else "false",
             "unique": "false",
             "sorting": "price",
@@ -652,6 +771,91 @@ def aviasales_month(month, token, direct, price_cap, origin):
     if pages > 1:
         print("Aviasales %s: dobrano %d stron" % (month, pages))
     return data
+
+
+def aviasales_oneway_deal(r, ow, marker, maps, jutro, koniec):
+    """Surowy wpis Aviasales (one_way) -> rekord OW albo None."""
+    price = r.get("price")
+    dep_at = r.get("departure_at") or ""
+    if price is None or len(dep_at) < 16:
+        raise ValueError("brak price/departure_at")
+    code = r.get("airline") or ""
+    cat = category_for(code)
+    if float(price) > ow["max_price_pln"][cat]:
+        return None
+    if (r.get("transfers") or 0) != 0:
+        return None
+
+    date_out, time_out = dep_at[:10], dep_at[11:16]
+    d_out = date.fromisoformat(date_out)
+    if not (jutro <= d_out <= koniec):
+        return None
+
+    origin = r.get("origin_airport") or r.get("origin") or ""
+    dest = r.get("destination_airport") or r.get("destination") or ""
+    dest_city_code = r.get("destination") or dest
+    url, via = buy_link(code, origin, dest, date_out)
+    dest_country = tp_country_name(maps, dest_city_code)
+
+    return {
+        "id": "OW-%s-%s-%s" % (origin, dest, date_out),
+        "origin": origin,
+        "origin_name": (maps["airports"].get(origin) or {}).get("name")
+                       or origin,
+        "dest": dest,
+        "dest_city": tp_city_name(maps, dest_city_code),
+        "dest_country": dest_country,
+        "country_code": tp_country_code(maps, dest_city_code),
+        "date_out": date_out,
+        "time_out": time_out,
+        "date_in": None,
+        "time_in": None,
+        "nights": None,
+        "price": float(price),
+        "price_out": float(price),
+        "price_in": None,
+        "transfers": 0,
+        "weekday_out": d_out.weekday(),
+        "weekday_in": None,
+        "airline_code": code,
+        "airline": airline_name(code, maps["airlines"]),
+        "category": cat,
+        "domestic": dest_country == "Polska",
+        "source": "aviasales",
+        "note": NOTE_AVIASALES,
+        "trip": "oneway",
+        "link": url,
+        "via": via,
+    }
+
+
+def fetch_aviasales_oneway(ow, token, marker, maps, origins):
+    """Loty w jedną stronę z Aviasales Data API (direct, cap z configu)."""
+    if not token:
+        return []
+    jutro = date.today() + timedelta(days=1)
+    koniec = jutro + timedelta(days=ow["days_ahead"])
+    months = [m[:7] for m in month_starts(jutro, koniec)]
+    deals = []
+    for month in months:
+        data = []
+        for org in origins:
+            data += aviasales_month(month, token, direct=True,
+                                    price_cap=ow["max_price_pln"]["full"],
+                                    origin=org, one_way=True)
+        ok = 0
+        for r in data:
+            try:
+                d = aviasales_oneway_deal(r, ow, marker, maps, jutro, koniec)
+            except (KeyError, TypeError, ValueError) as e:
+                print("Aviasales OW: pominięto wpis (%s)" % e)
+                continue
+            if d is not None:
+                deals.append(d)
+                ok += 1
+        print("Aviasales OW %s: %d rekordów, %d po filtrach"
+              % (month, len(data), ok))
+    return deals
 
 
 def fetch_aviasales_far(far, token, marker, maps, avi_origin):
@@ -905,9 +1109,11 @@ def main():
     history = load_history()
     backfill_history(set(cfg["airports"]))
     history_by_route = {}
+    history_ow_by_route = {}
     for e in history:
-        history_by_route.setdefault((e["origin"], e["dest"]),
-                                    []).append(e["price"])
+        tgt = history_ow_by_route if e.get("trip") == "oneway" \
+            else history_by_route
+        tgt.setdefault((e["origin"], e["dest"]), []).append(e["price"])
 
     sources = ["ryanair"]
     if token:
@@ -938,6 +1144,29 @@ def main():
                    "deals": far_deals},
                   f, ensure_ascii=False, separators=(",", ":"))
 
+    # Zakładka „W jedną stronę" — osobny plik, osobna historia (mediany
+    # RT nie mogą być zaniżane przez ceny jednokierunkowe i odwrotnie).
+    ow_cfg = cfg.get("oneway")
+    ow_deals, ow_ry, ow_avi = [], [], []
+    if ow_cfg:
+        ow_ry = fetch_ryanair_oneway(ow_cfg, cfg)
+        ow_avi = fetch_aviasales_oneway(
+            ow_cfg, token, marker, maps,
+            cfg.get("avi_origins") or [cfg["avi_origin"]]) if token else []
+        ow_deals = merge_offers(ow_ry + ow_avi)
+        annotate_record_low(ow_deals, history_ow_by_route, cfg)
+        annotate_geo(ow_deals, maps)
+        for d in ow_deals:
+            d["typical_price"] = None
+            d["vs_typical"] = None
+        ow_deals.sort(key=lambda d: d["price"])
+        with open(ONEWAY_PATH, "w", encoding="utf-8") as f:
+            json.dump({"generated_at": now, "config": ow_cfg,
+                       "counts": {"ryanair": len(ow_ry),
+                                  "aviasales": len(ow_avi)},
+                       "deals": ow_deals},
+                      f, ensure_ascii=False, separators=(",", ":"))
+
     # Limit ofert linii tradycyjnych na trasę (kontrola rozmiaru pliku).
     full_by_route = {}
     for d in deals:
@@ -964,6 +1193,11 @@ def main():
         key = (d["origin"], d["dest"])
         if key not in lowest or d["price"] < lowest[key]["price"]:
             lowest[key] = d
+    lowest_ow = {}
+    for d in ow_deals:
+        key = (d["origin"], d["dest"])
+        if key not in lowest_ow or d["price"] < lowest_ow[key]["price"]:
+            lowest_ow[key] = d
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(HISTORY_PATH, "w", encoding="utf-8") as f:
         for e in history:
@@ -972,6 +1206,11 @@ def main():
             f.write(json.dumps({"ts": now, "origin": d["origin"],
                                 "dest": d["dest"], "price": d["price"],
                                 "source": d["source"]},
+                               ensure_ascii=False) + "\n")
+        for d in lowest_ow.values():
+            f.write(json.dumps({"ts": now, "origin": d["origin"],
+                                "dest": d["dest"], "price": d["price"],
+                                "source": d["source"], "trip": "oneway"},
                                ensure_ascii=False) + "\n")
     append_history_points(deals + far_deals, lowest, now)
 
@@ -990,6 +1229,10 @@ def main():
           % (len(deals), DEALS_PATH, lows, multi,
              ", ".join(sources) if sources else "brak",
              counts["ryanair"], counts["aviasales"]))
+    if ow_cfg:
+        print("Zapisano %d lotów w jedną stronę do %s "
+              "[ryanair: %d, aviasales: %d]"
+              % (len(ow_deals), ONEWAY_PATH, len(ow_ry), len(ow_avi)))
 
 
 if __name__ == "__main__":

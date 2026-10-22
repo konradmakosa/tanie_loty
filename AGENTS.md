@@ -28,6 +28,30 @@
   `ingest.py <port>` w `search.yml`, aktywuj `<a class="ap on" data-ap=…>`
   na mapie + dopisz do mapowań `port` (head) i `ACTIVE`.
 
+## Szablon apki (od 2026-10)
+
+- Źródło: `templates/app.html` (placeholdery `{{PORT}}`, `{{CITY}}`,
+  `{{CITY_GEN}}`, `{{AIRPORTS_DESC}}`, `{{GEO_LAT}}`, `{{GEO_LON}}`,
+  `{{EXAMPLE_ROUTE}}`), dane per port w `config.json → ports`.
+- `python3 tools/build_pages.py` renderuje 6× `docs/<port>/index.html`.
+  **Nie edytować `docs/z*/index.html` ręcznie** — zmiany robić w szablonie,
+  przebudować, `deploy_site.py`, commit (pliki wynikowe są w repo).
+
+## Loty w jedną stronę (eksperyment, od 2026-10)
+
+- Zakładka „W jedną stronę" (`#wjedna`) na każdej stronie portu; plik
+  `docs/<port>/oneway.json`. Koperta: `config.json → oneway`
+  (≤79 zł LCC / ≤249 zł full, bezpośrednie, 120 dni).
+- `search.py`: Ryanair `oneWayFares/…/cheapestPerDay` + Travelpayouts
+  `one_way=true`; rekordy mają `trip: "oneway"`, `date_in: null`.
+  Historia w `data/history.jsonl` z `"trip":"oneway"` — mediany RT i OW
+  liczone osobno; OW bez plików `history/*.json` i bez typical_price.
+- OW NIE idzie do ingest/bazy ani do alertów mailowych.
+- GA4: `view_tab {tab: "wjedna"}`, `select_deal {trip: "oneway"|"return",
+  tab}`. **Żeby widzieć w raportach: zarejestrować wymiary niestandardowe
+  `tab` i `trip`** (Administracja → Definicje niestandardowe → wymiar
+  zdarzenia). Decyzja po 2–3 tyg.: jeśli OW < ~10% `select_deal` — usunąć.
+
 ## Linki zakupu (od 2025-10)
 
 - Użytkownik NIE trafia do Aviasales. `search.py: buy_link()` → strona linii
@@ -79,9 +103,8 @@
 
 ## Do zrobienia
 
-1. **Wspólny szablon apki:** 6× `docs/z*/index.html` to kopie różniące się
-   38 liniami (teksty, canonical/og, `HOME_GEO`). Generator z jednego
-   szablonu + config per port zanim dojdzie 7. port.
+1. **GA4:** zarejestrować wymiary `tab` i `trip`; po 2–3 tyg. ocenić
+   zakładkę „W jedną stronę" (zostaje / do usunięcia).
 2. **Zamiennik źródła cen** za Travelpayouts (Wizz/LOT/„Daleko") — dziś brak
    darmowej alternatywy; obserwować. Bez niego zostaje sam Ryanair.
 3. **Monetyzacja** (kolejność): lista mailowa rośnie → przy >5k UU/mies.

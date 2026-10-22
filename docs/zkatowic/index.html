@@ -155,6 +155,15 @@ if (location.hostname === "loty.makosa.org") {
     color: var(--accent); background: var(--card);
     box-shadow: 0 1px 4px rgba(0,0,0,.15);
   }
+  /* 4 zakładki na wąskim ekranie: mniejsze, bez łamania; zapas = scroll. */
+  @media (max-width: 480px) {
+    .tabs { overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button {
+      white-space: nowrap; padding: 0 9px;
+      min-height: 34px; font-size: 0.82rem;
+    }
+  }
   /* Filtry jako chipy — mobile: poziome przewijanie */
   .controls {
     display: flex; gap: 8px; flex-wrap: nowrap; align-items: center;
@@ -441,6 +450,7 @@ if (location.hostname === "loty.makosa.org") {
 <div class="tabs">
   <button id="tabOkazje" class="active">Okazje</button>
   <button id="tabDaleko">Daleko</button>
+  <button id="tabOneway">W jedną stronę</button>
   <button id="tabUstawienia">Ustawienia</button>
 </div>
 </div>
@@ -502,6 +512,31 @@ if (location.hostname === "loty.makosa.org") {
 </div>
 
 <main id="listFar"></main>
+</div>
+
+<div id="viewOneway" style="display:none">
+<header style="padding-top:8px">
+  <p class="desc" id="owDesc"></p>
+  <p class="desc" id="owCounts"></p>
+  <p class="desc" id="owUpdated"></p>
+</header>
+
+<div class="controls">
+  <label>Sortuj:
+    <select id="oSort">
+      <option value="price">po cenie</option>
+      <option value="date">po dacie</option>
+    </select>
+  </label>
+  <label>Linia:
+    <select id="oAirline">
+      <option value="">wszystkie linie</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="oGroupBy" checked> Grupuj po kierunku</label>
+</div>
+
+<main id="listOneway"></main>
 </div>
 
 <section id="settings" style="display:none">
@@ -657,6 +692,7 @@ const noce = n => n === 1 ? "1 noc" : (n >= 2 && n <= 4 ? n + " noce" : n + " no
 
 let deals = [], cfg = {}, settings = null;
 let farDeals = [], farCfg = {};
+let owDeals = [], owCfg = {};
 let activeTab = "okazje";
 
 /* GA4 — bez awarii przy zablokowanym skrypcie. */
@@ -747,6 +783,23 @@ function applyFarSettings(deals, s, cfgFar, today) {
   );
 }
 
+/* Filtry zakładki „W jedną stronę": wspólne z Okazjami origin/kraje/
+   dzień wylotu/krajowe — bez filtra nocy i maks. ceny RT. */
+function applyOwSettings(deals, s, cfgOw, today) {
+  const horizon = new Date(today);
+  horizon.setDate(horizon.getDate() + (cfgOw.days_ahead || 365));
+  const horizonIso = horizon.toISOString().slice(0, 10);
+  const origins = s.origins || null;
+  const excl = new Set(s.excludedCountries || []);
+  return deals.filter(d =>
+    d.date_out <= horizonIso &&
+    s.daysOut.includes(d.weekday_out) &&
+    (!origins || origins.includes(d.origin)) &&
+    !excl.has(d.dest_country) &&
+    (s.showDomestic || !d.domestic)
+  );
+}
+
 function isDefault(s) {
   return JSON.stringify(s) === JSON.stringify(defaults());
 }
@@ -818,7 +871,7 @@ function flag(cc) {
 
 /* Mini-mapa trasy: wykadrowany SVG ze sylwetką lądów (#world, ładowane
    z world.svg) + łuk Katowice → kierunek. Współrzędne: x=lon+180,
-   y=90-lat. Kadr: kierunek w prawej ~1/3, Katowice mogą wypaść. */
+   y=90-lat. Kadr: kierunek w prawej ~1/3, Katowice może wypaść. */
 const HOME_GEO = [50.47, 19.08];
 function mapSvg(d) {
   if (!d.dest_geo) return "";
@@ -875,6 +928,9 @@ function kartaHtml(d, showBadge, soonLvl) {
     ? `<a class="direct" href="${d.direct_link}" target="_blank" rel="noopener"` +
       ` data-id="${d.id}" data-via="direct">Kup bezpośrednio: ${d.direct_label} →</a>`
     : "";
+  const timesHtml = d.date_in
+    ? `${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}`
+    : `${fmtData(d.date_out)} · w jedną stronę${d.time_out ? " · " + d.time_out : ""}`;
   const vsHtml = (d.vs_typical !== null && d.vs_typical !== undefined)
     ? '<span class="vs ' + (d.vs_typical <= -15 ? "neg" :
         d.vs_typical > 15 ? "pos" : "neu") + '">' +
@@ -896,7 +952,7 @@ function kartaHtml(d, showBadge, soonLvl) {
           <span class="city">${soonHtml}${flag(d.country_code)} ${d.dest_city}${d.dest_country ? ", " + d.dest_country : ""}</span>
           <span class="route">${d.origin} → ${d.dest}</span>
         </div>
-        <div class="crow2 times">${fmtData(d.date_out)} → ${fmtData(d.date_in)} · ${noce(d.nights)}${d.time_out ? " · " + d.time_out + "–" + d.time_in : ""}</div>
+        <div class="crow2 times">${timesHtml}</div>
         <div class="crow3 row">
           <span class="airline">✈ ${d.airline} · ${d.category === "full" ? "tradycyjna" : "tania"} · ${viaLabel(d)}</span>
           <span class="route r2">${d.origin} → ${d.dest}</span>
@@ -937,6 +993,16 @@ function renderFar() {
   items = items.filter(d => (!airline || d.airline === airline) &&
                             (!onlyDirect || d.transfers === 0));
   renderList(items, "listFar", sort, groupBy, farDeals.length > 0);
+}
+
+function renderOneway() {
+  const sort = document.getElementById("oSort").value;
+  const airline = document.getElementById("oAirline").value;
+  const groupBy = document.getElementById("oGroupBy").checked;
+
+  let items = applyOwSettings(owDeals, settings, owCfg, new Date());
+  items = items.filter(d => !airline || d.airline === airline);
+  renderList(items, "listOneway", sort, groupBy, owDeals.length > 0);
 }
 
 function renderList(items, listId, sort, groupBy, anyData) {
@@ -994,14 +1060,17 @@ function renderList(items, listId, sort, groupBy, anyData) {
         rest.map(d => `
           <a class="alt" href="${dealLink(d)}" target="_blank" rel="noopener" data-id="${d.id}"
              data-via="${viaLabel(d)}">
-            ${soonHtmlFor(soonLevel(d), true)}${fmtData(d.date_out)} → ${fmtData(d.date_in)} (${noce(d.nights)})
+            ${soonHtmlFor(soonLevel(d), true)}${d.date_in
+              ? fmtData(d.date_out) + " → " + fmtData(d.date_in) + " (" + noce(d.nights) + ")"
+              : fmtData(d.date_out) + " · w jedną stronę"}
             · <strong>${fmtCena(d.price)}</strong>
             · ${d.airline} <span class="muted">· ${d.dest}
             · ${viaLabel(d)}</span>
           </a>`).join("") + "</div></details>"
       : "";
     return '<div class="group">' + kartaHtml(main, anyLow, anySoon) + legacy +
-      '<div class="chips">' + alts + histDetails(main) + "</div></div>";
+      '<div class="chips">' + alts +
+      (main.date_in ? histDetails(main) : "") + "</div></div>";
   }).join("");
 }
 
@@ -1170,20 +1239,24 @@ function showTab(tab) {
   track("view_tab", { tab: tab });
   document.getElementById("tabOkazje").classList.toggle("active", tab === "okazje");
   document.getElementById("tabDaleko").classList.toggle("active", tab === "daleko");
+  document.getElementById("tabOneway").classList.toggle("active", tab === "wjedna");
   document.getElementById("tabUstawienia").classList.toggle("active", tab === "ustawienia");
   document.getElementById("viewOkazje").style.display = tab === "okazje" ? "" : "none";
   document.getElementById("viewDaleko").style.display = tab === "daleko" ? "" : "none";
+  document.getElementById("viewOneway").style.display = tab === "wjedna" ? "" : "none";
   document.getElementById("settings").style.display = tab === "ustawienia" ? "" : "none";
 }
 
 document.getElementById("tabOkazje").onclick = () => { location.hash = ""; showTab("okazje"); };
 document.getElementById("tabDaleko").onclick = () => { location.hash = "daleko"; showTab("daleko"); };
+document.getElementById("tabOneway").onclick = () => { location.hash = "wjedna"; showTab("wjedna"); };
 document.getElementById("tabUstawienia").onclick = () => { location.hash = "ustawienia"; showTab("ustawienia"); };
 window.addEventListener("hashchange", () => showTab(tabFromHash()));
 
 function tabFromHash() {
   if (location.hash === "#ustawienia") return "ustawienia";
   if (location.hash === "#daleko") return "daleko";
+  if (location.hash === "#wjedna") return "wjedna";
   return "okazje";
 }
 
@@ -1350,6 +1423,7 @@ document.getElementById("sSave").onclick = () => {
   showTab("okazje");
   render();
   renderFar();
+  renderOneway();
 };
 
 document.getElementById("sReset").onclick = () => {
@@ -1373,21 +1447,26 @@ document.getElementById("fSort").addEventListener("change", renderFar);
 document.getElementById("fAirline").addEventListener("change", renderFar);
 document.getElementById("fTransfers").addEventListener("change", renderFar);
 document.getElementById("fGroupBy").addEventListener("change", renderFar);
+document.getElementById("oSort").addEventListener("change", renderOneway);
+document.getElementById("oAirline").addEventListener("change", renderOneway);
+document.getElementById("oGroupBy").addEventListener("change", renderOneway);
 
 // Kliknięcia w oferty (delegacja na obie listy).
-["list", "listFar"].forEach(id =>
+["list", "listFar", "listOneway"].forEach(id =>
   document.getElementById(id).addEventListener("click", e => {
   const el = e.target.closest("[data-id]");
   if (!el) return;
   const d = deals.find(x => x.id === el.dataset.id) ||
-            farDeals.find(x => x.id === el.dataset.id);
+            farDeals.find(x => x.id === el.dataset.id) ||
+            owDeals.find(x => x.id === el.dataset.id);
   if (!d) return;
   track("select_deal", {
     deal_id: d.id, destination: d.dest_city, country: d.dest_country,
     country_code: d.country_code || "", dest_geo: d.dest_geo || "",
     dest_airport: d.dest,
     price: d.price, airline: d.airline, source: d.source, nights: d.nights,
-    category: d.category, via: el.dataset.via || "", tab: activeTab
+    category: d.category, via: el.dataset.via || "", tab: activeTab,
+    trip: d.trip || "return"
   });
   // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
   if (!e.target.closest("a") && el.dataset.href)
@@ -1401,8 +1480,11 @@ Promise.all([
   }),
   // far.json może jeszcze nie istnieć — zakładka Daleko pokaże stan pusty.
   fetch("far.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null)
+    .catch(() => null),
+  // oneway.json jak far.json — opcjonalny; brak pliku = stan pusty.
+  fetch("oneway.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null)
     .catch(() => null)
-]).then(([data, farData]) => {
+]).then(([data, farData, owData]) => {
     deals = data.deals || [];
     cfg = data.config || {};
     settings = loadSettings();
@@ -1457,6 +1539,32 @@ Promise.all([
           fSel.appendChild(o);
         });
     }
+    // Zakładka „W jedną stronę".
+    if (owData) {
+      owDeals = owData.deals || [];
+      owCfg = owData.config || {};
+      document.getElementById("owUpdated").textContent =
+        "Zaktualizowano: " + new Date(owData.generated_at).toLocaleString("pl-PL");
+      const omp = owCfg.max_price_pln || {};
+      document.getElementById("owDesc").textContent =
+        "Skrypt zbiera oferty do " + omp.lcc + " zł (tanie linie) / " +
+        omp.full + " zł, loty bezpośrednie, najbliższe " +
+        (owCfg.days_ahead || "—") + " dni";
+      const oc = owData.counts || {};
+      const ocParts = [];
+      if (oc.ryanair) ocParts.push("Ryanair " + oc.ryanair + " ofert");
+      if (oc.aviasales) ocParts.push("wyszukiwarki " + oc.aviasales + " ofert");
+      if (ocParts.length)
+        document.getElementById("owCounts").textContent =
+          "Źródła: " + ocParts.join(" · ");
+      const oSel = document.getElementById("oAirline");
+      [...new Set(owDeals.map(d => d.airline).filter(Boolean))].sort()
+        .forEach(a => {
+          const o = document.createElement("option");
+          o.value = a; o.textContent = a;
+          oSel.appendChild(o);
+        });
+    }
     // Po wczytaniu farCfg odświeżamy domyślny horyzont i formularz.
     document.getElementById("farSettingsLine").textContent = farSummary(settings);
     fillSettingsForm();
@@ -1464,6 +1572,7 @@ Promise.all([
     showTab(tabFromHash());
     render();
     renderFar();
+    renderOneway();
     // Typowe ceny z pełnej bazy (API może nie działać — wtedy statyczne).
     applyApiTypical(deals, "okazje", render);
     applyApiTypical(farDeals, "daleko", renderFar);
