@@ -39,11 +39,15 @@
 
 ## Loty w jedną stronę (eksperyment, od 2026-10)
 
-- Zakładka „W jedną stronę" (`#wjedna`) na każdej stronie portu; plik
+- Zakładka „One way" (`#wjedna`) na każdej stronie portu; plik
   `docs/<port>/oneway.json`. Koperta: `config.json → oneway`
-  (≤79 zł LCC / ≤249 zł full, bezpośrednie, 120 dni).
+  (≤79 zł LCC / ≤249 zł full, bezpośrednie, 120 dni) + `oneway.far`
+  (poza Europą: ≤1200 zł, ≤1 przesiadka, 270 dni) — w tej samej zakładce,
+  select „Zasięg: wszystko/Europa/Daleko"; rekordy dalekie mają `far: true`
+  (flaga nadawana po kraju kierunku po scaleniu).
 - `search.py`: Ryanair `oneWayFares/…/cheapestPerDay` + Travelpayouts
-  `one_way=true`; rekordy mają `trip: "oneway"`, `date_in: null`.
+  `one_way=true` (direct) + `one_way=true, direct=false` dla dalekich;
+  rekordy mają `trip: "oneway"`, `date_in: null`. GA4 `select_deal.far`.
   Historia w `data/history.jsonl` z `"trip":"oneway"` — mediany RT i OW
   liczone osobno; OW bez plików `history/*.json` i bez typical_price.
 - OW NIE idzie do ingest/bazy ani do alertów mailowych.

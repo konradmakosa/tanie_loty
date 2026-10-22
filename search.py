@@ -86,6 +86,10 @@ SKYSCANNER_LINK = (
     "https://www.skyscanner.pl/transport/loty/{origin}/{dest}/"
     "{out_yymmdd}/{in_yymmdd}/?adultsv2=1&cabinclass=economy&rtn=1"
 )
+SKYSCANNER_OW_LINK = (
+    "https://www.skyscanner.pl/transport/loty/{origin}/{dest}/"
+    "{out_yymmdd}/?adultsv2=1&cabinclass=economy&rtn=0"
+)
 SKYSCANNER_LABEL = "Skyscanner"
 
 NOTE_RYANAIR = "cena bez bagażu rejestrowanego"
@@ -145,9 +149,9 @@ def buy_link(code, origin, dest, date_out, date_in=None):
     if code in LEGACY_LINKS:
         return LEGACY_LINKS[code], "strona linii"
     if date_in is None:
-        return ("https://www.skyscanner.pl/transport/loty/%s/%s/%s/"
-                "?adultsv2=1&cabinclass=economy&rtn=0"
-                % (origin.lower(), dest.lower(), _yymmdd(date_out)),
+        return (SKYSCANNER_OW_LINK.format(
+                    origin=origin.lower(), dest=dest.lower(),
+                    out_yymmdd=_yymmdd(date_out)),
                 SKYSCANNER_LABEL)
     return (SKYSCANNER_LINK.format(origin=origin.lower(), dest=dest.lower(),
                                    out_yymmdd=_yymmdd(date_out),
@@ -858,6 +862,121 @@ def fetch_aviasales_oneway(ow, token, marker, maps, origins):
     return deals
 
 
+def aviasales_oneway_far_deal(r, ow_far, marker, maps, jutro, koniec):
+    """Surowy wpis Aviasales (one_way, indirect) -> daleki rekord OW
+    albo None. Jak aviasales_far_deal, ale bez powrotu."""
+    price = r.get("price")
+    dep_at = r.get("departure_at") or ""
+    if price is None or len(dep_at) < 16:
+        raise ValueError("brak price/departure_at")
+    code = r.get("airline") or ""
+    if float(price) > ow_far["max_price_pln"]:
+        return None
+    t_out = r.get("transfers") or 0
+    if t_out > ow_far["max_transfers_each_way"]:
+        return None
+
+    dest_city_code = r.get("destination") or r.get("destination_airport") or ""
+    cc = tp_country_code(maps, dest_city_code)
+    if not cc or cc in EUROPE_CC:
+        return None
+
+    date_out, time_out = dep_at[:10], dep_at[11:16]
+    d_out = date.fromisoformat(date_out)
+    if not (jutro <= d_out <= koniec):
+        return None
+
+    origin = r.get("origin_airport") or r.get("origin") or ""
+    dest = r.get("destination_airport") or dest_city_code
+
+    if t_out > 0:
+        # Link do strony linii nie odda połączenia z przesiadką — Skyscanner.
+        url = SKYSCANNER_OW_LINK.format(
+            origin=origin.lower(), dest=dest.lower(),
+            out_yymmdd=_yymmdd(date_out))
+        via = SKYSCANNER_LABEL
+    else:
+        url, via = buy_link(code, origin, dest, date_out)
+
+    return {
+        "id": "OW-%s-%s-%s" % (origin, dest, date_out),
+        "origin": origin,
+        "origin_name": (maps["airports"].get(origin) or {}).get("name")
+                       or origin,
+        "dest": dest,
+        "dest_city": tp_city_name(maps, dest_city_code),
+        "dest_country": tp_country_name(maps, cc),
+        "country_code": cc,
+        "date_out": date_out,
+        "time_out": time_out,
+        "date_in": None,
+        "time_in": None,
+        "nights": None,
+        "price": float(price),
+        "price_out": float(price),
+        "price_in": None,
+        "transfers": t_out,
+        "transfers_out": t_out,
+        "duration_out_min": r.get("duration_to"),
+        "weekday_out": d_out.weekday(),
+        "weekday_in": None,
+        "airline_code": code,
+        "airline": airline_name(code, maps["airlines"]),
+        "category": category_for(code),
+        "domestic": False,
+        "far": True,
+        "source": "aviasales",
+        "note": NOTE_AVIASALES,
+        "trip": "oneway",
+        "link": url,
+        "via": via,
+    }
+
+
+def fetch_aviasales_oneway_far(ow_far, token, marker, maps, origins):
+    """Dalekie loty w jedną stronę (spoza Europy, max N przesiadek)."""
+    if not token:
+        return []
+    jutro = date.today() + timedelta(days=1)
+    koniec = jutro + timedelta(days=ow_far["days_ahead"])
+    months = [m[:7] for m in month_starts(jutro, koniec)]
+    raw = 0
+    deals = []
+    for month in months:
+        data = []
+        for org in origins:
+            data += aviasales_month(month, token, direct=False,
+                                    price_cap=ow_far["max_price_pln"],
+                                    origin=org, one_way=True)
+        raw += len(data)
+        ok = 0
+        for r in data:
+            try:
+                d = aviasales_oneway_far_deal(r, ow_far, marker, maps,
+                                              jutro, koniec)
+            except (KeyError, TypeError, ValueError) as e:
+                print("Daleko OW: pominięto niekompletny wpis (%s)" % e)
+                continue
+            if d is not None:
+                deals.append(d)
+                ok += 1
+        if ok:
+            print("Daleko OW %s: %d rekordów, %d po filtrach"
+                  % (month, len(data), ok))
+
+    by_route = {}
+    for d in deals:
+        by_route.setdefault((d["origin"], d["dest"]), []).append(d)
+    deals = []
+    for ds in by_route.values():
+        ds.sort(key=lambda x: x["price"])
+        deals.extend(ds[:MAX_PER_ROUTE_FAR])
+
+    print("Daleko OW: %d rekordów z API, %d po filtrach, %d tras"
+          % (raw, len(deals), len(by_route)))
+    return deals
+
+
 def fetch_aviasales_far(far, token, marker, maps, avi_origin):
     """Okazje poza Europę (zakładka „Daleko"): max 1 przesiadka w stronę,
     kraje spoza EUROPE_CC, cap MAX_PER_ROUTE_FAR na trasę."""
@@ -1147,13 +1266,26 @@ def main():
     # Zakładka „W jedną stronę" — osobny plik, osobna historia (mediany
     # RT nie mogą być zaniżane przez ceny jednokierunkowe i odwrotnie).
     ow_cfg = cfg.get("oneway")
-    ow_deals, ow_ry, ow_avi = [], [], []
+    ow_deals, ow_ry, ow_avi, ow_far = [], [], [], []
     if ow_cfg:
         ow_ry = fetch_ryanair_oneway(ow_cfg, cfg)
         ow_avi = fetch_aviasales_oneway(
             ow_cfg, token, marker, maps,
             cfg.get("avi_origins") or [cfg["avi_origin"]]) if token else []
-        ow_deals = merge_offers(ow_ry + ow_avi)
+        if ow_cfg.get("far"):
+            ow_far = fetch_aviasales_oneway_far(
+                ow_cfg["far"], token, marker, maps,
+                cfg.get("avi_origins") or [cfg["avi_origin"]]) \
+                if token else []
+        ow_deals = merge_offers(ow_ry + ow_avi + ow_far)
+        # Flaga „daleko" po kraju kierunku — ten sam lot (np. Kutaisi)
+        # może przyjść z przebiegu europejskiego i dalekiego.
+        for d in ow_deals:
+            cc = d.get("country_code")
+            if cc and cc not in EUROPE_CC:
+                d["far"] = True
+            else:
+                d.pop("far", None)
         annotate_record_low(ow_deals, history_ow_by_route, cfg)
         annotate_geo(ow_deals, maps)
         for d in ow_deals:
@@ -1163,7 +1295,8 @@ def main():
         with open(ONEWAY_PATH, "w", encoding="utf-8") as f:
             json.dump({"generated_at": now, "config": ow_cfg,
                        "counts": {"ryanair": len(ow_ry),
-                                  "aviasales": len(ow_avi)},
+                                  "aviasales": len(ow_avi),
+                                  "aviasales_far": len(ow_far)},
                        "deals": ow_deals},
                       f, ensure_ascii=False, separators=(",", ":"))
 
@@ -1231,8 +1364,9 @@ def main():
              counts["ryanair"], counts["aviasales"]))
     if ow_cfg:
         print("Zapisano %d lotów w jedną stronę do %s "
-              "[ryanair: %d, aviasales: %d]"
-              % (len(ow_deals), ONEWAY_PATH, len(ow_ry), len(ow_avi)))
+              "[ryanair: %d, aviasales: %d, daleko: %d]"
+              % (len(ow_deals), ONEWAY_PATH, len(ow_ry), len(ow_avi),
+                 len(ow_far)))
 
 
 if __name__ == "__main__":

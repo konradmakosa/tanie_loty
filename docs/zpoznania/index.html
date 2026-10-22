@@ -533,6 +533,13 @@ if (location.hostname === "loty.makosa.org") {
       <option value="">wszystkie linie</option>
     </select>
   </label>
+  <label>Zasięg:
+    <select id="oRange">
+      <option value="">wszystko</option>
+      <option value="europa">Europa</option>
+      <option value="daleko">Daleko</option>
+    </select>
+  </label>
   <label><input type="checkbox" id="oGroupBy" checked> Grupuj po kierunku</label>
 </div>
 
@@ -846,6 +853,12 @@ function fmtDur(min) {
 }
 
 function transferText(d) {
+  if (d.date_in === null || d.date_in === undefined) {
+    const leg = (d.transfers_out || 0) === 0
+      ? "bezpośrednio" : d.transfers_out + " przesiadka";
+    const dur = fmtDur(d.duration_out_min);
+    return leg + (dur ? " · ≈ " + dur : "");
+  }
   const t = [d.transfers_out, d.transfers_in];
   const legs = t.map(n => n === 0 ? "bezpośrednio" : n + " przesiadka")
     .join(", z powrotem ");
@@ -998,10 +1011,12 @@ function renderFar() {
 function renderOneway() {
   const sort = document.getElementById("oSort").value;
   const airline = document.getElementById("oAirline").value;
+  const range = document.getElementById("oRange").value;
   const groupBy = document.getElementById("oGroupBy").checked;
 
   let items = applyOwSettings(owDeals, settings, owCfg, new Date());
-  items = items.filter(d => !airline || d.airline === airline);
+  items = items.filter(d => (!airline || d.airline === airline) &&
+                            (!range || (range === "daleko") === !!d.far));
   renderList(items, "listOneway", sort, groupBy, owDeals.length > 0);
 }
 
@@ -1449,6 +1464,7 @@ document.getElementById("fTransfers").addEventListener("change", renderFar);
 document.getElementById("fGroupBy").addEventListener("change", renderFar);
 document.getElementById("oSort").addEventListener("change", renderOneway);
 document.getElementById("oAirline").addEventListener("change", renderOneway);
+document.getElementById("oRange").addEventListener("change", renderOneway);
 document.getElementById("oGroupBy").addEventListener("change", renderOneway);
 
 // Kliknięcia w oferty (delegacja na obie listy).
@@ -1466,7 +1482,7 @@ document.getElementById("oGroupBy").addEventListener("change", renderOneway);
     dest_airport: d.dest,
     price: d.price, airline: d.airline, source: d.source, nights: d.nights,
     category: d.category, via: el.dataset.via || "", tab: activeTab,
-    trip: d.trip || "return"
+    trip: d.trip || "return", far: d.far ? "true" : "false"
   });
   // Karta-div: klik poza wewnętrznymi linkami otwiera ofertę główną.
   if (!e.target.closest("a") && el.dataset.href)
@@ -1546,10 +1562,16 @@ Promise.all([
       document.getElementById("owUpdated").textContent =
         "Zaktualizowano: " + new Date(owData.generated_at).toLocaleString("pl-PL");
       const omp = owCfg.max_price_pln || {};
+      const ofc = owCfg.far || {};
       document.getElementById("owDesc").textContent =
         "Skrypt zbiera oferty do " + omp.lcc + " zł (tanie linie) / " +
         omp.full + " zł, loty bezpośrednie, najbliższe " +
-        (owCfg.days_ahead || "—") + " dni";
+        (owCfg.days_ahead || "—") + " dni" +
+        (ofc.max_price_pln
+          ? "; poza Europą do " + ofc.max_price_pln + " zł, maks. " +
+            ofc.max_transfers_each_way + " przesiadka, " +
+            ofc.days_ahead + " dni"
+          : "");
       const oc = owData.counts || {};
       const ocParts = [];
       if (oc.ryanair) ocParts.push("Ryanair " + oc.ryanair + " ofert");
