@@ -1,8 +1,9 @@
 name: Szukaj tanich lotów
 
 on:
-  schedule:
-    - cron: "0 */6 * * *"
+  # Harmonogram wyłączony — wyszukiwanie działa na VPS home.pl
+  # (systemd timer tl-search.timer co 6 h). Ten workflow zostaje
+  # jako awaryjny fallback: workflow_dispatch / push po zmianach w kodzie.
   workflow_dispatch:
   push:
     branches: [main]

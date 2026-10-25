@@ -14,9 +14,12 @@
   Pages nie robi 301 serwerowych.
 - **GA4:** jeden tag `G-CTFYNF714B` dla wszystkich domen; rozróżnienie po
   wymiarze Hostname. Historia nienaruszona.
-- **Pipeline:** GitHub Actions co 6 h: `search.py <port>` dla każdego portu
-  z `config.json → ports` → `ingest.py <port>` do bazy (PHP API
-  na `makosa.org/tanie_loty/api`) → commit danych do `docs/<port>/`.
+- **Pipeline:** VPS home.pl `entropia-vps` (31.70.120.242, Berlin),
+  systemd timer `tl-search.timer` co 6 h → `/home/tl/run_search.sh`
+  wykonuje `search.py <port>` + `ingest.py <port>` dla wszystkich portów,
+  a na końcu commituje `docs/` + `data/history.jsonl` i pushuje
+  (deploy key `tl-worker-entropia-vps`). Logi: `journalctl -u tl-search`.
+  GitHub Actions `search.yml` ma wyłączony schedule — fallback ręczny.
   FTP tylko przy wdrożeniu strony/API, nie przy aktualizacji ofert.
 - **Geolokalizacja:** `docs/index.html` pyta get.geojs.io (timeout 2,5 s),
   podświetla najbliższy port i kieruje odliczanie do najbliższego
@@ -153,9 +156,9 @@
 4. **Alerty — rozwój:** własne kryteria (kraj, max cena), digest dzienny
    zamiast per przebieg (DKIM/SPF/DMARC już działają), Brevo/SMTP
    gdy dostarczalność zacznie szwankować. Monitorować `alerts_sent`.
-5. **Niezależność od GitHub Actions:** przepisać `search.py` na PHP
-   i puścić z crona home.pl (panel: „Zadania cron"). GitHub zostaje tylko
-   jako repo kodu.
+5. ~~**Niezależność od GitHub Actions**~~ — zrobione 2026-10-25: wyszukiwanie
+   działa na VPS home.pl (`tl-search.timer`). GitHub zostaje tylko jako repo
+   + awaryjny `workflow_dispatch`.
 6. **loty.makosa.org:** gdy Google przeczyta canonical — wyłączyć GitHub
    Pages / CNAME.
 7. **Kolejne porty** wg `geo_suggest`: Rzeszów (baza Ryanaira) najsensowniejszy;
