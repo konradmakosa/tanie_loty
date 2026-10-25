@@ -2,6 +2,11 @@ name: Deploy API (home.pl)
 
 on:
   workflow_dispatch:
+    inputs:
+      api_only:
+        type: boolean
+        default: false
+        description: Deploy only PHP API
 
 permissions:
   contents: read
@@ -33,6 +38,7 @@ jobs:
         run: python deploy.py
 
       - name: Wgraj stronę przez FTP
+        if: ${{ !inputs.api_only }}
         continue-on-error: true
         env:
           TL_FTP_HOST: ${{ secrets.TL_FTP_HOST }}

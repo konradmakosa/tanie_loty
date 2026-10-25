@@ -22,9 +22,21 @@ $expected = cfg()['INGEST_KEY'] ?? '';
 if (!$expected || !hash_equals($expected, $key)) {
     json_err('nieprawidłowy klucz', 401);
 }
-$raw = file_get_contents('php://input', false, null, 0, 5 * 1024 * 1024 + 1);
-if ($raw === false || strlen($raw) > 5 * 1024 * 1024) {
+$inputStream = fopen('php://input', 'rb');
+$raw = '';
+while (!feof($inputStream) && strlen($raw) <= 5 * 1024 * 1024) {
+    $part = fread($inputStream, 8192);
+    if ($part === false) json_err('błąd odczytu', 400);
+    if ($part === '') break;
+    $raw .= $part;
+}
+fclose($inputStream);
+if (strlen($raw) > 5 * 1024 * 1024) {
     json_err('za duże body', 413);
+}
+if (isset($_SERVER['CONTENT_LENGTH']) &&
+    strlen($raw) !== (int)$_SERVER['CONTENT_LENGTH']) {
+    json_err('niepełne body', 400);
 }
 if (($_SERVER['HTTP_CONTENT_ENCODING'] ?? '') === 'gzip') {
     $raw = gzdecode($raw, 25 * 1024 * 1024);
