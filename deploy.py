@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 ENV_PATH = ROOT / ".env"
 SERVER_DIR = ROOT / "server"
-FILES = ["db.php", "ingest.php", "history.php", "typical.php",
+FILES = ["db.php", "ingest.php", "snapshot.php", "history.php", "typical.php",
          "ports.php", "mail.php", "subscribe.php", "confirm.php",
          "unsubscribe.php", "notify.php", "subscribers.php",
          "maintenance.php",

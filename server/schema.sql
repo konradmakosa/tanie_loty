@@ -57,3 +57,9 @@ CREATE TABLE IF NOT EXISTS alerts_sent (
   sent_at DATETIME NOT NULL,
   PRIMARY KEY (deal_id, port)
 );
+
+CREATE TABLE IF NOT EXISTS deal_snapshots (
+  port VARCHAR(16) PRIMARY KEY,
+  generated_at VARCHAR(32) NOT NULL,
+  payload MEDIUMTEXT NOT NULL
+);
