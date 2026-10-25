@@ -5,7 +5,9 @@ require __DIR__ . '/ports.php';
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     cors();
     $port = $_GET['port'] ?? '';
-    if (!port_ok($port)) json_err('nieprawidłowy port', 400);
+    if (!is_string($port) || !port_ok($port)) {
+        json_err('nieprawidłowy port', 400);
+    }
     $st = db()->prepare('SELECT payload FROM deal_snapshots WHERE port=?');
     $st->execute([$port]);
     $payload = $st->fetchColumn();
@@ -44,6 +46,59 @@ if (($_SERVER['HTTP_CONTENT_ENCODING'] ?? '') === 'gzip') {
 }
 if (strlen($raw) > 25 * 1024 * 1024) json_err('za duże dane', 413);
 $input = json_decode($raw, true);
+$staged = false;
+if (is_array($input) && array_key_exists('part', $input)) {
+    $port = $input['port'] ?? '';
+    $chunkTs = $input['generated_at'] ?? '';
+    $index = $input['part'];
+    $total = $input['total'] ?? null;
+    $data = $input['data'] ?? null;
+    if (!is_string($port) || !port_ok($port) ||
+        !is_string($chunkTs) ||
+        !preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+00:00$/',
+                    $chunkTs) ||
+        !is_int($index) || !is_int($total) ||
+        $total < 1 || $total > 1000 || $index < 0 || $index >= $total ||
+        !is_string($data) || strlen($data) > 8000 ||
+        base64_decode($data, true) === false) {
+        json_err('nieprawidłowa część', 400);
+    }
+    $pdo = db();
+    if (db_driver($pdo) === 'mysql') {
+        $sql = 'INSERT INTO snapshot_parts
+            (port, generated_at, part, total, data) VALUES (?,?,?,?,?)
+            ON DUPLICATE KEY UPDATE total=VALUES(total), data=VALUES(data)';
+    } else {
+        $sql = 'INSERT INTO snapshot_parts
+            (port, generated_at, part, total, data) VALUES (?,?,?,?,?)
+            ON CONFLICT(port, generated_at, part) DO UPDATE SET
+            total=excluded.total, data=excluded.data';
+    }
+    $pdo->prepare($sql)->execute([$port, $chunkTs, $index, $total, $data]);
+    $st = $pdo->prepare('SELECT part, total, data FROM snapshot_parts
+        WHERE port=? AND generated_at=? ORDER BY part');
+    $st->execute([$port, $chunkTs]);
+    $parts = $st->fetchAll();
+    if (count($parts) < $total) json_out(['ok' => true, 'complete' => false]);
+    $compressed = '';
+    foreach ($parts as $i => $part) {
+        if ((int)$part['part'] !== $i || (int)$part['total'] !== $total) {
+            json_err('niespójne części', 400);
+        }
+        $compressed .= base64_decode($part['data'], true);
+    }
+    if (strlen($compressed) > 5 * 1024 * 1024) {
+        json_err('za duży snapshot', 413);
+    }
+    $complete = gzdecode($compressed, 25 * 1024 * 1024);
+    if ($complete === false) json_err('błędny snapshot', 400);
+    $input = json_decode($complete, true);
+    if (($input['port'] ?? null) !== $port ||
+        ($input['tabs']['okazje']['generated_at'] ?? null) !== $chunkTs) {
+        json_err('niespójne dane snapshotu', 400);
+    }
+    $staged = true;
+}
 $port = $input['port'] ?? '';
 $tabs = $input['tabs'] ?? null;
 if (!is_string($port) || !port_ok($port) || !is_array($tabs) ||
@@ -79,4 +134,9 @@ if (db_driver($pdo) === 'mysql') {
 }
 $st = $pdo->prepare($sql);
 $st->execute([$port, $ts, $payload]);
-json_out(['ok' => true, 'updated' => $st->rowCount() > 0]);
+$updated = $st->rowCount() > 0;
+if ($staged) {
+    $pdo->prepare('DELETE FROM snapshot_parts
+        WHERE port=? AND generated_at<=?')->execute([$port, $ts]);
+}
+json_out(['ok' => true, 'updated' => $updated, 'complete' => true]);

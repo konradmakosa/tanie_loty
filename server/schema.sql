@@ -63,3 +63,12 @@ CREATE TABLE IF NOT EXISTS deal_snapshots (
   generated_at VARCHAR(32) NOT NULL,
   payload MEDIUMTEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS snapshot_parts (
+  port VARCHAR(16) NOT NULL,
+  generated_at VARCHAR(32) NOT NULL,
+  part INT NOT NULL,
+  total INT NOT NULL,
+  data TEXT NOT NULL,
+  PRIMARY KEY (port, generated_at, part)
+);

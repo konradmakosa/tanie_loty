@@ -66,6 +66,10 @@ function db_migrate(PDO $pdo): void {
         $pdo->exec("CREATE TABLE IF NOT EXISTS deal_snapshots (
             port VARCHAR(16) PRIMARY KEY, generated_at VARCHAR(32) NOT NULL,
             payload TEXT NOT NULL)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS snapshot_parts (
+            port VARCHAR(16) NOT NULL, generated_at VARCHAR(32) NOT NULL,
+            part INT NOT NULL, total INT NOT NULL, data TEXT NOT NULL,
+            PRIMARY KEY (port, generated_at, part))");
         return;
     }
     if ($drv === 'sqlite') {
@@ -110,6 +114,10 @@ function db_migrate(PDO $pdo): void {
         $pdo->exec("CREATE TABLE IF NOT EXISTS deal_snapshots (
             port VARCHAR(16) PRIMARY KEY, generated_at VARCHAR(32) NOT NULL,
             payload TEXT NOT NULL)");
+        $pdo->exec("CREATE TABLE IF NOT EXISTS snapshot_parts (
+            port VARCHAR(16) NOT NULL, generated_at VARCHAR(32) NOT NULL,
+            part INT NOT NULL, total INT NOT NULL, data TEXT NOT NULL,
+            PRIMARY KEY (port, generated_at, part))");
         return;
     }
     // MySQL — zgodnie ze schema.sql.
