@@ -16,8 +16,8 @@
   wymiarze Hostname. Historia nienaruszona.
 - **Pipeline:** GitHub Actions co 6 h: `search.py <port>` dla każdego portu
   z `config.json → ports` → `ingest.py <port>` do bazy (PHP API
-  na `makosa.org/tanie_loty/api`) → `deploy_site.py` (FTP na home.pl) →
-  commit danych do `docs/<port>/`.
+  na `makosa.org/tanie_loty/api`) → commit danych do `docs/<port>/`.
+  FTP tylko przy wdrożeniu strony/API, nie przy aktualizacji ofert.
 - **Geolokalizacja:** `docs/index.html` pyta get.geojs.io (timeout 2,5 s),
   podświetla najbliższy port i kieruje odliczanie do najbliższego
   AKTYWNEGO lotniska (mapowanie ACTIVE w skrypcie). Sugestia, nie redirect.
@@ -50,7 +50,8 @@
   rekordy mają `trip: "oneway"`, `date_in: null`. GA4 `select_deal.far`.
   Historia w `data/history.jsonl` z `"trip":"oneway"` — mediany RT i OW
   liczone osobno; OW bez plików `history/*.json` i bez typical_price.
-- OW NIE idzie do ingest/bazy ani do alertów mailowych.
+- OW trafia do pełnego snapshotu w bazie, ale NIE do tabeli historii
+  `offers` ani do alertów mailowych.
 - GA4: `view_tab {tab: "wjedna"}`, `select_deal {trip: "oneway"|"return",
   tab}`. **Żeby widzieć w raportach: zarejestrować wymiary niestandardowe
   `tab` i `trip`** (Administracja → Definicje niestandardowe → wymiar
@@ -112,6 +113,21 @@
   `.html`/`.json`/`.htaccess` wgrywane zawsze; reszta po rozmiarze.
   `docs/CNAME` nie jest wgrywany na home.pl.
 - API: `python3 deploy.py` lub workflow `deploy-api.yml`.
+- Pełne oferty (`deals`, `far`, `oneway`) są zapisywane atomowo dla portu
+  w `deal_snapshots` przez POST `snapshot.php` (X-Ingest-Key).
+  `ingest.py` przesyła gzip podzielony na porcje ≤6 KB, bo home.pl ucina
+  większe body; `snapshot_parts` zbiera porcje i dopiero cały komplet
+  zastępuje snapshot. Niedokończony transfer nie zmienia widoku strony.
+  GET `snapshot.php?port=<slug>` zwraca trzy zakładki; frontend pobiera
+  je z API, a przy błędzie używa statycznych JSON-ów z ostatniego deployu.
+  Starszy przebieg nie nadpisuje nowszego. Relacyjne `offers` i
+  `route_daily` nadal przechowują historię RT i służą wykresom/typowym cenom.
+  Testy: `python3 -m unittest discover -s tests -v` oraz
+  `node tests/test_frontend_snapshot.js`.
+- Wdrożenie zmiany źródła danych: najpierw API (`deploy-api.yml`), potem
+  zasilić sześć portów aktualnymi snapshotami, zweryfikować GET dla każdego
+  i dopiero włączyć frontend czytający API. Przebieg `search.yml` musi
+  pomyślnie zapisać snapshoty; błąd ingestu zatrzymuje przebieg.
 - **Preferowany deploy strony: `gh workflow run deploy-api.yml`** (robi
   API + stronę z aktualnego `main`). Lokalny FTP-TLS bywa blokowany przez
   firewall sieci (kanał danych PASV w TLS → timeout) — wtedy tylko Actions.

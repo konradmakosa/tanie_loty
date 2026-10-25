@@ -3,6 +3,7 @@
 przez API PHP (ingest.php). Bez TL_API_BASE/TL_INGEST_KEY — pomija.
 Użycie: python ingest.py [port] (domyślnie zwarszawy)."""
 
+import base64
 import gzip
 import json
 import os
@@ -61,13 +62,33 @@ def build_payload(path, tab, ts):
     return {"ts": ts, "tab": tab, "offers": offers}
 
 
-def post_json(url, key, payload):
-    body = gzip.compress(json.dumps(payload,
-                                    ensure_ascii=False).encode("utf-8"))
+def snapshot_payload(port_dir, port):
+    tabs = {}
+    ts = None
+    for tab, filename in (("okazje", "deals.json"),
+                          ("daleko", "far.json"),
+                          ("oneway", "oneway.json")):
+        data = json.loads((port_dir / filename).read_text(encoding="utf-8"))
+        if (not isinstance(data, dict) or not data.get("generated_at") or
+                not isinstance(data.get("config"), dict) or
+                not isinstance(data.get("deals"), list)):
+            raise ValueError("niekompletny snapshot: " + filename)
+        if ts is not None and data["generated_at"] != ts:
+            raise ValueError("różne czasy generowania snapshotów")
+        ts = data["generated_at"]
+        tabs[tab] = data
+    return {"port": port, "tabs": tabs}
+
+
+def post_json(url, key, payload, compress=True):
+    body = json.dumps(payload, ensure_ascii=False,
+                      separators=(",", ":")).encode("utf-8")
+    if compress:
+        body = gzip.compress(body)
     req = urllib.request.Request(
         url, data=body, method="POST",
         headers={"Content-Type": "application/json",
-                 "Content-Encoding": "gzip",
+                 **({"Content-Encoding": "gzip"} if compress else {}),
                  "X-Ingest-Key": key,
                  "User-Agent": "tanie-loty-ingest/1.0"})
     for attempt in range(2):
@@ -79,6 +100,27 @@ def post_json(url, key, payload):
                 continue
             raise
     return None
+
+
+def post_snapshot(url, key, payload):
+    data = gzip.compress(json.dumps(payload, ensure_ascii=False,
+                                    separators=(",", ":")).encode("utf-8"))
+    parts = [data[i:i + 6000] for i in range(0, len(data), 6000)]
+    if len(parts) > 1000:
+        raise ValueError("snapshot: za dużo części")
+    result = None
+    for i, part in enumerate(parts):
+        result = post_json(url, key, {
+            "port": payload["port"],
+            "generated_at": payload["tabs"]["okazje"]["generated_at"],
+            "part": i, "total": len(parts),
+            "data": base64.b64encode(part).decode("ascii"),
+        }, compress=False)
+        if not result or not result.get("ok"):
+            raise RuntimeError("snapshot: zapis części nie powiódł się")
+    if not result.get("complete"):
+        raise RuntimeError("snapshot: brak kompletu części")
+    return result
 
 
 def main():
@@ -108,6 +150,10 @@ def main():
             print("ingest %s: %s" % (tab, resp))
         except Exception as e:
             print("ingest %s: błąd (%s)" % (tab, e))
+
+    resp = post_snapshot(base + "/snapshot.php", key,
+                         snapshot_payload(PORT_DIR, PORT))
+    print("snapshot %s: %s" % (PORT, resp))
 
     # Alerty e-mail: rekordowo tanie loty → notify.php.
     lows = [d for d in (json.loads(deals_path.read_text(encoding="utf-8"))
