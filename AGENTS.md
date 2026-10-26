@@ -113,10 +113,18 @@
 
 ## Deploy
 
+- **Deploy działa z VPS** (`entropia-vps`): timer `tl-deploy.timer` co 5 min
+  odpala `/home/tl/deploy.sh` — `git pull`, `deploy.py` gdy zmieniło się
+  `server/` lub `deploy.py`, `deploy_site.py` zawsze przy nowym HEAD.
+  Marker ostatniego deploya: `/home/tl/.tl_deployed`. Logi:
+  `journalctl -u tl-deploy`. Push na `main` → na serwerze w ≤5 min.
+  Cały deploy (API + strona) trwa ~1–2 min z VPS vs ~25 min z GH Actions.
 - Frontend: `python3 deploy_site.py` (wymaga TL_FTP_*, TL_WEB_DIR=/makosa.org).
   `.html`/`.json`/`.htaccess` wgrywane zawsze; reszta po rozmiarze.
   `docs/CNAME` nie jest wgrywany na home.pl.
-- API: `python3 deploy.py` lub workflow `deploy-api.yml`.
+- API: `python3 deploy.py` (ręcznie na VPS lub lokalnie z `.env`).
+- **GitHub = tylko repo.** Workflowy usunięte (2026-10-26) — deploy i
+  wyszukiwanie działają wyłącznie na VPS.
 - Pełne oferty (`deals`, `far`, `oneway`) są zapisywane atomowo dla portu
   w `deal_snapshots` przez POST `snapshot.php` (X-Ingest-Key).
   `ingest.py` przesyła gzip podzielony na porcje ≤6 KB, bo home.pl ucina
