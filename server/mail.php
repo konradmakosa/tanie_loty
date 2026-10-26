@@ -21,7 +21,7 @@ function send_mail(string $to, string $subject, string $html, string $text,
         . chunk_split(base64_encode($html))
         . "--$sep--\r\n";
 
-    $headers = "From: =?UTF-8?B?" . base64_encode('Polataj.se') . "?= <$from>\r\n"
+    $headers = "From: =?UTF-8?B?" . base64_encode('polataj.se') . "?= <$from>\r\n"
         . "Reply-To: $from\r\n"
         . "MIME-Version: 1.0\r\n"
         . "Content-Type: multipart/alternative; boundary=\"$sep\"\r\n"

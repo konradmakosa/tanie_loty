@@ -1,4 +1,4 @@
-# Polataj.se — notatki projektowe
+# polataj.se — notatki projektowe
 
 ## Stan (po migracji na home.pl + polataj.se)
 
@@ -28,8 +28,9 @@
 - **Nowy port:** dodaj wpis w `config.json → ports` (`airports`,
   `avi_origin`), katalog `docs/<port>/index.html` (kopia apki — teksty,
   canonical/og, `HOME_GEO`), przebieg `search.py <port>` +
-  `ingest.py <port>` w `search.yml`, aktywuj `<a class="ap on" data-ap=…>`
-  na mapie + dopisz do mapowań `port` (head) i `ACTIVE`.
+  `ingest.py <port>` w `search.yml`, aktywuj port na mapie Leaflet
+  (`docs/index.html`: wpis w `APS` → flaga `1`, `URLS`, `ACTIVE_IATA`,
+  `ACTIVE`) + mapowanie `port` w `<head>` + link w `#fallback`.
 
 ## Szablon apki (od 2026-10)
 

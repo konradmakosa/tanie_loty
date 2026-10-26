@@ -1,4 +1,4 @@
-"""Generuje ikony Polataj.se do docs/: zaokrąglony granatowy kwadrat
+"""Generuje ikony polataj.se do docs/: zaokrąglony granatowy kwadrat
 z zielonym „lotniskowym" symbolem (pierścień + kropka).
 
 Paleta jak w og.png/mapie: tło #0b1733, zieleń #4ade80, błękit #7aa2ff.

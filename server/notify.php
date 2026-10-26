@@ -133,7 +133,7 @@ foreach ($subs as $s) {
         . '<p><a href="' . htmlspecialchars("$site/$port/")
         . '">Zobacz wszystkie okazje</a></p>'
         . '<p style="color:#888;font-size:12px">Dostajesz te maile, bo '
-        . 'potwierdziłeś alerty na Polataj.se. '
+        . 'potwierdziłeś alerty na polataj.se. '
         . '<a href="' . htmlspecialchars($unsub) . '">Wypisz się</a></p></div>';
     $text = "Nowe rekordy cenowe z $city\n\n$li_text\n"
         . "Wszystkie okazje: $site/$port/\n"

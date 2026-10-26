@@ -11,10 +11,9 @@ ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs" / "og.png"
 W, H = 1200, 630
 
-# granica Polski + porty — z docs/index.html (projekcja x=(lon-19)*cos52,
+# granica Polski — tools/poland_border.txt (projekcja x=(lon-19)*cos52,
 # y=-(lat-52); y rośnie na południe, czyli w dół obrazka)
-INDEX = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
-D = re.search(r'class="border" d="([^"]+)"', INDEX).group(1)
+D = (ROOT / "tools" / "poland_border.txt").read_text(encoding="utf-8").strip()
 
 PORTS = [  # iata, x, y (jak na mapie)
     ("WAW", 1.21114, -0.1657),
@@ -108,7 +107,7 @@ for iata, x, y in PORTS:
     dr.text((cx - tw / 2, cy + 18), iata, font=f_iata, fill=green)
 
 # teksty po lewej
-dr.text((60, 150), "Polataj.se", font=f_title, fill=(232, 234, 240))
+dr.text((60, 150), "polataj.se", font=f_title, fill=(232, 234, 240))
 dr.text((63, 270), "Okazje na loty w obie strony", font=f_sub,
         fill=(154, 163, 178))
 dr.text((63, 320), "z lotnisk w całej Polsce", font=f_sub,
