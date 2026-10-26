@@ -240,7 +240,7 @@ function pick(ap) {
   APS.forEach(function (a) {
     var ap = a[0], city = a[1], iata = a[2], on = a[5];
     var m = L.circleMarker([a[3], a[4]], {
-      radius: on ? 7 : 5,
+      radius: on ? 14 : 5,
       color: "#e8eaf0", weight: 2,
       fillColor: on ? "#4ade80" : "#9aa3b2", fillOpacity: 1
     }).addTo(map);
@@ -262,7 +262,7 @@ function pick(ap) {
       interactive: false,
       icon: L.divIcon({ className: "", html:
         '<div class="ap-label' + (on ? "" : " off") + '" data-ap="' + ap
-        + '">' + iata + '</div>', iconAnchor: [0, -14] })
+        + '">' + iata + '</div>', iconAnchor: [0, -20] })
     }).addTo(map);
     markers[ap] = { m: m, label: label };
   });
@@ -289,7 +289,7 @@ function pick(ap) {
       if (a[2].indexOf(near.iata) === 0) {
         var it = markers[a[0]];
         it.m.setStyle({ fillColor: "#7aa2ff" });
-        it.m.setRadius(a[5] ? 9 : 7);
+        it.m.setRadius(a[5] ? 16 : 7);
         it.label.getElement().firstChild.classList.add("near");
       }
     });
