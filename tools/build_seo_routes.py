@@ -322,10 +322,11 @@ def render_index(routes, cfg):
     rows = []
     for port in cfg["ports"]:
         p = cfg["ports"][port]
-        rows.append('<h2 id="z-%s" style="margin:22px 0 10px">Z %s '
+        rows.append('<h2 id="z-%s" style="margin:22px 0 10px">'
+                    '<a href="/%s/" style="color:var(--accent)">Z %s</a> '
                     '<span style="color:var(--muted);font-weight:400">'
                     '(%s)</span></h2><div class="links">'
-                    % (esc(slug(p["city"])), esc(p["city_gen"]),
+                    % (esc(slug(p["city"])), esc(port), esc(p["city_gen"]),
                        esc(p["airports_desc"])))
         for r in sorted(by_port[port], key=lambda x: x["min_price"]):
             rows.append('<a href="/loty/%s/">%s'
@@ -349,8 +350,7 @@ def render_index(routes, cfg):
     return out
 
 
-def main():
-    cfg = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+def prepare_routes(cfg):
     hist = load_history()
     routes = collect_routes(cfg)
     routes = [enrich(r, cfg, hist) for r in routes.values()]
@@ -363,6 +363,15 @@ def main():
         if len(rs) > 1:
             for r in rs:
                 r["slug"] = "%s-%s" % (slug_, r["dest"].lower())
+
+    return routes
+
+
+def main():
+    cfg = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+    routes = prepare_routes(cfg)
+    from build_pages import main as build_port_pages
+    build_port_pages(routes)
 
     # linki wewnętrzne
     by_port = defaultdict(list)

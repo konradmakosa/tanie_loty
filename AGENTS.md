@@ -52,6 +52,12 @@
   z `date_out`/`weekday_out`. Trasy <3 deale i <2 próbki historii →
   `noindex,follow`.
 - Generuje też `docs/loty/index.html`, `docs/sitemap.xml`, `docs/robots.txt`.
+- Linkowanie statyczne: mapa (`details.mesh`) → sześć stron portów →
+  pełna siatka tras (`{{ROUTE_LINKS}}` w `templates/app.html`). Katalog
+  `/loty/` linkuje także do portów. `build_seo_routes.py` przebudowuje
+  strony portów przez `build_pages.main(routes)`, więc siatki odświeżają
+  się razem z trasami. Test osiągalności: parsować HTML bez wykonywania JS
+  i sprawdzić, że każda aktywna trasa ma link ze swojej strony portu.
 - Odpalany na VPS z `run_search.sh` po ingestach (co 6 h, przed commitem);
   deploy idzie `tl-deploy.timer`. Logo: `docs/assets/logo.jpg` (+`-96`),
   użyte w nagłówku pSEO i `og.png` (`make_og.py`).

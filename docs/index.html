@@ -39,7 +39,7 @@ try {
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
+  gtag('consent', 'default', { 'analytics_storage': 'granted', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
   gtag('js', new Date());
   gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
 </script>
@@ -142,6 +142,12 @@ body {
   background: rgba(122,162,255,.1); border: 1px solid rgba(122,162,255,.3);
   border-radius: 12px; color: var(--text); text-decoration: none;
   font-weight: 600; text-align: center }
+.mesh { position: fixed; left: 50%; bottom: 88px; transform: translateX(-50%); z-index: 1000; width: min(360px,calc(100% - 32px)); background: rgba(11,23,51,.94); border: 1px solid rgba(122,162,255,.3); border-radius: 16px; padding: 12px 16px; }
+.mesh summary { cursor: pointer; font-size: .85rem; color: var(--text); }
+.mesh a { color: var(--accent); text-decoration: none; }
+.mesh nav { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-top: 12px; max-height: 35vh; overflow: auto; }
+.mesh nav a { padding: 10px; border-radius: 8px; background: rgba(122,162,255,.1); }
+.mesh a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -162,6 +168,17 @@ body {
 </div>
 <div class="bar" id="bar"><span id="barmsg">Wybierz lotnisko wylotu</span><a class="coffee2" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"><img src="postaw-kawe.png" alt="Postaw kawę" style="height:24px;width:24px;object-fit:cover;object-position:left;display:block"></a></div>
 <a class="coffee" href="https://buycoffee.to/konradmakosa" target="_blank" rel="noopener"><img src="postaw-kawe.png" alt="Postaw kawę"></a>
+<details class="mesh">
+  <summary>Najpopularniejsze wyloty · <a href="/loty/">wszystkie trasy</a></summary>
+  <nav aria-label="Najpopularniejsze wyloty">
+    <a href="/zwarszawy/">Warszawa</a>
+    <a href="/zkrakowa/">Kraków</a>
+    <a href="/zgdanska/">Gdańsk</a>
+    <a href="/zpoznania/">Poznań</a>
+    <a href="/zwroclawia/">Wrocław</a>
+    <a href="/zkatowic/">Katowice</a>
+  </nav>
+</details>
 <div class="foot"><a href="loty/">Wszystkie trasy</a> · <a href="prywatnosc/">Prywatność</a> · <a id="contactLink" href="#">Kontakt</a></div>
 <script src="vendor/leaflet.js"></script>
 <script>

@@ -44,7 +44,7 @@ if (location.hostname === "loty.makosa.org") {
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('consent', 'default', { 'analytics_storage': 'denied', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
+  gtag('consent', 'default', { 'analytics_storage': 'granted', 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied' });
   gtag('js', new Date());
   gtag('config', 'G-CTFYNF714B', { anonymize_ip: true });
 </script>
@@ -381,6 +381,14 @@ if (location.hostname === "loty.makosa.org") {
   }
   footer a, .alerts .small a { color: var(--muted); text-decoration: underline; }
   footer a:hover, .alerts .small a:hover { color: var(--text); }
+  .route-mesh { margin: 24px 0; padding: 18px; border: 1px solid rgba(255,255,255,.14); border-radius: 14px; }
+  .route-mesh h2 { font-size: 1.1rem; margin-bottom: 14px; }
+  .route-mesh nav { display: grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap: 8px; }
+  .route-mesh a { color: var(--accent); text-decoration: none; }
+  .route-mesh nav a { padding: 10px; background: rgba(122,162,255,.07); border-radius: 8px; }
+  .route-mesh nav a:hover { background: rgba(122,162,255,.15); }
+  .route-mesh span { display: block; color: var(--price); font-size: .8rem; margin-top: 4px; }
+  .route-mesh p { margin-top: 14px; }
   .coffee { display: inline-block; margin-top: 10px; line-height: 0; }
   .coffee img { height: 46px; width: auto; border-radius: 999px; }
   .coffee:hover img { filter: brightness(1.1); }
@@ -671,6 +679,11 @@ if (location.hostname === "loty.makosa.org") {
     <input type="text" id="alertHp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <p class="desc small">Tylko rekordy cenowe, zwykle kilka maili w miesiącu. Zapisując się, zgadzasz się na otrzymywanie alertów; administratorem danych jest Konrad Mąkosa. Wypisanie jednym kliknięciem. <a href="../prywatnosc/">Polityka prywatności</a>.</p>
   </form>
+</section>
+<section class="route-mesh" aria-labelledby="routesHeading">
+  <h2 id="routesHeading">Wszystkie trasy z Poznania</h2>
+  <nav aria-label="Trasy z Poznania"><a href="/loty/poznan-alicante/">Alicante<span>od 200 zł</span></a><a href="/loty/poznan-amsterdam/">Amsterdam<span>od 930 zł</span></a><a href="/loty/poznan-barcelona/">Barcelona<span>od 252 zł</span></a><a href="/loty/poznan-bari/">Bari<span>od 172 zł</span></a><a href="/loty/poznan-bazylea/">Bazylea<span>od 175 zł</span></a><a href="/loty/poznan-bergamo/">Bergamo<span>od 132 zł</span></a><a href="/loty/poznan-birmingham/">Birmingham<span>od 145 zł</span></a><a href="/loty/poznan-bristol/">Bristol<span>od 145 zł</span></a><a href="/loty/poznan-copenhagen/">Copenhagen<span>od 130 zł</span></a><a href="/loty/poznan-dublin/">Dublin<span>od 248 zł</span></a><a href="/loty/poznan-edynburg/">Edynburg<span>od 210 zł</span></a><a href="/loty/poznan-istambul/">Istambuł<span>od 1019 zł</span></a><a href="/loty/poznan-kutaisi/">Kutaisi<span>od 417 zł</span></a><a href="/loty/poznan-liverpool/">Liverpool<span>od 174 zł</span></a><a href="/loty/poznan-lizbona/">Lizbona<span>od 313 zł</span></a><a href="/loty/poznan-londyn/">Londyn<span>od 130 zł</span></a><a href="/loty/poznan-malaga/">Malaga<span>od 176 zł</span></a><a href="/loty/poznan-malta/">Malta<span>od 216 zł</span></a><a href="/loty/poznan-manchester/">Manchester<span>od 149 zł</span></a><a href="/loty/poznan-marrakesz/">Marrakesz<span>od 747 zł</span></a><a href="/loty/poznan-miami/">Miami<span>od 2998 zł</span></a><a href="/loty/poznan-nowy-jork/">Nowy Jork<span>od 2835 zł</span></a><a href="/loty/poznan-pafos/">Pafos<span>od 198 zł</span></a><a href="/loty/poznan-palermo/">Palermo<span>od 180 zł</span></a><a href="/loty/poznan-paryz/">Paryż<span>od 135 zł</span></a><a href="/loty/poznan-porto/">Porto<span>od 235 zł</span></a><a href="/loty/poznan-rzym/">Rzym<span>od 195 zł</span></a><a href="/loty/poznan-sandefjord/">Sandefjord<span>od 134 zł</span></a><a href="/loty/poznan-shannon/">Shannon<span>od 158 zł</span></a><a href="/loty/poznan-sharm-el-sheikh/">Sharm El Sheikh<span>od 1376 zł</span></a><a href="/loty/poznan-szanghaj/">Szanghaj<span>od 3369 zł</span></a><a href="/loty/poznan-sztokholm/">Sztokholm<span>od 159 zł</span></a><a href="/loty/poznan-taszkient/">Taszkient<span>od 2947 zł</span></a><a href="/loty/poznan-tbilisi/">Tbilisi<span>od 1893 zł</span></a><a href="/loty/poznan-tirana/">Tirana<span>od 132 zł</span></a><a href="/loty/poznan-tokio/">Tokio<span>od 3061 zł</span></a><a href="/loty/poznan-walencja/">Walencja<span>od 154 zł</span></a></nav>
+  <p><a href="/loty/">Wszystkie trasy z Polski</a></p>
 </section>
 <footer>
   Apka jest darmowa i bez reklam. Jeśli trafiłeś dzięki niej na okazję:<br>

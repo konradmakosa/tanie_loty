@@ -1,6 +1,7 @@
 """Renderuje docs/<port>/index.html z templates/app.html + config.json.
 Użycie: python3 tools/build_pages.py   (zero zależności)
 """
+import html
 import json
 import re
 import unicodedata
@@ -20,13 +21,16 @@ def slug(s):
 def render(tpl, p):
     out = tpl
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
-              "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG"):
+              "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG", "ROUTE_LINKS"):
         out = out.replace("{{%s}}" % k, str(p["__vals__"][k]))
     return out
 
 
-def main():
+def main(routes=None):
     cfg = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
+    if routes is None:
+        from build_seo_routes import prepare_routes
+        routes = prepare_routes(cfg)
     tpl = TPL.read_text(encoding="utf-8")
     for port, v in cfg["ports"].items():
         vals = {
@@ -38,6 +42,12 @@ def main():
             "GEO_LON": "%.2f" % v["geo"][1],
             "EXAMPLE_ROUTE": v["example_route"],
             "CITY_SLUG": slug(v["city"]),
+            "ROUTE_LINKS": "".join(
+                '<a href="/loty/%s/">%s<span>od %.0f zł</span></a>'
+                % (html.escape(r["slug"], quote=True),
+                   html.escape(r["dest_city"]), r["min_price"])
+                for r in sorted(routes, key=lambda r: r["dest_city"])
+                if r["port"] == port),
         }
         v["__vals__"] = vals
         out = render(tpl, v)
