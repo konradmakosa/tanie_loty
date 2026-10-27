@@ -105,11 +105,11 @@ for iata, x, y in PORTS:
     tw = dr.textlength(iata, font=f_iata)
     dr.text((cx - tw / 2, cy + 18), iata, font=f_iata, fill=green)
 
-# logo po lewej (docs/assets/logo.jpg — zawiera już nazwę i tagline)
-logo = Image.open(ROOT / "docs" / "assets" / "logo.jpg").convert("RGB")
+# logo po lewej (docs/assets/logo.png, alfa → wklejamy na gradiencie)
+logo = Image.open(ROOT / "docs" / "assets" / "logo.png").convert("RGBA")
 lw = 560
 logo = logo.resize((lw, int(logo.height * lw / logo.width)))
-img.paste(logo, (40, 100))
+img.paste(logo, (50, 140), logo)
 dr.text((63, 460), "odświeżane co 6 h", font=f_small, fill=green)
 dr.text((63, 500), "WAW · KRK · GDN · POZ · WRO · KTW", font=f_small,
         fill=(122, 162, 255))

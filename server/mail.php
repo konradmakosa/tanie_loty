@@ -9,6 +9,12 @@ function send_mail(string $to, string $subject, string $html, string $text,
                    string $extraHeaders = ''): bool {
     $c = cfg();
     $from = $c['MAIL_FROM'] ?? 'alerty@polataj.se';
+    // Baner z logo na granatowym tle (znak jest jasny).
+    $html = '<div style="background:#0a1f44;padding:16px 20px;'
+        . 'border-radius:12px;margin-bottom:18px">'
+        . '<a href="https://polataj.se/"><img src="https://polataj.se/'
+        . 'assets/logo-520.png" width="220" alt="polataj.se" '
+        . 'style="display:block"></a></div>' . $html;
 
     $sep = "=_pl_" . bin2hex(random_bytes(8));
     $body = "--$sep\r\n"
