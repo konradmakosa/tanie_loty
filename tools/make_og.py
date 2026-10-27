@@ -92,7 +92,6 @@ for src, tx, ty in ROUTES:
 
 f_iata = font(MONO, 17)
 f_city = font(MONO, 13)
-f_title = font(MONO, 84)
 f_sub = font(MONO, 30)
 f_small = font(MONO, 22)
 
@@ -106,14 +105,13 @@ for iata, x, y in PORTS:
     tw = dr.textlength(iata, font=f_iata)
     dr.text((cx - tw / 2, cy + 18), iata, font=f_iata, fill=green)
 
-# teksty po lewej
-dr.text((60, 150), "polataj.se", font=f_title, fill=(232, 234, 240))
-dr.text((63, 270), "Okazje na loty w obie strony", font=f_sub,
-        fill=(154, 163, 178))
-dr.text((63, 320), "z lotnisk w całej Polsce", font=f_sub,
-        fill=(154, 163, 178))
-dr.text((63, 400), "odświeżane co 6 h", font=f_small, fill=green)
-dr.text((63, 436), "WAW · KRK · GDN · POZ · WRO · KTW", font=f_small,
+# logo po lewej (docs/assets/logo.jpg — zawiera już nazwę i tagline)
+logo = Image.open(ROOT / "docs" / "assets" / "logo.jpg").convert("RGB")
+lw = 560
+logo = logo.resize((lw, int(logo.height * lw / logo.width)))
+img.paste(logo, (40, 100))
+dr.text((63, 460), "odświeżane co 6 h", font=f_small, fill=green)
+dr.text((63, 500), "WAW · KRK · GDN · POZ · WRO · KTW", font=f_small,
         fill=(122, 162, 255))
 
 img.save(OUT, "PNG")

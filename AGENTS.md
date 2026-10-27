@@ -41,6 +41,21 @@
   **Nie edytować `docs/z*/index.html` ręcznie** — zmiany robić w szablonie,
   przebudować, `deploy_site.py`, commit (pliki wynikowe są w repo).
 
+## pSEO — statyczne strony tras (od 2026-10)
+
+- `tools/build_seo_routes.py` (zero zależności) → `docs/loty/<miasto>-<miasto>/`
+  per para (port, dest), lotniska portu scalone pod slugiem miasta.
+  Szablon `templates/route.html` (placeholdery `{{TITLE}}`, `{{DESCRIPTION}}`,
+  `{{CANONICAL}}`, `{{ROBOTS}}`, `{{JSONLD}}`, `{{BODY}}`).
+- Dane: `deals.json`+`far.json` wszystkich portów (tylko RT), min. 30 dni
+  z `data/history.jsonl`, dystans z `dest_geo`, miesiące/dni tygodnia
+  z `date_out`/`weekday_out`. Trasy <3 deale i <2 próbki historii →
+  `noindex,follow`.
+- Generuje też `docs/loty/index.html`, `docs/sitemap.xml`, `docs/robots.txt`.
+- Odpalany na VPS z `run_search.sh` po ingestach (co 6 h, przed commitem);
+  deploy idzie `tl-deploy.timer`. Logo: `docs/assets/logo.jpg` (+`-96`),
+  użyte w nagłówku pSEO i `og.png` (`make_og.py`).
+
 ## Loty w jedną stronę (eksperyment, od 2026-10)
 
 - Zakładka „One way" (`#wjedna`) na każdej stronie portu; plik
