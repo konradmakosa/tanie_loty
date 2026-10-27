@@ -97,13 +97,13 @@ body {
   filter: none;
 }
 .ap-label {
-  font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: var(--price); text-align: center; white-space: nowrap;
-  text-shadow: 0 0 4px #0b1733, 0 0 7px #0b1733, 0 0 2px #0b1733;
+  font: 800 16px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+  color: #126537; text-align: center; white-space: nowrap;
+  text-shadow: none;
   pointer-events: none;
 }
-.ap-label.off { color: var(--muted) }
-.ap-label.near { color: var(--accent) }
+.ap-label.off { color: #4b5563 }
+.ap-label.near { color: #204da7 }
 .leaflet-popup-content-wrapper {
   border-radius: 12px; background: #171c2b; color: var(--text);
   box-shadow: 0 4px 16px rgba(0,0,0,.5);
@@ -254,7 +254,7 @@ function pick(ap) {
   APS.forEach(function (a) {
     var ap = a[0], city = a[1], iata = a[2], on = a[5];
     var m = L.circleMarker([a[3], a[4]], {
-      radius: on ? 14 : 5,
+      radius: on ? 18 : 7,
       color: "#e8eaf0", weight: 2,
       fillColor: on ? "#4ade80" : "#9aa3b2", fillOpacity: 1
     }).addTo(map);
@@ -276,7 +276,7 @@ function pick(ap) {
       interactive: false,
       icon: L.divIcon({ className: "", html:
         '<div class="ap-label' + (on ? "" : " off") + '" data-ap="' + ap
-        + '">' + iata + '</div>', iconAnchor: [0, -20] })
+        + '">' + iata + '</div>', iconSize: [160, 24], iconAnchor: [80, -24] })
     }).addTo(map);
     markers[ap] = { m: m, label: label };
   });
@@ -303,7 +303,7 @@ function pick(ap) {
       if (a[2].indexOf(near.iata) === 0) {
         var it = markers[a[0]];
         it.m.setStyle({ fillColor: "#7aa2ff" });
-        it.m.setRadius(a[5] ? 16 : 7);
+        it.m.setRadius(a[5] ? 20 : 9);
         it.label.getElement().firstChild.classList.add("near");
       }
     });
