@@ -3,16 +3,24 @@ Użycie: python3 tools/build_pages.py   (zero zależności)
 """
 import json
 import re
+import unicodedata
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TPL = ROOT / "templates" / "app.html"
 
+_PL = str.maketrans("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", "acelnoszzACELNOSZZ")
+
+
+def slug(s):
+    s = unicodedata.normalize("NFKD", s.translate(_PL))
+    return re.sub(r"[^a-zA-Z0-9]+", "-", s).strip("-").lower()
+
 
 def render(tpl, p):
     out = tpl
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
-              "GEO_LON", "EXAMPLE_ROUTE"):
+              "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG"):
         out = out.replace("{{%s}}" % k, str(p["__vals__"][k]))
     return out
 
@@ -29,6 +37,7 @@ def main():
             "GEO_LAT": "%.2f" % v["geo"][0],
             "GEO_LON": "%.2f" % v["geo"][1],
             "EXAMPLE_ROUTE": v["example_route"],
+            "CITY_SLUG": slug(v["city"]),
         }
         v["__vals__"] = vals
         out = render(tpl, v)

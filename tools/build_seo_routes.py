@@ -322,10 +322,11 @@ def render_index(routes, cfg):
     rows = []
     for port in cfg["ports"]:
         p = cfg["ports"][port]
-        rows.append('<h2 style="margin:22px 0 10px">Z %s '
+        rows.append('<h2 id="z-%s" style="margin:22px 0 10px">Z %s '
                     '<span style="color:var(--muted);font-weight:400">'
                     '(%s)</span></h2><div class="links">'
-                    % (esc(p["city_gen"]), esc(p["airports_desc"])))
+                    % (esc(slug(p["city"])), esc(p["city_gen"]),
+                       esc(p["airports_desc"])))
         for r in sorted(by_port[port], key=lambda x: x["min_price"]):
             rows.append('<a href="/loty/%s/">%s'
                         '<span class="mp">od %s zł</span></a>'
