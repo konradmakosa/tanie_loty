@@ -242,14 +242,8 @@ function pick(ap) {
   // Podkład: OSM przyciemniony filtrem CSS (pełne drogi i miasta).
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 12, className: "sat",
-    attribution: "&copy; OpenStreetMap contributors &middot; "
-      + "granice/etykiety &copy; Esri"
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map);
-  // Granice państw i etykiety miast w jasnej wersji (pod ciemny podkład).
-  L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/"
-    + "Reference/World_Boundaries_and_Places/MapServer/"
-    + "tile/{z}/{y}/{x}", { maxZoom: 12 }).addTo(map);
   map.fitBounds([[49.0, 14.0], [55.0, 24.2]], { padding: [12, 12] });
 
   var markers = {};
