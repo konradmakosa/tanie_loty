@@ -59,7 +59,9 @@ body {
   pointer-events: none; z-index: 1000;
   text-shadow: 0 1px 8px rgba(11,23,51,.9), 0 0 2px rgba(11,23,51,.9) }
 .hdr h1 { font-size: 2rem; font-weight: 700; letter-spacing: .01em }
-.hdr p { color: var(--muted); margin-top: 4px; font-size: .95rem }
+.hdr p { display: inline-block; color: var(--text); margin-top: 6px; font-size: .95rem;
+  background: rgba(11,23,51,.94); padding: 7px 14px; border-radius: 999px;
+  text-shadow: none }
 .bar {
   position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
   display: flex; align-items: center; gap: 10px;
@@ -240,9 +242,11 @@ function pick(ap) {
   });
   L.control.zoom({ position: "bottomright" }).addTo(map);
   // Podkład: OSM przyciemniony filtrem CSS (pełne drogi i miasta).
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/"
+    + "World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
     maxZoom: 12, className: "sat",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    attribution: 'Tiles &copy; Esri — Source: Esri, TomTom, Garmin, FAO, NOAA, USGS, '
+      + '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
   }).addTo(map);
   map.fitBounds([[49.0, 14.0], [55.0, 24.2]], { padding: [12, 12] });
 
