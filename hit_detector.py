@@ -55,21 +55,11 @@ def booking_url(deal):
     return link or "https://polataj.se/%s/" % deal["port"]
 
 
-def dest_genitive(city):
-    if city.endswith("a") and not city.endswith("ia"):
-        return city[:-1] + "y"
-    if city.endswith("ia"):
-        return city[:-1] + "i"
-    return city
-
-
 def pepper_message(deal):
     esc = lambda value: html.escape(str(value))
     oneway = deal.get("trip") == "oneway" or not deal.get("date_in")
-    origin_gen = deal.get("origin_city_gen") or deal["origin_city"]
-    dest_gen = dest_genitive(deal["dest_city"])
-    title = "Loty z %s do %s za %.0f zł! (%s)" % (
-        origin_gen, dest_gen, deal["price"],
+    title = "Loty: %s – %s za %.0f zł! (%s)" % (
+        deal["origin_city"], deal["dest_city"], deal["price"],
         "w jedną stronę" if oneway else "w dwie strony")
     dates = "\n".join(
         "• %s" % esc(d["date_out"]) if not d.get("date_in")
@@ -81,12 +71,12 @@ def pepper_message(deal):
         "<b>CENA:</b>\n%.0f\n\n"
         "<b>LINK:</b>\n%s\n\n"
         "<b>OPIS DO WKLEJENIA:</b>\n"
-        "Wyszukaliśmy okazję na loty z %s do %s.\n%s\n\n"
+        "Wyszukaliśmy okazję na loty: %s – %s.\n%s\n\n"
         "<b>Przykładowe daty:</b>\n%s\n\n"
         "Szybsze alerty o takich błędach cenowych i okazjach wpadają na nasz Telegram: "
         "https://t.me/polataj_se"
         % (esc(title), deal["price"], esc(booking_url(deal)),
-           esc(origin_gen), esc(dest_gen),
+           esc(deal["origin_city"]), esc(deal["dest_city"]),
            esc("https://polataj.se/%s/" % deal["port"]), dates))
 
 
