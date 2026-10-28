@@ -29,13 +29,25 @@ def load_config():
             ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_ID", "TELEGRAM_ENABLED")}
 
 
-def api_call(token, method, payload):
+def api_call(token, method, payload, photo=None):
+    content_type = "application/json"
+    body = json.dumps(payload).encode("utf-8")
+    if photo is not None:
+        boundary = "polataj_" + os.urandom(16).hex()
+        parts = []
+        for key, value in payload.items():
+            parts.append(('--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n'
+                          % (boundary, key, value)).encode("utf-8"))
+        parts.append(('--%s\r\nContent-Disposition: form-data; name="photo"; '
+                      'filename="trasa.png"\r\nContent-Type: image/png\r\n\r\n'
+                      % boundary).encode("utf-8") + photo + b'\r\n')
+        body = b''.join(parts) + ('--%s--\r\n' % boundary).encode("utf-8")
+        content_type = "multipart/form-data; boundary=" + boundary
     req = urllib.request.Request(
         "https://api.telegram.org/bot%s/%s" % (token, method),
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"})
+        data=body, headers={"Content-Type": content_type})
     try:
-        with urllib.request.urlopen(req, timeout=15) as response:
+        with urllib.request.urlopen(req, timeout=30 if photo is not None else 15) as response:
             result = json.load(response)
         if not isinstance(result, dict):
             print("telegram: nieprawidłowa odpowiedź API")
@@ -66,12 +78,34 @@ def format_alert(deal):
     )
 
 
+def map_image(deal):
+    if not deal.get("dest_geo"):
+        return None
+    try:
+        from route_map import render_route_map
+        return render_route_map(deal)
+    except (ImportError, OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
+        print("telegram: mapka niedostępna — wysyłam sam tekst")
+        return None
+
+
 def send_alert(config, deal):
-    result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {
-        "chat_id": config["TELEGRAM_CHANNEL_ID"], "text": format_alert(deal),
-        "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
-    })
-    return isinstance(result, dict) and bool(result.get("message_id"))
+    text = format_alert(deal)
+    photo = map_image(deal) if len(text) <= 1024 else None
+    if photo is not None:
+        result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendPhoto", {
+            "chat_id": config["TELEGRAM_CHANNEL_ID"], "caption": text,
+            "parse_mode": "HTML",
+        }, photo=photo)
+    else:
+        result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {
+            "chat_id": config["TELEGRAM_CHANNEL_ID"], "text": text,
+            "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
+        })
+    ok = isinstance(result, dict) and bool(result.get("message_id"))
+    if ok and photo is not None:
+        print("telegram: mapka wysłana, message_id=%s" % result["message_id"])
+    return ok
 
 
 def collect_candidates(root, now):

@@ -21,9 +21,15 @@ def main():
     if not args.send_test:
         print("telegram: konfiguracja OK; test bez publikacji")
         return 0
+    from route_map import airport_coordinates
+    airports = airport_coordinates()
+    if "OSL" not in airports:
+        print("telegram: brak współrzędnych Oslo w katalogu lotnisk")
+        return 1
     sent = send_alert(config, {
         "origin_city": "TEST — Warszawa", "dest_city": "Oslo (oferta testowa)",
         "origin": "WAW", "dest": "OSL", "port": "zwarszawy",
+        "dest_geo": airports["OSL"],
         "price": 99, "date_out": "przykładowy wylot",
         "date_in": "przykładowy powrót", "airline": "TEST — nie jest rzeczywistą ofertą",
     })

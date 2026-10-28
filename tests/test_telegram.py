@@ -61,6 +61,40 @@ class TelegramTest(unittest.TestCase):
         with patch('telegram_alerts.api_call', return_value=None):
             self.assertFalse(send_alert(CONFIG, deal()))
 
+    def test_photo_uses_caption_and_does_not_send_second_message(self):
+        with patch('telegram_alerts.map_image', return_value=b'PNG'):
+            with patch('telegram_alerts.api_call', return_value={'message_id': 123}) as call:
+                self.assertTrue(send_alert(CONFIG, deal()))
+        call.assert_called_once()
+        self.assertEqual(call.call_args.args[1], 'sendPhoto')
+        self.assertEqual(call.call_args.kwargs['photo'], b'PNG')
+        self.assertIn('caption', call.call_args.args[2])
+
+    def test_failed_upload_does_not_send_duplicate_text(self):
+        with patch('telegram_alerts.map_image', return_value=b'PNG'):
+            with patch('telegram_alerts.api_call', return_value=None) as call:
+                self.assertFalse(send_alert(CONFIG, deal()))
+        call.assert_called_once()
+        self.assertEqual(call.call_args.args[1], 'sendPhoto')
+
+    def test_map_failure_falls_back_to_text(self):
+        with patch('route_map.render_route_map', side_effect=TimeoutError):
+            with patch('telegram_alerts.api_call', return_value={'message_id': 1}) as call:
+                self.assertTrue(send_alert(CONFIG, {**deal(), 'dest_geo': '60.19,11.1'}))
+        self.assertEqual(call.call_args.args[1], 'sendMessage')
+
+    def test_photo_request_is_multipart(self):
+        with patch('telegram_alerts.urllib.request.urlopen') as request:
+            request.return_value.__enter__.return_value.read.return_value = b'{"ok":true,"result":{"message_id":1}}'
+            self.assertEqual(api_call('test-token', 'sendPhoto', {
+                'chat_id': '@test', 'caption': 'Warszawa → Oslo', 'parse_mode': 'HTML'},
+                photo=b'PNG'), {'message_id': 1})
+        req = request.call_args.args[0]
+        self.assertIn('multipart/form-data', req.get_header('Content-type'))
+        self.assertIn(b'filename="trasa.png"', req.data)
+        self.assertIn('Warszawa → Oslo'.encode(), req.data)
+        self.assertEqual(request.call_args.kwargs['timeout'], 30)
+
     def test_network_errors_do_not_leak_token(self):
         for error in (
             urllib.error.URLError('https://api.telegram.org/bottest-token/sendMessage'),

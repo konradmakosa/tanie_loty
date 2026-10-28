@@ -148,6 +148,17 @@
 - `tools/run_search.sh` jest wersjonowaną kopią `/home/tl/run_search.sh`;
   wywołuje Telegram raz po całej pętli search/ingest, przed generowaniem pSEO.
   Zmiany skryptu należy przenieść na VPS do `/home/tl/run_search.sh`.
+- Mapki tras: `route_map.py` + Pillow (na VPS pakiet Ubuntu `python3-pil`).
+  Jasne kafelki Esri World Topo, współrzędne lotnisk z istniejącego
+  `data/cache/airports.json` (fallback wylotu: geo portu), kierunek z `dest_geo`.
+  PNG 1000×640 wysyłany przez `sendPhoto` z opisem w podpisie, bez osobnego
+  podglądu linku. Atrybucja na grafice; linia to schemat połączenia, nie przebieg lotu.
+  Kafelki cache'owane 7 dni w `data/cache/telegram_tiles`; pobranie 8 s/kafelek,
+  budżet generowania 30 s (ostatnie żądanie może go przekroczyć o timeout).
+  Przy braku mapy/Pillow/kafelków wysyłany sam tekst. Po niepotwierdzonym
+  uploadzie nie wysyłać dodatkowo tekstu (ryzyko duplikatu); retry z kolejki.
+  Upload zdjęcia: timeout 30 s. Do bliźniaczego serwisu przenieść także renderer
+  i zainstalować Pillow; żaden dodatkowy token mapy nie jest wymagany.
 - Testy: `python3 -m unittest discover -s tests -v`.
   `python3 tools/test_telegram.py` sprawdza prawdziwe API bez publikacji;
   dopiero `--send-test` publikuje oznaczony post testowy (wymaga zgody).
