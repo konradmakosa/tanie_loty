@@ -227,7 +227,10 @@
   `python3 social_publisher.py --send-test`, opcjonalnie `--platform facebook`
   lub `--platform telegram`, aby nie powtarzać testu drugiej platformy.
   Test nie trafia do prywatnych subskrybentów ani do deduplikacji prawdziwych ofert.
-- Hit Detector (`hit_detector.py`): progi `price<=60 zł` LUB `price<=typical_price*0.3`.
+- Hit Detector (`hit_detector.py`): progi `price<=60 zł` LUB `price<=typical_price*0.3`,
+  skanuje WSZYSTKIE oferty z `deals.json`, `far.json` i `oneway.json` (RT i OW,
+  bez limitu 200 zł); tytuł pokazuje „w dwie strony”/„w jedną stronę”,
+  LINK = link zakupu oferty, fallback na stronę portu.
   Zgrupowane po trasie, najtańsza oferta + do 3 przykładowych dat; szablon bloków
   „TYTUŁ/CENA/LINK/OPIS” pod Pepper.pl wysyłany tylko na `TELEGRAM_ADMIN_CHAT_ID`
   (prywatny czat admina w `telegram/.env`). Osobny stan `data/cache/hits_admin.sqlite`,

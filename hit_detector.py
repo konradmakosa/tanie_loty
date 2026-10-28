@@ -1,10 +1,40 @@
+import hashlib
 import html
+import json
+from datetime import datetime, timedelta, timezone
 
 from telegram_alerts import api_call, process
 
 ABSOLUTE_MAX = 60.0
 DISCOUNT_RATIO = 0.30
 MAX_DATES = 3
+FRESH_HOURS = 8
+
+
+def collect_hit_candidates(root, now):
+    ports = json.loads((root / "config.json").read_text(encoding="utf-8"))["ports"]
+    candidates, stamps = {}, []
+    for port, info in ports.items():
+        for filename in ("deals.json", "far.json", "oneway.json"):
+            path = root / "docs" / port / filename
+            if not path.exists():
+                continue
+            data = json.loads(path.read_text(encoding="utf-8"))
+            stamp = datetime.fromisoformat(data["generated_at"])
+            if stamp.tzinfo is None:
+                stamp = stamp.replace(tzinfo=timezone.utc)
+            stamps.append((port, filename, data["generated_at"]))
+            if not now - timedelta(hours=FRESH_HOURS) <= stamp <= now:
+                continue
+            for deal in data["deals"]:
+                if deal["date_out"] <= now.date().isoformat():
+                    continue
+                key = "%s-%s-%s-%s" % (deal["origin"], deal["dest"],
+                                       deal["date_out"], deal.get("date_in"))
+                item = {**deal, "port": port, "origin_city": info["city"]}
+                if key not in candidates or deal["price"] < candidates[key]["price"]:
+                    candidates[key] = item
+    return hashlib.sha256(json.dumps(stamps).encode()).hexdigest(), candidates
 
 
 def is_hit(deal):
@@ -18,24 +48,35 @@ def is_hit(deal):
                 price <= typical * DISCOUNT_RATIO)
 
 
+def booking_url(deal):
+    offers = deal.get("offers") or []
+    link = deal.get("direct_link") or (offers[0].get("link") if offers else "")
+    return link or "https://polataj.se/%s/" % deal["port"]
+
+
 def pepper_message(deal):
     esc = lambda value: html.escape(str(value))
-    title = "Loty z %s do %s za %.0f zł! (w dwie strony)" % (
-        deal["origin_city"], deal["dest_city"], deal["price"])
-    dates = "\n".join("• %s – %s" % (esc(d["date_out"]), esc(d["date_in"]))
-                      for d in deal["_dates"][:MAX_DATES])
+    oneway = deal.get("trip") == "oneway" or not deal.get("date_in")
+    title = "Loty z %s do %s za %.0f zł! (%s)" % (
+        deal["origin_city"], deal["dest_city"], deal["price"],
+        "w jedną stronę" if oneway else "w dwie strony")
+    dates = "\n".join(
+        "• %s" % esc(d["date_out"]) if not d.get("date_in")
+        else "• %s – %s" % (esc(d["date_out"]), esc(d["date_in"]))
+        for d in deal["_dates"][:MAX_DATES])
     return (
         "🔥 <b>HIT NA PEPPER.PL</b> 🔥\n\n"
         "<b>TYTUŁ:</b>\n%s\n\n"
         "<b>CENA:</b>\n%.0f\n\n"
-        "<b>LINK:</b>\nhttps://polataj.se/%s/\n\n"
+        "<b>LINK:</b>\n%s\n\n"
         "<b>OPIS DO WKLEJENIA:</b>\n"
-        "Automatyczny alert z polataj.se wyłapał okazję na loty z %s do %s.\n\n"
+        "Wyszukaliśmy okazję na loty z %s do %s.\n%s\n\n"
         "<b>Przykładowe daty:</b>\n%s\n\n"
         "Szybsze alerty o takich błędach cenowych i okazjach wpadają na nasz Telegram: "
         "https://t.me/polataj_se"
-        % (esc(title), deal["price"], esc(deal["port"]),
-           esc(deal["origin_city"]), esc(deal["dest_city"]), dates))
+        % (esc(title), deal["price"], esc(booking_url(deal)),
+           esc(deal["origin_city"]), esc(deal["dest_city"]),
+           esc("https://polataj.se/%s/" % deal["port"]), dates))
 
 
 def send_admin_hit(config, deal):

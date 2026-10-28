@@ -43,8 +43,11 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
                 sender=facebook.send_alert, label='facebook')
         jobs['facebook'] = publish_facebook
     if tg.get('TELEGRAM_ADMIN_CHAT_ID'):
-        jobs['admin_hits'] = lambda: hit_detector.publish_admin_hits(
-            tg, batch, candidates, root / 'data/cache/hits_admin.sqlite', now)
+        def admin_hits():
+            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
+            return hit_detector.publish_admin_hits(
+                tg, h_batch, h_candidates, root / 'data/cache/hits_admin.sqlite', now)
+        jobs['admin_hits'] = admin_hits
     return settle(jobs)
 
 
