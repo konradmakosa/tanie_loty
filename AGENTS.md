@@ -126,6 +126,33 @@
   `curl -H "X-Ingest-Key: $TL_INGEST_KEY" https://makosa.org/tanie_loty/api/subscribers.php`.
   Usunięcie wpisu: to samo z `-X DELETE "...subscribers.php?email=adres"`.
 
+## Telegram
+
+- `telegram_alerts.py` (Python 3, stdlib) → bot `@polatajsebot`, kanał
+  `@polataj_se`. Konfiguracja prywatna `telegram/.env` (ignorowana przez Git):
+  `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHANNEL_ID`, `TELEGRAM_ENABLED`.
+  `TELEGRAM_BOT_USERNAME` w pliku jest tylko informacyjne.
+- `--check` sprawdza bota/kanał/uprawnienia bez publikacji; bez argumentów
+  jest dry-run. `--auto` publikuje tylko gdy `TELEGRAM_ENABLED=1`;
+  `--send` jawnie publikuje niezależnie od przełącznika. Domyślnie wyłączone.
+- Filtr: RT, `record_low=true`, cena >0 i ≤200 zł, wylot po dzisiejszym dniu,
+  snapshot ≤8 h. Maks. 3 próby na cały zestaw snapshotów sześciu portów.
+- SQLite `data/cache/telegram.sqlite` + flock chronią przed równoległą wysyłką.
+  Potwierdzone wysyłki deduplikowane po kanale, lotniskach i datach; błędy
+  można ponowić w kolejnych przebiegach przez 24 h. Timeout po przyjęciu posta
+  przez Telegram może skutkować duplikatem (API nie ma klucza idempotencji).
+- Wiadomości HTML prowadzą na stronę portu polataj.se (nie udają linku
+  do serwisu, jeśli prowadzą do przewoźnika). Timeout API 15 s, bez logowania tokenu.
+- `tools/run_search.sh` jest wersjonowaną kopią `/home/tl/run_search.sh`;
+  wywołuje Telegram raz po całej pętli search/ingest, przed generowaniem pSEO.
+  Zmiany skryptu należy przenieść na VPS do `/home/tl/run_search.sh`.
+- Testy: `python3 -m unittest discover -s tests -v`.
+  `python3 tools/test_telegram.py` sprawdza prawdziwe API bez publikacji;
+  dopiero `--send-test` publikuje oznaczony post testowy (wymaga zgody).
+- Przenoszenie do bliźniaczego serwisu: osobny bot/kanał/token, własny stan
+  SQLite; podmienić domenę, walutę, porty i progi w module. Szczegółowe
+  polecenia i zasady są również w komentarzach prywatnego `telegram/.env`.
+
 ## Social / branding
 
 - `docs/og.png` (1200×630) generowany przez `tools/make_og.py` (Pillow,
