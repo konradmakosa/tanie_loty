@@ -141,13 +141,19 @@
 - Prywatne subskrypcje: `telegram_bot.py`, usługa VPS `tl-telegram.service`
   (źródło `tools/tl-telegram.service`), long polling bez webhooka. `/start`
   pokazuje przyciski miast; Warszawa to wspólny wybór WAW/WMI/RDO.
-  Można zaznaczyć kilka miast; wybór zapisuje się od razu. `/lotniska`,
-  `/pauza` (alias `/stop`), `/wznow`, `/wypisz`. Tylko prywatne rozmowy.
+  Można zaznaczyć kilka miast; są to robocze `draft_ports`. Dopiero przycisk
+  „Zapisz i łap okazje” przenosi je do potwierdzonych `ports` i włącza alerty.
+  Po zapisie pozytywny ekran potwierdzenia, „Zmień moje miasta” i „Ustawienia”.
+  Pauza/wznowienie tylko w ustawieniach, bez przycisku wypisania z menu.
+  `/lotniska`, `/pauza` (alias `/stop`), `/wznow`. Tylko prywatne rozmowy.
+  Dawna komenda `/wypisz` działa dla zgodności, ale nie jest promowana w UI.
+  Wyjście z publicznego kanału nie zatrzymuje prywatnych alertów bota.
 - Preferencje, kursor aktualizacji i kolejka odpowiedzi: prywatny plik
   `data/cache/telegram_subscribers.sqlite` (0600, WAL). Bez nazw/username'ów;
   tylko ID rozmowy i preferencje. Callbacki idempotentne po update_id,
   odpowiedzi ponawiane z outboxu bez ponownego przełączania wyboru.
-  Po restarcie zachowane subskrypcje i kursor. `/wypisz` usuwa subskrypcję;
+  Po restarcie zachowane subskrypcje, szkic wyboru i kursor. Migracja dodaje
+  `draft_ports` bez zmiany potwierdzonych miast ani pauzy. `/wypisz` usuwa subskrypcję;
   historia deduplikacji wysyłek pozostaje w oddzielnym `telegram.sqlite`.
 - `telegram_alerts.py --auto` po kanale wysyła osobno prywatne alerty.
   Ponownie sprawdza aktualny zapis przed każdą wysyłką; nie wysyła starej

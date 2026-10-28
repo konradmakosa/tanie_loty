@@ -24,6 +24,11 @@ def open_store(path=STATE):
         "INSERT OR IGNORE INTO bot_state VALUES(1,-1);"
         "CREATE TABLE IF NOT EXISTS outbox (update_id INTEGER PRIMARY KEY, chat_id INTEGER, "
         "method TEXT, payload TEXT, attempts INTEGER DEFAULT 0, retry_at REAL DEFAULT 0);")
+    with db:
+        db.execute("BEGIN IMMEDIATE")
+        if "draft_ports" not in {row[1] for row in db.execute("PRAGMA table_info(subscribers)")}:
+            db.execute("ALTER TABLE subscribers ADD COLUMN draft_ports TEXT")
+        db.execute("UPDATE subscribers SET draft_ports=ports WHERE draft_ports IS NULL")
     return db
 
 
@@ -45,24 +50,58 @@ def city_label(port, info):
     return "%s — %s" % (info["city"], airports)
 
 
-def menu(ports, selected, paused):
-    labels = [info["city"] for port, info in ports.items() if port in selected]
-    text = ("polataj.se — Twoje prywatne alerty\n\n"
-            "Kliknij jedno lub kilka miast. Wybór zapisuje się od razu.\n"
+def city_names(ports, selected):
+    return ", ".join(info["city"] for port, info in ports.items() if port in selected) or "jeszcze żadne"
+
+
+def menu(ports, selected, paused, draft=None):
+    draft = selected if draft is None else draft
+    text = ("Skąd chcesz łapać tanie loty?\n\n"
+            "Wybierz jedno lub kilka miast, a ja znajdę okazje za Ciebie "
+            "i wyślę je tutaj — z ceną, terminem i mapką trasy.\n\n"
             "Warszawa obejmuje Okęcie (WAW), Modlin (WMI) i Radom (RDO).\n\n"
-            "Wybrane: %s\nStan: %s\n\n"
-            "Tylko nowe rekordy do 200 zł w obie strony; maksymalnie 3 oferty "
-            "łącznie z Twoich miast po skanie co 6 h. Jeśli nie ma okazji, nie piszę.\n\n"
-            "Zapisuję ID czatu i wybór miast do obsługi alertów. "
-            "/lotniska — zmiana wyboru, /pauza, /wznow, /wypisz — usunięcie subskrypcji."
-            % (", ".join(labels) or "jeszcze nic — zaznacz miasto poniżej",
-               "wstrzymane" if paused else "włączone" if selected else "czeka na wybór miasta"))
-    buttons = [[{"text": ("[x] " if port in selected else "[ ] ") + city_label(port, info),
+            "Twój wybór do zapisania: %s\n"
+            "Aktualnie zapisane miasta: %s\n\n"
+            "Zatwierdź przyciskiem poniżej. Dopiero potwierdzenie zmienia zapis.\n"
+            "Tylko rekordy do 200 zł w obie strony, maksymalnie 3 okazje po skanie co 6 h.\n"
+            "polataj.se — zapisuję ID czatu i wybór miast do obsługi alertów."
+            % (city_names(ports, draft), city_names(ports, selected)))
+    if paused:
+        text += "\nAlerty są wstrzymane; zapisanie wyboru je wznowi."
+    buttons = [[{"text": ("[x] " if port in draft else "[ ] ") + city_label(port, info),
                  "callback_data": "port:" + port}] for port, info in ports.items()]
-    buttons.append([{"text": "Wznów alerty" if paused else "Wstrzymaj alerty",
-                     "callback_data": "resume" if paused else "pause"},
-                    {"text": "Wypisz mnie", "callback_data": "unsubscribe"}])
+    buttons.append([{"text": "Zapisz i łap okazje" + (" (%d)" % len(draft) if draft else ""),
+                     "callback_data": "save"}])
+    if selected:
+        buttons.append([{"text": "Ustawienia", "callback_data": "settings"}])
     return text, {"inline_keyboard": buttons}
+
+
+def confirmed_menu(ports, selected, paused):
+    if not selected:
+        return menu(ports, selected, paused)
+    text = ("Gotowe! Twoje miasta są zapisane.\n\n"
+            "%s\n\nNie musisz już śledzić cen — odezwę się, gdy pojawi się "
+            "nowy rekord do 200 zł w obie strony. Dostaniesz ofertę z mapką trasy.\n"
+            "Skanuję co 6 h i wysyłam maksymalnie 3 okazje z Twoich miast na przebieg."
+            % city_names(ports, selected))
+    if paused:
+        text += "\n\nAlerty są teraz wstrzymane; możesz je wznowić w ustawieniach."
+    return text, {"inline_keyboard": [
+        [{"text": "Zmień moje miasta", "callback_data": "ports"}],
+        [{"text": "Ustawienia", "callback_data": "settings"}],
+    ]}
+
+
+def settings_menu(ports, selected, paused):
+    text = ("Twoje ustawienia alertów\n\nMiasta: %s\nStan: %s\n\n"
+            "Możesz zrobić przerwę bez utraty wybranych miast."
+            % (city_names(ports, selected), "wstrzymane" if paused else "aktywne" if selected else "czekam na wybór miast"))
+    return text, {"inline_keyboard": [
+        [{"text": "Wznów łapanie okazji" if paused else "Wstrzymaj na chwilę",
+          "callback_data": "resume" if paused else "pause"}],
+        [{"text": "Wróć do moich okazji", "callback_data": "home"}],
+    ]}
 
 
 def apply_update(db, update, ports):
@@ -81,8 +120,9 @@ def apply_update(db, update, ports):
         chat_id = chat["id"]
         command = message.get("text", "").split(maxsplit=1)[0].split("@")[0] if message.get("text") else ""
         action = callback.get("data", "") if callback else command
-        row = db.execute("SELECT ports,paused FROM subscribers WHERE chat_id=?", (chat_id,)).fetchone()
+        row = db.execute("SELECT ports,paused,draft_ports FROM subscribers WHERE chat_id=?", (chat_id,)).fetchone()
         selected, paused = (set(json.loads(row[0])) & set(ports), bool(row[1])) if row else (set(), False)
+        draft = set(json.loads(row[2] or row[0])) & set(ports) if row else set()
         if action == "/start":
             db.execute("INSERT OR IGNORE INTO subscribers(chat_id) VALUES(?)", (chat_id,))
             row = True
@@ -93,15 +133,23 @@ def apply_update(db, update, ports):
             text, keyboard = "Wyślij /start, aby wybrać miasta i uruchomić prywatne alerty.", {"inline_keyboard": []}
         else:
             if action.startswith("port:") and action[5:] in ports:
-                port = action[5:]
-                selected.symmetric_difference_update({port})
+                draft.symmetric_difference_update({action[5:]})
+            elif action == "save" and draft:
+                selected, paused = draft.copy(), False
             elif action in ("/pauza", "/stop", "pause"):
                 paused = True
             elif action in ("/wznow", "resume"):
                 paused = False
-            db.execute("UPDATE subscribers SET ports=?,paused=? WHERE chat_id=?",
-                       (json.dumps(sorted(selected)), int(paused), chat_id))
-            text, keyboard = menu(ports, selected, paused)
+            db.execute("UPDATE subscribers SET ports=?,paused=?,draft_ports=? WHERE chat_id=?",
+                       (json.dumps(sorted(selected)), int(paused), json.dumps(sorted(draft)), chat_id))
+            if action in ("settings", "/pauza", "/stop", "pause", "/wznow", "resume"):
+                text, keyboard = settings_menu(ports, selected, paused)
+            elif (action == "save" and draft) or (action in ("home", "/start") and selected):
+                text, keyboard = confirmed_menu(ports, selected, paused)
+            else:
+                text, keyboard = menu(ports, selected, paused, draft)
+                if action == "save":
+                    text = "Wybierz najpierw przynajmniej jedno miasto.\n\n" + text
         payload = {"chat_id": chat_id, "text": text, "reply_markup": keyboard,
                    "link_preview_options": {"is_disabled": True}}
         method = "sendMessage"

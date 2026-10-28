@@ -1,3 +1,5 @@
+import json
+import sqlite3
 import tempfile
 import unittest
 from datetime import datetime, timezone
@@ -5,7 +7,8 @@ from pathlib import Path
 from unittest.mock import Mock
 
 from telegram_alerts import process, publish_private
-from telegram_bot import active_subscribers, apply_update, city_label, flush_outbox, open_store, read_subscriber
+from telegram_bot import (active_subscribers, apply_update, city_label, confirmed_menu,
+                          flush_outbox, menu, open_store, read_subscriber, settings_menu)
 
 PORTS = {
     'zwarszawy': {'city': 'Warszawa', 'airports': ['WMI', 'WAW', 'RDO']},
@@ -48,28 +51,100 @@ class TelegramBotTest(unittest.TestCase):
         self.assertFalse(active_subscribers(self.path))
         self.apply(2, 'port:zwarszawy', callback=True)
         self.apply(3, 'port:zkrakowa', callback=True)
+        self.assertEqual(read_subscriber(111, self.path)[0], set())
+        self.assertFalse(active_subscribers(self.path))
+        self.apply(4, 'save', callback=True)
         self.assertEqual(read_subscriber(111, self.path)[0], set(PORTS))
         self.assertIn('WAW · WMI · RDO', city_label('zwarszawy', PORTS['zwarszawy']))
-        self.apply(4, 'port:zwarszawy', callback=True)
+        self.apply(5, 'port:zwarszawy', callback=True)
+        self.assertEqual(read_subscriber(111, self.path)[0], set(PORTS))
+        self.apply(6, 'save', callback=True)
         self.assertEqual(read_subscriber(111, self.path)[0], {'zkrakowa'})
 
     def test_replayed_callback_does_not_toggle_twice(self):
         self.apply(1)
         self.apply(2, 'port:zwarszawy', callback=True)
         self.apply(2, 'port:zwarszawy', callback=True)
+        self.assertEqual(read_subscriber(111, self.path)[0], set())
+        self.apply(3, 'save', callback=True)
         self.assertEqual(read_subscriber(111, self.path)[0], {'zwarszawy'})
         self.assertEqual(self.db.execute('SELECT count(*) FROM outbox').fetchone()[0], 1)
 
     def test_pause_resume_and_unsubscribe(self):
         self.apply(1)
         self.apply(2, 'port:zwarszawy', callback=True)
-        self.apply(3, '/pauza')
+        self.apply(3, 'save', callback=True)
+        self.apply(4, '/pauza')
         self.assertFalse(active_subscribers(self.path))
-        self.apply(4, '/wznow')
+        self.apply(5, '/wznow')
         self.assertEqual(len(active_subscribers(self.path)), 1)
-        self.apply(5, '/wypisz')
+        self.apply(6, '/wypisz')
         self.assertIsNone(read_subscriber(111, self.path))
         self.assertFalse(active_subscribers(self.path))
+
+    def test_menu_encourages_signup_and_keeps_pause_in_settings(self):
+        text, keyboard = menu(PORTS, {'zwarszawy'}, False, {'zkrakowa'})
+        buttons = [button for row in keyboard['inline_keyboard'] for button in row]
+        self.assertIn('Skąd chcesz łapać tanie loty?', text)
+        self.assertTrue(any('Zapisz i łap okazje' in button['text'] for button in buttons))
+        self.assertFalse(any(button['callback_data'] in ('pause', 'unsubscribe') for button in buttons))
+        self.assertNotIn('/wypisz', text)
+        saved, _ = confirmed_menu(PORTS, {'zkrakowa'}, False)
+        self.assertIn('Gotowe!', saved)
+        self.assertIn('Kraków', saved)
+        _, settings = settings_menu(PORTS, {'zkrakowa'}, False)
+        self.assertEqual([b['callback_data'] for row in settings['inline_keyboard'] for b in row],
+                         ['pause', 'home'])
+
+    def test_empty_save_does_not_subscribe(self):
+        self.apply(1)
+        self.apply(2, 'save', callback=True)
+        self.assertFalse(active_subscribers(self.path))
+        payload = json.loads(self.db.execute('SELECT payload FROM outbox').fetchone()[0])
+        self.assertIn('Wybierz najpierw', payload['text'])
+
+    def test_draft_survives_reopening_without_activating_alerts(self):
+        self.apply(1)
+        self.apply(2, 'port:zwarszawy', callback=True)
+        reopened = open_store(self.path)
+        try:
+            self.assertEqual(json.loads(reopened.execute('SELECT draft_ports FROM subscribers').fetchone()[0]),
+                             ['zwarszawy'])
+        finally:
+            reopened.close()
+        sender = Mock(return_value=True)
+        candidates = {'WAW': flight('WAW', 'zwarszawy')}
+        self.assertEqual(publish_private(CONFIG, 'batch', candidates, self.delivery,
+                                         NOW, self.path, sender), 0)
+        sender.assert_not_called()
+        self.apply(3, 'save', callback=True)
+        self.assertEqual(publish_private(CONFIG, 'batch', candidates, self.delivery,
+                                         NOW, self.path, sender), 1)
+
+    def test_save_explicitly_resumes_paused_alerts(self):
+        self.apply(1)
+        self.apply(2, 'port:zwarszawy', callback=True)
+        self.apply(3, 'save', callback=True)
+        self.apply(4, '/pauza')
+        self.apply(5, 'port:zkrakowa', callback=True)
+        self.assertEqual(read_subscriber(111, self.path), ({'zwarszawy'}, True))
+        self.apply(6, 'save', callback=True)
+        self.assertEqual(read_subscriber(111, self.path), (set(PORTS), False))
+
+    def test_legacy_migration_preserves_selection_and_pause(self):
+        path = Path(self.tmp.name) / 'legacy.sqlite'
+        legacy = sqlite3.connect(path)
+        with legacy:
+            legacy.execute('CREATE TABLE subscribers (chat_id INTEGER PRIMARY KEY, ports TEXT, paused INTEGER)')
+            legacy.execute('INSERT INTO subscribers VALUES(111,?,1)', (json.dumps(['zwarszawy']),))
+        legacy.close()
+        migrated = open_store(path)
+        try:
+            self.assertEqual(json.loads(migrated.execute('SELECT draft_ports FROM subscribers').fetchone()[0]),
+                             ['zwarszawy'])
+        finally:
+            migrated.close()
+        self.assertEqual(read_subscriber(111, path), ({'zwarszawy'}, True))
 
     def test_groups_and_forged_callbacks_are_ignored(self):
         apply_update(self.db, update(1, private=False), PORTS)
@@ -94,9 +169,9 @@ class TelegramBotTest(unittest.TestCase):
 
     def test_personal_delivery_has_independent_limits_and_deduplication(self):
         for uid, action, chat in [
-            (1, '/start', 111), (2, 'port:zwarszawy', 111),
-            (3, '/start', 222), (4, 'port:zkrakowa', 222),
-            (5, '/start', 333), (6, 'port:zwarszawy', 333), (7, 'pause', 333),
+            (1, '/start', 111), (2, 'port:zwarszawy', 111), (3, 'save', 111),
+            (4, '/start', 222), (5, 'port:zkrakowa', 222), (6, 'save', 222),
+            (7, '/start', 333), (8, 'port:zwarszawy', 333), (9, 'save', 333), (10, 'pause', 333),
         ]:
             self.apply(uid, action, chat, not action.startswith('/'))
         candidates = {origin: flight(origin, 'zwarszawy', price)
@@ -125,8 +200,9 @@ class TelegramBotTest(unittest.TestCase):
     def test_pause_is_checked_again_before_each_delivery(self):
         self.apply(1)
         self.apply(2, 'port:zwarszawy', callback=True)
+        self.apply(3, 'save', callback=True)
         def send(config, deal):
-            self.apply(3, '/pauza')
+            self.apply(4, '/pauza')
             return True
         sender = Mock(side_effect=send)
         candidates = {code: flight(code, 'zwarszawy') for code in ['WAW', 'WMI', 'RDO']}
