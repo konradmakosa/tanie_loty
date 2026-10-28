@@ -40,6 +40,24 @@ class PageAssetsTest(unittest.TestCase):
                 self.assertEqual(untouched.read_text(), '<title>Other</title>')
                 self.assertEqual(build_pages.refresh_og_metadata(), 0)
 
+    def test_social_links_are_accessible_and_refresh_without_duplicates(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'docs').mkdir()
+            home = root / 'docs/index.html'
+            home.write_text('<div class="hdr"></div>\n<div id="map"></div></body>')
+            with patch.object(build_pages, 'ROOT', root):
+                build_pages.refresh_social_links()
+                first = home.read_text()
+                build_pages.refresh_social_links()
+            self.assertEqual(home.read_text(), first)
+            self.assertEqual(first.count('class="social-links"'), 1)
+            for url in ('https://t.me/polataj_se', 'https://t.me/polatajsebot',
+                        'https://www.facebook.com/1393638090497267'):
+                self.assertIn(url, first)
+            self.assertIn('aria-label=', first)
+            self.assertIn('pointer-events:auto', first)
+
     def test_home_metadata_is_updated_without_stacking_versions(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

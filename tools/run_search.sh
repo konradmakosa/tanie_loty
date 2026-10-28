@@ -19,8 +19,8 @@ for p in zwarszawy zkrakowa zgdanska zpoznania zwroclawia zkatowic; do
   python3 ingest.py "$p" || echo "ingest $p: BLAD"
 done
 
-echo "=== telegram ==="
-python3 telegram_alerts.py --auto || echo "telegram: BLAD"
+echo "=== social ==="
+python3 social_publisher.py --auto || echo "social: BLAD"
 
 echo "=== build_seo_routes ==="
 python3 tools/build_seo_routes.py || echo "build_seo_routes: BLAD"

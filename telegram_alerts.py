@@ -25,8 +25,11 @@ def load_config():
             if "=" in line and not line.lstrip().startswith("#"):
                 key, value = line.split("=", 1)
                 values[key.strip()] = value.strip().strip('"').strip("'")
-    return {k: os.environ.get(k, values.get(k, "")) for k in
-            ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_ID", "TELEGRAM_ENABLED")}
+    config = {k: os.environ.get(k, values.get(k, "")) for k in
+              ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_ID", "TELEGRAM_ENABLED")}
+    config["TELEGRAM_CHANNEL_ID"] = config["TELEGRAM_CHANNEL_ID"] or os.environ.get(
+        "TELEGRAM_CHAT_ID", values.get("TELEGRAM_CHAT_ID", ""))
+    return config
 
 
 def api_call(token, method, payload, photo=None):
@@ -148,7 +151,7 @@ def collect_candidates(root, now):
 
 
 def process(config, batch, candidates, state_path, now, sender=send_alert,
-            allowed_ports=None, allow_deal=None):
+            allowed_ports=None, allow_deal=None, label="telegram"):
     state_path = Path(state_path)
     state_path.parent.mkdir(parents=True, exist_ok=True)
     with state_path.with_suffix(".lock").open("a") as lock:
@@ -161,7 +164,7 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
             db.execute("CREATE TABLE IF NOT EXISTS batches ("
                        "channel TEXT, batch TEXT, attempts INTEGER DEFAULT 0, "
                        "PRIMARY KEY(channel,batch))")
-            channel = config["TELEGRAM_CHANNEL_ID"]
+            channel = config.get("RECIPIENT_ID") or config["TELEGRAM_CHANNEL_ID"]
             for key, deal in candidates.items():
                 db.execute("INSERT INTO deals(channel,id,payload,seen_at) VALUES(?,?,?,?) "
                            "ON CONFLICT(channel,id) DO UPDATE SET "
@@ -191,12 +194,12 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
                            (attempts, channel, batch))
                 db.commit()
                 if not sender(config, deal):
-                    print("telegram: wysyłka niepotwierdzona, ponowienie w następnym przebiegu")
+                    print("%s: wysyłka niepotwierdzona, ponowienie w następnym przebiegu" % label)
                     break
                 db.execute("UPDATE deals SET sent=1 WHERE channel=? AND id=?", (channel, key))
                 db.commit()
                 sent += 1
-                print("telegram: wysłano %s" % key)
+                print("%s: wysłano %s" % (label, key))
             return sent
 
 

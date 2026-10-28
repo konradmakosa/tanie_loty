@@ -8,6 +8,11 @@ import re
 import unicodedata
 from pathlib import Path
 
+try:
+    from .social_links import social_links
+except ImportError:
+    from social_links import social_links
+
 ROOT = Path(__file__).resolve().parent.parent
 TPL = ROOT / "templates" / "app.html"
 
@@ -36,8 +41,28 @@ def refresh_og_metadata():
     return changed
 
 
+def refresh_social_links():
+    nav = social_links()
+    for page in (ROOT / "docs").rglob("*.html"):
+        text = page.read_text(encoding="utf-8")
+        if '</body>' not in text:
+            continue
+        if 'class="social-links"' in text:
+            updated = re.sub(r'<nav class="social-links"[^>]*>.*?</nav>', nav, text, flags=re.S)
+        elif page == ROOT / "docs/index.html":
+            updated = text.replace('</div>\n<div id="map">', nav + '\n</div>\n<div id="map">', 1)
+        elif '<footer>' in text:
+            updated = text.replace('<footer>', nav + '\n<footer>', 1)
+        elif '<div class="foot">' in text:
+            updated = text.replace('<div class="foot">', nav + '\n<div class="foot">', 1)
+        else:
+            updated = text.replace('</body>', nav + '\n</body>', 1)
+        if updated != text:
+            page.write_text(updated, encoding="utf-8")
+
+
 def render(tpl, p):
-    out = tpl.replace("{{OG_IMAGE_URL}}", og_image_url())
+    out = tpl.replace("{{OG_IMAGE_URL}}", og_image_url()).replace("{{SOCIAL_LINKS}}", social_links())
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
               "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG", "ROUTE_LINKS"):
         out = out.replace("{{%s}}" % k, str(p["__vals__"][k]))
@@ -76,6 +101,7 @@ def main(routes=None):
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(out, encoding="utf-8")
         print("%s → %s (%d B)" % (port, dest, len(out.encode())))
+    refresh_social_links()
 
 
 if __name__ == "__main__":

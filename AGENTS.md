@@ -194,6 +194,37 @@
   SQLite; podmienić domenę, walutę, porty i progi w module. Szczegółowe
   polecenia i zasady są również w komentarzach prywatnego `telegram/.env`.
 
+## Facebook i wspólna publikacja (od 2026-10)
+
+- `social_publisher.py --auto` zastępuje pojedyncze wywołanie Telegrama w
+  `tools/run_search.sh` (kopię trzeba też zainstalować jako `/home/tl/run_search.sh`).
+  Wspólne świeże rekordy RT do 200 zł, maks. 3 na platformę/przebieg.
+  Publiczny Telegram, prywatne alerty i Facebook to niezależne zadania
+  `ThreadPoolExecutor`; wyjątek jednego nie blokuje pozostałych.
+- Facebook: `facebook_publisher.py`, natywne urllib, Graph API `v24.0`,
+  POST `/{page-id}/feed` z tekstem i linkiem do portu na polataj.se (podgląd OG).
+  Strona: `1393638090497267`, `https://www.facebook.com/1393638090497267`.
+  Przed wysyłką `/me` musi identyfikować tę stronę. Token w Authorization,
+  nigdy w URL/logu; błędy logują tylko HTTP/Graph code/subcode.
+- Prywatny `facebook/.env`, tryb 600, poza Gitem: `FB_PAGE_ID`,
+  `FB_PAGE_ACCESS_TOKEN` (alias dawnego `FACEBOOK_ACCESS_TOKEN`),
+  `FB_GRAPH_VERSION=v24.0`, `FACEBOOK_ENABLED=1` (0 = wyłączone).
+  Wymagany Page Access Token, nie token użytkownika, oraz uprawnienia
+  `pages_manage_posts` i `pages_read_engagement`. Błąd 190: odświeżyć token.
+  Bez pliku domyślnie wyłączone. Nie kopiować sekretów do dokumentacji/repo.
+- Facebook ma osobny stan `data/cache/facebook.sqlite` (600) i lock;
+  Telegram nadal używa dotychczasowego stanu, bez ponownej publikacji
+  wysłanych ofert. Ponowienia i ważność 24 h jak w module Telegrama.
+- Sprawdzenie bez publikacji: `python3 facebook_publisher.py`.
+  `python3 social_publisher.py` = dry-run. Test publiczny (wyłącznie za zgodą):
+  `python3 social_publisher.py --send-test`, opcjonalnie `--platform facebook`
+  lub `--platform telegram`, aby nie powtarzać testu drugiej platformy.
+  Test nie trafia do prywatnych subskrybentów ani do deduplikacji prawdziwych ofert.
+- Wspólne ikony/linki: `tools/social_links.py`, kanał Telegram, fanpage i
+  prywatny bot „Alerty z moich miast”. Szablony mają `{{SOCIAL_LINKS}}`;
+  `build_pages.refresh_social_links()` odświeża również stare strony bez duplikatów.
+  Bez zewnętrznych widgetów, SDK ani pikseli śledzących.
+
 ## Social / branding
 
 - `docs/og.png` (1200×630) to aktualna grafika dostarczona ręcznie:
