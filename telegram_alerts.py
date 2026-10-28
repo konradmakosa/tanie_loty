@@ -69,12 +69,13 @@ def format_alert(deal):
         '<b>Cena:</b> %.2f zł (w dwie strony)\n'
         '<b>Termin:</b> %s – %s\n'
         '<b>Lotniska:</b> %s → %s\n'
-        '<b>Linia:</b> %s\n\n'
+        '%s\n'
         '<a href="https://polataj.se/%s/">Zobacz okazje na polataj.se</a>'
         % (esc(deal["origin_city"]), esc(deal["dest_city"]), deal["price"],
            esc(deal["date_out"]), esc(deal["date_in"]),
            esc(deal["origin"]), esc(deal["dest"]),
-           esc(deal.get("airline") or "brak danych"), esc(deal["port"]))
+           ('<b>Linia:</b> %s\n' % esc(deal["airline"])) if deal.get("airline") else '',
+           esc(deal["port"]))
     )
 
 

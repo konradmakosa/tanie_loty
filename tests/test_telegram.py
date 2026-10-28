@@ -51,6 +51,13 @@ class TelegramTest(unittest.TestCase):
         self.assertIn('href="https://polataj.se/zwarszawy/"', text)
         self.assertIn('99.00 zł (w dwie strony)', text)
 
+    def test_missing_airline_omits_line(self):
+        item = deal()
+        del item['airline']
+        text = format_alert(item)
+        self.assertNotIn('<b>Linia:</b>', text)
+        self.assertIn('<b>Lotniska:</b>', text)
+
     def test_send_checks_message_id(self):
         with patch('telegram_alerts.api_call', return_value={"message_id": 42}) as call:
             self.assertTrue(send_alert(CONFIG, deal()))

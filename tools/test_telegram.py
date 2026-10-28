@@ -31,7 +31,7 @@ def main():
         "origin": "WAW", "dest": "OSL", "port": "zwarszawy",
         "dest_geo": airports["OSL"],
         "price": 99, "date_out": "przykładowy wylot",
-        "date_in": "przykładowy powrót", "airline": "TEST — nie jest rzeczywistą ofertą",
+        "date_in": "przykładowy powrót",
     })
     print("telegram: post testowy %s" % ("wysłany" if sent else "niepotwierdzony"))
     return 0 if sent else 1
