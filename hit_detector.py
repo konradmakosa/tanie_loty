@@ -31,7 +31,8 @@ def collect_hit_candidates(root, now):
                     continue
                 key = "%s-%s-%s-%s" % (deal["origin"], deal["dest"],
                                        deal["date_out"], deal.get("date_in"))
-                item = {**deal, "port": port, "origin_city": info["city"]}
+                item = {**deal, "port": port, "origin_city": info["city"],
+                        "origin_city_gen": info["city_gen"]}
                 if key not in candidates or deal["price"] < candidates[key]["price"]:
                     candidates[key] = item
     return hashlib.sha256(json.dumps(stamps).encode()).hexdigest(), candidates
@@ -54,11 +55,21 @@ def booking_url(deal):
     return link or "https://polataj.se/%s/" % deal["port"]
 
 
+def dest_genitive(city):
+    if city.endswith("a") and not city.endswith("ia"):
+        return city[:-1] + "y"
+    if city.endswith("ia"):
+        return city[:-1] + "i"
+    return city
+
+
 def pepper_message(deal):
     esc = lambda value: html.escape(str(value))
     oneway = deal.get("trip") == "oneway" or not deal.get("date_in")
+    origin_gen = deal.get("origin_city_gen") or deal["origin_city"]
+    dest_gen = dest_genitive(deal["dest_city"])
     title = "Loty z %s do %s za %.0f zł! (%s)" % (
-        deal["origin_city"], deal["dest_city"], deal["price"],
+        origin_gen, dest_gen, deal["price"],
         "w jedną stronę" if oneway else "w dwie strony")
     dates = "\n".join(
         "• %s" % esc(d["date_out"]) if not d.get("date_in")
@@ -75,7 +86,7 @@ def pepper_message(deal):
         "Szybsze alerty o takich błędach cenowych i okazjach wpadają na nasz Telegram: "
         "https://t.me/polataj_se"
         % (esc(title), deal["price"], esc(booking_url(deal)),
-           esc(deal["origin_city"]), esc(deal["dest_city"]),
+           esc(origin_gen), esc(dest_gen),
            esc("https://polataj.se/%s/" % deal["port"]), dates))
 
 
