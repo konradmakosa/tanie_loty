@@ -3,7 +3,7 @@ import html
 import json
 from datetime import datetime, timedelta, timezone
 
-from telegram_alerts import api_call, process
+from telegram_alerts import api_call, map_image, process
 
 ABSOLUTE_MAX = 60.0
 DISCOUNT_RATIO = 0.30
@@ -81,10 +81,20 @@ def pepper_message(deal):
 
 
 def send_admin_hit(config, deal):
-    result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {
-        "chat_id": config["TELEGRAM_ADMIN_CHAT_ID"],
-        "text": pepper_message(deal),
-        "parse_mode": "HTML",
+    text = pepper_message(deal)
+    photo = map_image(deal, label="hit-admin")
+    token = config["TELEGRAM_BOT_TOKEN"]
+    chat = config["TELEGRAM_ADMIN_CHAT_ID"]
+    if photo is not None:
+        if len(text) <= 1024:
+            result = api_call(token, "sendPhoto", {
+                "chat_id": chat, "caption": text, "parse_mode": "HTML"}, photo=photo)
+            return isinstance(result, dict) and bool(result.get("message_id"))
+        ok = api_call(token, "sendPhoto", {"chat_id": chat}, photo=photo)
+        if not (isinstance(ok, dict) and ok.get("message_id")):
+            return False
+    result = api_call(token, "sendMessage", {
+        "chat_id": chat, "text": text, "parse_mode": "HTML",
         "link_preview_options": {"is_disabled": True},
     })
     return isinstance(result, dict) and bool(result.get("message_id"))
