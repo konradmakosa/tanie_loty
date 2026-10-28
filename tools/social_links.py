@@ -37,7 +37,7 @@ def social_links(home=False):
         '<ol><li>Otwórz bota i naciśnij <strong>Start</strong>.</li>'
         '<li>Zaznacz jedno lub kilka miast wylotu.</li>'
         '<li>Naciśnij <strong>Zapisz i łap okazje</strong>.</li></ol>'
-        '<p>Bot odezwie się, gdy znajdzie pasującą okazję. Warszawa obejmuje WAW, WMI i RDO.</p>'
+        '<p>Bot odezwie się, gdy znajdzie pasującą okazję.</p>'
         '<a class="social-bot" href="https://t.me/polatajsebot" target="_blank" rel="noopener" '
         'aria-label="Uruchom prywatne alerty polataj.se na Telegramie">Uruchom bota na Telegramie</a>'
         '<small>Bezpłatnie, bez podawania e-maila. Nowe rekordy do 200 zł w obie strony, '

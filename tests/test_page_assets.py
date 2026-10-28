@@ -63,7 +63,7 @@ class PageAssetsTest(unittest.TestCase):
             self.assertNotIn('<details class="social-subscribe" open', first)
             self.assertIn('Start</strong>', first)
             self.assertIn('Zapisz i łap okazje', first)
-            self.assertIn('WAW, WMI i RDO', first)
+            self.assertNotIn('WAW, WMI i RDO', first)
 
     def test_footer_subscription_is_not_a_fixed_map_overlay(self):
         markup = build_pages.social_links()
