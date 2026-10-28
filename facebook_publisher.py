@@ -7,6 +7,8 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
+from telegram_alerts import map_image
+
 ROOT = Path(__file__).resolve().parent
 
 
@@ -34,15 +36,25 @@ def load_config():
     }
 
 
-def graph_request(config, path, payload=None):
+def graph_request(config, path, payload=None, photo=None):
     version = config['FB_GRAPH_VERSION']
     if not re.fullmatch(r'v\d{1,2}\.0', version):
         raise ValueError('nieprawidłowa wersja Graph API')
     url = 'https://graph.facebook.com/%s/%s' % (version, path)
     data = None if payload is None else urllib.parse.urlencode(payload).encode('utf-8')
+    content_type = 'application/x-www-form-urlencoded'
+    if photo is not None:
+        boundary = 'polataj_' + os.urandom(16).hex()
+        parts = [('--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n'
+                  % (boundary, key, value)).encode('utf-8') for key, value in payload.items()]
+        parts.append(('--%s\r\nContent-Disposition: form-data; name="source"; '
+                      'filename="trasa.png"\r\nContent-Type: image/png\r\n\r\n' % boundary).encode('utf-8')
+                     + photo + b'\r\n')
+        data = b''.join(parts) + ('--%s--\r\n' % boundary).encode('utf-8')
+        content_type = 'multipart/form-data; boundary=' + boundary
     req = urllib.request.Request(url, data=data, headers={
         'Authorization': 'Bearer ' + config['FB_PAGE_ACCESS_TOKEN'],
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': content_type,
     })
     try:
         with urllib.request.urlopen(req, timeout=25) as response:
@@ -88,9 +100,16 @@ def format_post(deal):
 def publish_post(config, deal):
     if not config['FB_PAGE_ID'].isdigit():
         raise ValueError('nieprawidłowy FB_PAGE_ID')
-    result = graph_request(config, config['FB_PAGE_ID'] + '/feed', {
-        'message': format_post(deal), 'link': 'https://polataj.se/%s/' % deal['port'],
-    })
+    message = format_post(deal) + '\n\nhttps://polataj.se/%s/' % deal['port']
+    photo = map_image(deal, label='facebook')
+    if photo is not None:
+        result = graph_request(config, config['FB_PAGE_ID'] + '/photos', {
+            'message': message, 'published': 'true',
+        }, photo=photo)
+        if result.get('id'):
+            result = {**result, 'photo_id': result['id'], 'id': result.get('post_id') or result['id']}
+    else:
+        result = graph_request(config, config['FB_PAGE_ID'] + '/feed', {'message': message})
     if not result.get('id'):
         raise FacebookError()
     print('facebook: opublikowano post id=%s' % result['id'])

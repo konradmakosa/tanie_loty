@@ -28,7 +28,30 @@ class SocialPublisherTest(unittest.TestCase):
         self.assertNotIn(b'secret-token', req.data)
         self.assertEqual(req.get_header('Authorization'), 'Bearer secret-token')
         self.assertEqual(req.full_url, 'https://graph.facebook.com/v24.0/123/feed')
-        self.assertIn(b'link=https%3A%2F%2Fpolataj.se%2Fzwarszawy%2F', req.data)
+        self.assertNotIn(b'link=', req.data)
+        self.assertIn(b'https%3A%2F%2Fpolataj.se%2Fzwarszawy%2F', req.data)
+
+    def test_facebook_photo_uses_route_map_and_post_id(self):
+        with patch('facebook_publisher.map_image', return_value=b'png-bytes'), \
+                patch('facebook_publisher.graph_request', return_value={'id': 'photo1', 'post_id': '123_456'}) as api:
+            result = facebook.publish_post(FB, DEAL)
+        self.assertEqual(result['id'], '123_456')
+        self.assertEqual(result['photo_id'], 'photo1')
+        self.assertEqual(api.call_args.args[1], '123/photos')
+        self.assertEqual(api.call_args.kwargs['photo'], b'png-bytes')
+        self.assertNotIn('link', api.call_args.args[2])
+        self.assertIn('https://polataj.se/zwarszawy/', api.call_args.args[2]['message'])
+
+    def test_photo_upload_uses_binary_multipart_without_exposing_token(self):
+        with patch('facebook_publisher.urllib.request.urlopen') as request:
+            request.return_value.__enter__.return_value.read.return_value = b'{"id":"photo1","post_id":"123_456"}'
+            facebook.graph_request(FB, '123/photos', {'message': 'Test'}, photo=b'png-bytes')
+        req = request.call_args.args[0]
+        self.assertIn('multipart/form-data', req.get_header('Content-type'))
+        self.assertIn(b'name="source"', req.data)
+        self.assertIn(b'png-bytes', req.data)
+        self.assertNotIn(b'secret-token', req.data)
+        self.assertNotIn('secret-token', req.full_url)
 
     def test_graph_errors_do_not_expose_response_or_token(self):
         body = json.dumps({'error': {'code': 190, 'error_subcode': 463,

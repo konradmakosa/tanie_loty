@@ -201,8 +201,15 @@
   Wspólne świeże rekordy RT do 200 zł, maks. 3 na platformę/przebieg.
   Publiczny Telegram, prywatne alerty i Facebook to niezależne zadania
   `ThreadPoolExecutor`; wyjątek jednego nie blokuje pozostałych.
-- Facebook: `facebook_publisher.py`, natywne urllib, Graph API `v24.0`,
-  POST `/{page-id}/feed` z tekstem i linkiem do portu na polataj.se (podgląd OG).
+- Facebook: `facebook_publisher.py`, natywne urllib, Graph API `v24.0`.
+  Własna mapka trasy z tego samego renderera co Telegram: multipart
+  `POST /{page-id}/photos` (`source`, `message`, `published=true`), URL portu
+  w opisie, bez osobnego parametru `link` i bez powtarzanego podglądu OG.
+  Jeśli renderer nie wygeneruje mapy: `/feed` tylko z `message` i URL-em
+  w tekście, bez `link` (nie zamawia załącznika linkowego). Błąd wysyłki
+  zdjęcia nie uruchamia natychmiastowej drugiej publikacji tekstu, aby nie
+  duplikować posta przy niepewnym wyniku połączenia. Stan aktualizowany
+  po potwierdzeniu API; odpowiedź zdjęciowa normalizowana do `post_id`.
   Strona: `1393638090497267`, `https://www.facebook.com/1393638090497267`.
   Przed wysyłką `/me` musi identyfikować tę stronę. Token w Authorization,
   nigdy w URL/logu; błędy logują tylko HTTP/Graph code/subcode.
