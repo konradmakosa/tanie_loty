@@ -56,6 +56,13 @@ def api_call(token, method, payload, photo=None):
             return result.get("result")
         print("telegram: API odrzuciło żądanie (%s)" % result.get("error_code"))
     except urllib.error.HTTPError as exc:
+        if exc.code == 400 and method in ("editMessageText", "editMessageReplyMarkup"):
+            try:
+                error = json.loads(exc.read(16384))
+                if "message is not modified" in error.get("description", ""):
+                    return True
+            except (OSError, ValueError, AttributeError):
+                pass
         print("telegram: błąd HTTP %d" % exc.code)
     except (OSError, ValueError, http.client.HTTPException):
         print("telegram: błąd połączenia lub odpowiedzi API")
@@ -140,12 +147,14 @@ def collect_candidates(root, now):
     return batch, candidates
 
 
-def process(config, batch, candidates, state_path, now, sender=send_alert):
+def process(config, batch, candidates, state_path, now, sender=send_alert,
+            allowed_ports=None, allow_deal=None):
     state_path = Path(state_path)
     state_path.parent.mkdir(parents=True, exist_ok=True)
     with state_path.with_suffix(".lock").open("a") as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         with sqlite3.connect(state_path) as db:
+            state_path.chmod(0o600)
             db.execute("CREATE TABLE IF NOT EXISTS deals ("
                        "channel TEXT, id TEXT, payload TEXT, seen_at TEXT, "
                        "sent INTEGER DEFAULT 0, PRIMARY KEY(channel,id))")
@@ -171,6 +180,10 @@ def process(config, batch, candidates, state_path, now, sender=send_alert):
                        if deal["date_out"] > now.date().isoformat()]
             sent = 0
             for key, deal in sorted(pending, key=lambda item: (item[1]["price"], item[0])):
+                if allowed_ports is not None and deal.get("port") not in allowed_ports:
+                    continue
+                if allow_deal is not None and not allow_deal(deal):
+                    continue
                 if attempts >= MAX_MESSAGES:
                     break
                 attempts += 1
@@ -185,6 +198,22 @@ def process(config, batch, candidates, state_path, now, sender=send_alert):
                 sent += 1
                 print("telegram: wysłano %s" % key)
             return sent
+
+
+def publish_private(config, batch, candidates, state_path, now, subscribers_path=None,
+                    sender=send_alert):
+    from telegram_bot import STATE, active_subscribers, read_subscriber
+    subscribers_path = subscribers_path or STATE
+    sent = 0
+    for chat_id, ports in active_subscribers(subscribers_path):
+        selected = {key: deal for key, deal in candidates.items() if deal.get("port") in ports}
+        def still_subscribed(deal, recipient=chat_id):
+            current = read_subscriber(recipient, subscribers_path)
+            return bool(current and not current[1] and deal.get("port") in current[0])
+        target = {**config, "TELEGRAM_CHANNEL_ID": str(chat_id)}
+        sent += process(target, batch, selected, state_path, now, sender,
+                        allowed_ports=ports, allow_deal=still_subscribed)
+    return sent
 
 
 def check_config(config):
@@ -223,7 +252,9 @@ def main():
               (len(candidates), MAX_MESSAGES))
         return 0
     count = process(config, batch, candidates, args.state, now)
-    print("telegram: wysłano %d alertów" % count)
+    print("telegram: wysłano %d alertów na kanał" % count)
+    private_count = publish_private(config, batch, candidates, args.state, now)
+    print("telegram: wysłano %d prywatnych alertów" % private_count)
     return 0
 
 

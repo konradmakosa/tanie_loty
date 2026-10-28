@@ -25,7 +25,8 @@ def deal(price=99):
 
 
 class TelegramTest(unittest.TestCase):
-    def test_automatic_publishing_is_opt_in(self):
+    @patch('telegram_alerts.publish_private', return_value=0)
+    def test_automatic_publishing_is_opt_in(self, private):
         for enabled, expected in [('0', False), ('1', True)]:
             with patch('telegram_alerts.load_config', return_value={
                     **CONFIG, 'TELEGRAM_ENABLED': enabled}):
@@ -89,6 +90,13 @@ class TelegramTest(unittest.TestCase):
             with patch('telegram_alerts.api_call', return_value={'message_id': 1}) as call:
                 self.assertTrue(send_alert(CONFIG, {**deal(), 'dest_geo': '60.19,11.1'}))
         self.assertEqual(call.call_args.args[1], 'sendMessage')
+
+    def test_repeated_menu_edit_is_treated_as_delivered(self):
+        error = urllib.error.HTTPError('https://api.telegram.org/bottest-token/editMessageText',
+                                       400, 'bad request', {}, io.BytesIO(
+                                           b'{"description":"Bad Request: message is not modified"}'))
+        with patch('telegram_alerts.urllib.request.urlopen', side_effect=error):
+            self.assertIs(api_call('test-token', 'editMessageText', {}), True)
 
     def test_photo_request_is_multipart(self):
         with patch('telegram_alerts.urllib.request.urlopen') as request:

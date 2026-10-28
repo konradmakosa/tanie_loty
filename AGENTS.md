@@ -136,7 +136,29 @@
   jest dry-run. `--auto` publikuje tylko gdy `TELEGRAM_ENABLED=1`;
   `--send` jawnie publikuje niezależnie od przełącznika. Domyślnie wyłączone.
 - Filtr: RT, `record_low=true`, cena >0 i ≤200 zł, wylot po dzisiejszym dniu,
-  snapshot ≤8 h. Maks. 3 próby na cały zestaw snapshotów sześciu portów.
+  snapshot ≤8 h. Maks. 3 próby na cały zestaw snapshotów sześciu portów dla
+  kanału; prywatnie osobny limit 3 na odbiorcę łącznie z jego wybranych miast.
+- Prywatne subskrypcje: `telegram_bot.py`, usługa VPS `tl-telegram.service`
+  (źródło `tools/tl-telegram.service`), long polling bez webhooka. `/start`
+  pokazuje przyciski miast; Warszawa to wspólny wybór WAW/WMI/RDO.
+  Można zaznaczyć kilka miast; wybór zapisuje się od razu. `/lotniska`,
+  `/pauza` (alias `/stop`), `/wznow`, `/wypisz`. Tylko prywatne rozmowy.
+- Preferencje, kursor aktualizacji i kolejka odpowiedzi: prywatny plik
+  `data/cache/telegram_subscribers.sqlite` (0600, WAL). Bez nazw/username'ów;
+  tylko ID rozmowy i preferencje. Callbacki idempotentne po update_id,
+  odpowiedzi ponawiane z outboxu bez ponownego przełączania wyboru.
+  Po restarcie zachowane subskrypcje i kursor. `/wypisz` usuwa subskrypcję;
+  historia deduplikacji wysyłek pozostaje w oddzielnym `telegram.sqlite`.
+- `telegram_alerts.py --auto` po kanale wysyła osobno prywatne alerty.
+  Ponownie sprawdza aktualny zapis przed każdą wysyłką; nie wysyła starej
+  kolejki z odznaczonych miast. Pauza nie cofa już rozpoczętego uploadu.
+  `TELEGRAM_ENABLED=0` zatrzymuje publikację, ale menu bota nadal działa.
+- Obsługa: `sudo systemctl restart tl-telegram.service` po zmianach kodu
+  workera/configu; logi `journalctl -u tl-telegram.service`. Deploy timer nie
+  restartuje tej usługi automatycznie. Po zmianach pliku unit: instalacja
+  do `/etc/systemd/system/`, `sudo systemctl daemon-reload`, restart.
+  Nie uruchamiać równolegle drugiego pollera ani `getUpdates` w diagnostyce.
+  Nie usuwać cudzego webhooka; worker odmawia startu, jeśli webhook istnieje.
 - SQLite `data/cache/telegram.sqlite` + flock chronią przed równoległą wysyłką.
   Potwierdzone wysyłki deduplikowane po kanale, lotniskach i datach; błędy
   można ponowić w kolejnych przebiegach przez 24 h. Timeout po przyjęciu posta

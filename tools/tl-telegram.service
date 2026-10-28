@@ -1,0 +1,17 @@
+[Unit]
+Description=polataj.se private Telegram subscriptions
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tl
+WorkingDirectory=/home/tl/tanie_loty
+ExecStart=/usr/bin/python3 -u /home/tl/tanie_loty/telegram_bot.py
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
