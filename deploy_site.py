@@ -65,7 +65,7 @@ def main():
         # html/.htaccess są małe — porównanie po rozmiarze bywało
         # fałszywie dodatnie przy edycjach tej samej długości);
         # reszta tylko gdy rozmiar się różni lub plik nie istnieje.
-        if (p.suffix not in (".json", ".html") and p.name not in (".htaccess", "og.png")
+        if (p.suffix not in (".json", ".html", ".css") and p.name not in (".htaccess", "og.png")
                 and remote_size(ftp, remote) == size):
             skipped += 1
             continue

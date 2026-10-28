@@ -227,10 +227,20 @@
   `python3 social_publisher.py --send-test`, opcjonalnie `--platform facebook`
   lub `--platform telegram`, aby nie powtarzać testu drugiej platformy.
   Test nie trafia do prywatnych subskrybentów ani do deduplikacji prawdziwych ofert.
-- Wspólne ikony/linki: `tools/social_links.py`, kanał Telegram, fanpage i
-  prywatny bot „Alerty z moich miast”. Szablony mają `{{SOCIAL_LINKS}}`;
-  `build_pages.refresh_social_links()` odświeża również stare strony bez duplikatów.
-  Bez zewnętrznych widgetów, SDK ani pikseli śledzących.
+- Wspólne ikony/linki: `tools/social_links.py`, wspólny CSS
+  `docs/assets/social.css` (adres `?v=<hash pliku>`). Ikony kanału Telegram
+  i Facebooka, rozdzielone od rozwijanej sekcji „Alerty z moich miast”
+  (z ikoną Telegrama), która prowadzi do `https://t.me/polatajsebot` i tłumaczy
+  Start → wybór miast → „Zapisz i łap okazje”. Bez zewnętrznych widgetów, SDK
+  ani pikseli śledzących.
+- Szablon portu ma `{{SOCIAL_LINKS}}` w `.alerts`, bezpośrednio pod formularzem
+  mailowym — tam również nie dublować linków. `build_pages.refresh_social_links()`
+  odświeża stare HTML-e bez duplikatów; główna używa wariantu
+  `data-home="true"` z lekkim, klikalnym overlayem nad mapą (`pointer-events:auto`
+  tylko na panelu). W bardzo niskim widoku kompresuje się do ikon/„Bot”, a rozwinięcie
+  rozszerza panel. Podstrony pSEO/stopki mają zwykły blok `data-home="false"`.
+  `deploy_site.py` musi wgrywać `.css` zawsze, bo podmiana stylu może mieć
+  ten sam rozmiar pliku.
 
 ## Social / branding
 

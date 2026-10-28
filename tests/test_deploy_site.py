@@ -13,6 +13,8 @@ class DeploySiteTest(unittest.TestCase):
             (docs / 'og.png').write_bytes(b'new!')
             (docs / 'logo.png').write_bytes(b'same')
             (docs / 'index.html').write_text('<html></html>')
+            (docs / 'assets').mkdir()
+            (docs / 'assets/social.css').write_text('new!')
             ftp = Mock()
             ftp.size.return_value = 4
             with patch.object(deploy_site, 'DOCS_DIR', docs), \
@@ -21,7 +23,8 @@ class DeploySiteTest(unittest.TestCase):
                     patch.object(deploy_site, 'mkdirs'), patch('sys.argv', ['deploy_site.py']):
                 deploy_site.main()
             self.assertEqual([call.args[0] for call in ftp.storbinary.call_args_list],
-                             ['STOR /site/polataj/og.png', 'STOR /site/polataj/index.html'])
+                             ['STOR /site/polataj/og.png', 'STOR /site/polataj/assets/social.css',
+                              'STOR /site/polataj/index.html'])
             ftp.quit.assert_called_once()
 
 

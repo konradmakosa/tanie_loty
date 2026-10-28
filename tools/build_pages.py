@@ -42,11 +42,11 @@ def refresh_og_metadata():
 
 
 def refresh_social_links():
-    nav = social_links()
     for page in (ROOT / "docs").rglob("*.html"):
         text = page.read_text(encoding="utf-8")
         if '</body>' not in text:
             continue
+        nav = social_links(home=page == ROOT / "docs/index.html")
         if 'class="social-links"' in text:
             updated = re.sub(r'<nav class="social-links"[^>]*>.*?</nav>', nav, text, flags=re.S)
         elif page == ROOT / "docs/index.html":

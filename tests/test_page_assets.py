@@ -57,6 +57,28 @@ class PageAssetsTest(unittest.TestCase):
                 self.assertIn(url, first)
             self.assertIn('aria-label=', first)
             self.assertIn('pointer-events:auto', first)
+            self.assertIn('data-home="true"', first)
+            self.assertIn('/assets/social.css?v=', first)
+            self.assertIn('<details class="social-subscribe"', first)
+            self.assertNotIn('<details class="social-subscribe" open', first)
+            self.assertIn('Start</strong>', first)
+            self.assertIn('Zapisz i łap okazje', first)
+            self.assertIn('WAW, WMI i RDO', first)
+
+    def test_footer_subscription_is_not_a_fixed_map_overlay(self):
+        markup = build_pages.social_links()
+        self.assertIn('data-home="false"', markup)
+        self.assertIn('Telegram</span></a>', markup)
+        self.assertIn('Facebook</span></a>', markup)
+        self.assertIn('Uruchom bota na Telegramie', markup)
+        self.assertIn('<span class="social-bot-label"><svg', markup)
+
+    def test_city_subscription_options_are_next_to_mail_signup(self):
+        template = build_pages.TPL.read_text()
+        self.assertEqual(template.count('{{SOCIAL_LINKS}}'), 1)
+        self.assertLess(template.index('id="alertForm"'), template.index('{{SOCIAL_LINKS}}'))
+        self.assertLess(template.index('{{SOCIAL_LINKS}}'), template.index('<section class="route-mesh"'))
+        self.assertIn('</form>\n  {{SOCIAL_LINKS}}\n</section>', template)
 
     def test_home_metadata_is_updated_without_stacking_versions(self):
         with tempfile.TemporaryDirectory() as temp:
