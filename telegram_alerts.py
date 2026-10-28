@@ -26,7 +26,8 @@ def load_config():
                 key, value = line.split("=", 1)
                 values[key.strip()] = value.strip().strip('"').strip("'")
     config = {k: os.environ.get(k, values.get(k, "")) for k in
-              ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_ID", "TELEGRAM_ENABLED")}
+              ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_ID", "TELEGRAM_ENABLED",
+               "TELEGRAM_ADMIN_CHAT_ID")}
     config["TELEGRAM_CHANNEL_ID"] = config["TELEGRAM_CHANNEL_ID"] or os.environ.get(
         "TELEGRAM_CHAT_ID", values.get("TELEGRAM_CHAT_ID", ""))
     return config

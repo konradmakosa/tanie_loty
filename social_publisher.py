@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import facebook_publisher as facebook
+import hit_detector
 import telegram_alerts as telegram
 
 ROOT = Path(__file__).resolve().parent
@@ -41,6 +42,9 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
                 batch, candidates, root / 'data/cache/facebook.sqlite', now,
                 sender=facebook.send_alert, label='facebook')
         jobs['facebook'] = publish_facebook
+    if tg.get('TELEGRAM_ADMIN_CHAT_ID'):
+        jobs['admin_hits'] = lambda: hit_detector.publish_admin_hits(
+            tg, batch, candidates, root / 'data/cache/hits_admin.sqlite', now)
     return settle(jobs)
 
 
