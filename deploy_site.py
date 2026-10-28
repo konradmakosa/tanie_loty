@@ -27,7 +27,7 @@ def collect_files():
         if not p.is_file() or p.name in SKIP:
             continue
         files.append(p)
-    return files
+    return sorted(files, key=lambda path: path != DOCS_DIR / "og.png")
 
 
 def remote_size(ftp, path):
@@ -65,7 +65,7 @@ def main():
         # html/.htaccess są małe — porównanie po rozmiarze bywało
         # fałszywie dodatnie przy edycjach tej samej długości);
         # reszta tylko gdy rozmiar się różni lub plik nie istnieje.
-        if (p.suffix not in (".json", ".html") and p.name != ".htaccess"
+        if (p.suffix not in (".json", ".html") and p.name not in (".htaccess", "og.png")
                 and remote_size(ftp, remote) == size):
             skipped += 1
             continue

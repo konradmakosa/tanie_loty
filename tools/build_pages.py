@@ -24,6 +24,18 @@ def og_image_url():
     return "https://polataj.se/og.png?v=" + version
 
 
+def refresh_og_metadata():
+    url = og_image_url()
+    changed = 0
+    for page in (ROOT / "docs").rglob("*.html"):
+        text = page.read_text(encoding="utf-8")
+        updated = re.sub(r'https://polataj\.se/og\.png(?:\?v=[a-f0-9]+)?', url, text)
+        if updated != text:
+            page.write_text(updated, encoding="utf-8")
+            changed += 1
+    return changed
+
+
 def render(tpl, p):
     out = tpl.replace("{{OG_IMAGE_URL}}", og_image_url())
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
@@ -38,10 +50,7 @@ def main(routes=None):
         from build_seo_routes import prepare_routes
         routes = prepare_routes(cfg)
     tpl = TPL.read_text(encoding="utf-8")
-    home = ROOT / "docs" / "index.html"
-    home.write_text(re.sub(r'https://polataj\.se/og\.png(?:\?v=[a-f0-9]+)?',
-                           og_image_url(), home.read_text(encoding="utf-8")),
-                    encoding="utf-8")
+    refresh_og_metadata()
     for port, v in cfg["ports"].items():
         vals = {
             "PORT": port,

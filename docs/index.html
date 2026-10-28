@@ -31,7 +31,7 @@ try {
 <meta property="og:title" content="polataj.se — tanie loty z Polski">
 <meta property="og:description" content="Wybierz lotnisko wylotu — okazje na loty w obie strony, odświeżane co 6 godzin.">
 <meta property="og:url" content="https://polataj.se/">
-<meta property="og:image" content="https://polataj.se/og.png?v=8acfc714c867">
+<meta property="og:image" content="https://polataj.se/og.png?v=c2dc00fb5b23">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="vendor/leaflet.css">
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -100,12 +100,12 @@ body {
 }
 .ap-label {
   font: 800 16px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: #126537; text-align: center; white-space: nowrap;
+  color: #0b1733; text-align: center; white-space: nowrap;
   text-shadow: none;
   pointer-events: none;
 }
 .ap-label.off { color: #4b5563 }
-.ap-label.near { color: #204da7 }
+.ap-label.near { color: #0b1733 }
 .leaflet-popup-content-wrapper {
   border-radius: 12px; background: #171c2b; color: var(--text);
   box-shadow: 0 4px 16px rgba(0,0,0,.5);
@@ -196,6 +196,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 var URLS = { waw: "zwarszawy/", krk: "zkrakowa/", gdn: "zgdanska/",
              poz: "zpoznania/", wro: "zwroclawia/", ktw: "zkatowic/" };
+var AP_COLORS = { waw: "#8295ed", krk: "#f58b43", gdn: "#16ad73",
+                  poz: "#0f9a67", wro: "#f16f5b", ktw: "#28b4c8" };
 // [slug, miasto, IATA, lat, lon, aktywny]
 var APS = [
   ["waw", "Warszawa",  "WAW·WMI·RDO", 52.30,   20.80,   1],
@@ -259,8 +261,8 @@ function pick(ap) {
     var ap = a[0], city = a[1], iata = a[2], on = a[5];
     var m = L.circleMarker([a[3], a[4]], {
       radius: on ? 18 : 7,
-      color: "#e8eaf0", weight: 2,
-      fillColor: on ? "#4ade80" : "#9aa3b2", fillOpacity: 1
+      color: on ? "#ffffff" : "#e8eaf0", weight: on ? 3 : 2,
+      fillColor: on ? (AP_COLORS[ap] || "#16ad73") : "#9aa3b2", fillOpacity: 1
     }).addTo(map);
     m.bindPopup('<div class="pc">' + city + '</div>'
       + '<div class="pa">' + iata + '</div>'
@@ -306,7 +308,7 @@ function pick(ap) {
     APS.forEach(function (a) {
       if (a[2].indexOf(near.iata) === 0) {
         var it = markers[a[0]];
-        it.m.setStyle({ fillColor: "#7aa2ff" });
+        it.m.setStyle({ color: "#0b1733", weight: 4 });
         it.m.setRadius(a[5] ? 20 : 9);
         it.label.getElement().firstChild.classList.add("near");
       }

@@ -22,6 +22,24 @@ class PageAssetsTest(unittest.TestCase):
                 image.write_bytes(b'new image')
                 self.assertNotEqual(first, build_pages.og_image_url())
 
+    def test_all_existing_pages_get_the_current_image_version(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            docs = root / 'docs'
+            old_route = docs / 'loty' / 'old-route' / 'index.html'
+            old_route.parent.mkdir(parents=True)
+            (docs / 'og.png').write_bytes(b'new image')
+            (docs / 'index.html').write_text('<meta property="og:image" content="https://polataj.se/og.png">')
+            old_route.write_text('<meta name="twitter:image" content="https://polataj.se/og.png?v=deadbeef">')
+            untouched = docs / 'other.html'
+            untouched.write_text('<title>Other</title>')
+            with patch.object(build_pages, 'ROOT', root):
+                self.assertEqual(build_pages.refresh_og_metadata(), 2)
+                self.assertIn(build_pages.og_image_url(), old_route.read_text())
+                self.assertIn(build_pages.og_image_url(), (docs / 'index.html').read_text())
+                self.assertEqual(untouched.read_text(), '<title>Other</title>')
+                self.assertEqual(build_pages.refresh_og_metadata(), 0)
+
     def test_home_metadata_is_updated_without_stacking_versions(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

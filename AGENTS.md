@@ -196,13 +196,22 @@
 
 ## Social / branding
 
-- `docs/og.png` (1200×630) generowany przez `tools/make_og.py` (Pillow,
-  czcionki systemowe macOS; kontur z `tools/poland_border.txt`, logo z `docs/assets/logo.png`).
-  `build_pages.og_image_url()` dodaje do adresu OG `?v=<hash zawartości>`;
-  `build_pages.py` aktualizuje metadane głównej i portów, a generator pSEO
-  używa tego samego adresu. Po zmianie grafiki przebudować strony.
-  Cache podglądu istniejących postów komunikatorów może wymagać osobnego odświeżenia.
-  Nowy port → dopisać do `PORTS`/`ROUTES` i odpalić ponownie.
+- `docs/og.png` (1200×630) to aktualna grafika dostarczona ręcznie:
+  jasna mapa i kolorowe pinezki. Nie regenerować jej przez `tools/make_og.py`
+  bez uzgodnienia — ten archiwalny generator nadpisuje ją starszym projektem.
+- `build_pages.og_image_url()` dodaje do adresu OG `?v=<hash zawartości>`.
+  `build_pages.refresh_og_metadata()` odświeża wszystkie istniejące HTML-e,
+  również starsze strony tras; jest uruchamiane przez `build_pages.py`.
+  Generator pSEO używa tego samego adresu. Po podmianie obrazka można wykonać
+  samo odświeżenie: `python3 -c "from tools.build_pages import refresh_og_metadata; refresh_og_metadata()"`.
+  Cache już opublikowanych podglądów komunikatorów może wymagać osobnego odświeżenia.
+- `deploy_site.py` wgrywa `og.png` zawsze, przed HTML-ami, również przy tej
+  samej wielkości pliku; zapobiega pomijaniu zmienionej grafiki i publikacji
+  nowych metadanych przed obrazem. Pozostałe zasady transferu bez zmian.
+- Kolory punktów głównej mapy: `docs/index.html → AP_COLORS` (dopisać przy
+  aktywacji nowego miasta). Nieaktywne punkty szare; geosugestia powiększa
+  punkt i obwódkę, ale zachowuje kolor miasta. Etykiety ciemne, bez cienia.
+  Test: `node tests/test_homepage_map.js`. Pozostałe strony zachowują ciemny styl.
 
 ## Deploy
 
