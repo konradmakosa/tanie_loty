@@ -15,6 +15,8 @@ from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from build_pages import og_image_url
+
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 TPL = (ROOT / "templates" / "route.html").read_text(encoding="utf-8")
@@ -305,7 +307,7 @@ def render_route(r, cfg, related_from, related_to):
              '<a href="/%s/" style="color:var(--accent)">stronie portu %s'
              '</a>.</div></div>' % (esc(r["port"]), esc(p["city"])))
 
-    out = TPL
+    out = TPL.replace("{{OG_IMAGE_URL}}", og_image_url())
     for k, v in {
         "TITLE": esc(title), "DESCRIPTION": esc(desc),
         "CANONICAL": esc(canonical), "ROBOTS": robots,
@@ -338,7 +340,7 @@ def render_index(routes, cfg):
             '</h1><div class="sub">%d tras z aktywnymi okazjami, '
             'skanowane co 6 h</div></div>'
             % len(routes)) + "".join(rows)
-    out = TPL
+    out = TPL.replace("{{OG_IMAGE_URL}}", og_image_url())
     for k, v in {
         "TITLE": esc("Tanie loty z Polski — wszystkie trasy | polataj.se"),
         "DESCRIPTION": esc("Wszystkie trasy z aktywnymi okazjami lotniczymi "

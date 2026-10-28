@@ -57,6 +57,7 @@ class TelegramTest(unittest.TestCase):
         payload = call.call_args.args[2]
         self.assertEqual(payload['chat_id'], '@test')
         self.assertEqual(payload['parse_mode'], 'HTML')
+        self.assertEqual(payload['link_preview_options'], {'is_disabled': True})
         with patch('telegram_alerts.api_call', return_value=None):
             self.assertFalse(send_alert(CONFIG, deal()))
 

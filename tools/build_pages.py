@@ -1,6 +1,7 @@
 """Renderuje docs/<port>/index.html z templates/app.html + config.json.
 Użycie: python3 tools/build_pages.py   (zero zależności)
 """
+import hashlib
 import html
 import json
 import re
@@ -18,8 +19,13 @@ def slug(s):
     return re.sub(r"[^a-zA-Z0-9]+", "-", s).strip("-").lower()
 
 
+def og_image_url():
+    version = hashlib.sha256((ROOT / "docs" / "og.png").read_bytes()).hexdigest()[:12]
+    return "https://polataj.se/og.png?v=" + version
+
+
 def render(tpl, p):
-    out = tpl
+    out = tpl.replace("{{OG_IMAGE_URL}}", og_image_url())
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
               "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG", "ROUTE_LINKS"):
         out = out.replace("{{%s}}" % k, str(p["__vals__"][k]))
@@ -32,6 +38,10 @@ def main(routes=None):
         from build_seo_routes import prepare_routes
         routes = prepare_routes(cfg)
     tpl = TPL.read_text(encoding="utf-8")
+    home = ROOT / "docs" / "index.html"
+    home.write_text(re.sub(r'https://polataj\.se/og\.png(?:\?v=[a-f0-9]+)?',
+                           og_image_url(), home.read_text(encoding="utf-8")),
+                    encoding="utf-8")
     for port, v in cfg["ports"].items():
         vals = {
             "PORT": port,

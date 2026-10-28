@@ -69,7 +69,7 @@ def format_alert(deal):
 def send_alert(config, deal):
     result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {
         "chat_id": config["TELEGRAM_CHANNEL_ID"], "text": format_alert(deal),
-        "parse_mode": "HTML", "disable_web_page_preview": False,
+        "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
     })
     return isinstance(result, dict) and bool(result.get("message_id"))
 

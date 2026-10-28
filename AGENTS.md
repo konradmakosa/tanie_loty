@@ -142,7 +142,9 @@
   można ponowić w kolejnych przebiegach przez 24 h. Timeout po przyjęciu posta
   przez Telegram może skutkować duplikatem (API nie ma klucza idempotencji).
 - Wiadomości HTML prowadzą na stronę portu polataj.se (nie udają linku
-  do serwisu, jeśli prowadzą do przewoźnika). Timeout API 15 s, bez logowania tokenu.
+  do serwisu, jeśli prowadzą do przewoźnika). Podgląd linku wyłączony przez
+  `link_preview_options.is_disabled=true`, więc alerty nie powtarzają grafiki OG.
+  Timeout API 15 s, bez logowania tokenu.
 - `tools/run_search.sh` jest wersjonowaną kopią `/home/tl/run_search.sh`;
   wywołuje Telegram raz po całej pętli search/ingest, przed generowaniem pSEO.
   Zmiany skryptu należy przenieść na VPS do `/home/tl/run_search.sh`.
@@ -156,7 +158,11 @@
 ## Social / branding
 
 - `docs/og.png` (1200×630) generowany przez `tools/make_og.py` (Pillow,
-  czcionki systemowe macOS; czyta granicę Polski z `docs/index.html`).
+  czcionki systemowe macOS; kontur z `tools/poland_border.txt`, logo z `docs/assets/logo.png`).
+  `build_pages.og_image_url()` dodaje do adresu OG `?v=<hash zawartości>`;
+  `build_pages.py` aktualizuje metadane głównej i portów, a generator pSEO
+  używa tego samego adresu. Po zmianie grafiki przebudować strony.
+  Cache podglądu istniejących postów komunikatorów może wymagać osobnego odświeżenia.
   Nowy port → dopisać do `PORTS`/`ROUTES` i odpalić ponownie.
 
 ## Deploy
