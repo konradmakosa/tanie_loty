@@ -30,6 +30,7 @@ def load_config():
                 values[k.strip()] = v.strip().strip('"').strip("'")
     get = lambda k, d="": os.environ.get(k, values.get(k, d))
     return {"key": get("WYKOP_APP_KEY"), "secret": get("WYKOP_APP_SECRET"),
+            "refresh": get("WYKOP_REFRESH_TOKEN"),
             "enabled": get("WYKOP_ENABLED") == "1"}
 
 
@@ -54,10 +55,37 @@ def can_hit(state, now):
 
 
 def _token(config):
-    req = urllib.request.Request(API + "/auth", data=urllib.parse.urlencode({
-        "key": config["key"], "secret": config["secret"]}).encode())
+    req = urllib.request.Request(API + "/auth", headers={
+        "Content-Type": "application/json", "accept": "application/json"},
+        data=json.dumps({"data": {"key": config["key"],
+                                  "secret": config["secret"]}}).encode())
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.load(r)["data"]["token"]
+
+
+def _jwt_expired(token):
+    try:
+        payload = json.loads(__import__("base64").urlsafe_b64decode(
+            token.split(".")[1] + "==").decode())
+        return payload.get("exp", 0) < time.time() + 60
+    except (ValueError, KeyError, IndexError):
+        return True
+
+
+def _user_token(config):
+    """Świeży JWT użytkownika: z cache lub po refresh_token (rtoken się rotuje)."""
+    state = _load_state()
+    if state.get("token") and not _jwt_expired(state["token"]):
+        return state["token"]
+    rtoken = state.get("rtoken") or config["refresh"]
+    req = urllib.request.Request(API + "/refresh-token", headers={
+        "Content-Type": "application/json", "accept": "application/json"},
+        data=json.dumps({"data": {"refresh_token": rtoken}}).encode())
+    with urllib.request.urlopen(req, timeout=20) as r:
+        data = json.load(r)["data"]
+    state.update({"token": data["token"], "rtoken": data["refresh_token"]})
+    _save_state(state)
+    return data["token"]
 
 
 def _upload(token, image):
@@ -65,20 +93,22 @@ def _upload(token, image):
     body = (("--%s\r\nContent-Disposition: form-data; name=\"file\"; "
              "filename=\"trasa.png\"\r\nContent-Type: image/png\r\n\r\n" % boundary).encode()
             + image + ("\r\n--%s--\r\n" % boundary).encode())
-    req = urllib.request.Request(API + "/media/photos", data=body, headers={
-        "Authorization": "Bearer " + token,
+    req = urllib.request.Request(API + "/media/photos/upload?type=comments",
+                                 data=body, headers={
+        "Authorization": "Bearer " + token, "accept": "application/json",
         "Content-Type": "multipart/form-data; boundary=" + boundary})
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.load(r)["data"]["key"]
 
 
 def _entry(token, content, media_key=None):
-    payload = {"content": content}
+    payload = {"data": {"content": content}}
     if media_key:
-        payload["media"] = {"key": media_key}
+        payload["data"]["photo"] = media_key
     req = urllib.request.Request(API + "/entries",
                                  data=json.dumps(payload).encode(),
                                  headers={"Authorization": "Bearer " + token,
+                                          "accept": "application/json",
                                           "Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.load(r)["data"]
@@ -120,7 +150,7 @@ def post(config, content, image=None):
     if not config["enabled"]:
         print("wykop: wyłączony (brak WYKOP_ENABLED=1) — wpis pominięty")
         return None
-    token = _token(config)
+    token = _user_token(config)
     media = _upload(token, image) if image else None
     return _entry(token, content, media)
 
