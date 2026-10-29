@@ -51,14 +51,15 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
     return settle(jobs)
 
 
-def test_deal():
-    from route_map import airport_coordinates
-    return {
-        'origin_city': 'TEST — Warszawa', 'dest_city': 'Oslo (oferta testowa)',
-        'origin': 'WAW', 'dest': 'OSL', 'port': 'zwarszawy', 'price': 99,
-        'date_out': 'przykładowy wylot', 'date_in': 'przykładowy powrót',
-        'dest_geo': airport_coordinates().get('OSL'),
-    }
+def test_deal(root=ROOT):
+    """Prawdziwa, najtańsza świeża oferta — test wygląda 1:1 jak alert."""
+    from hit_detector import collect_hit_candidates
+    now = datetime.now(timezone.utc)
+    _, candidates = collect_hit_candidates(root, now)
+    fresh = [d for d in candidates.values() if d.get('dest_geo')]
+    if not fresh:
+        raise RuntimeError('brak świeżych ofert do testu')
+    return min(fresh, key=lambda d: d['price'])
 
 
 def publish_test(tg, fb, platform='all'):

@@ -99,10 +99,13 @@ def check_config(config):
 
 
 def format_post(deal):
-    text = ('✈️ %s → %s\n\n💰 %.2f zł w dwie strony\n📅 %s – %s\n'
+    dates = deal['date_out'] + (' – %s' % deal['date_in'] if deal.get('date_in')
+                                else ' (w jedną stronę)')
+    unit = 'w dwie strony' if deal.get('date_in') else 'w jedną stronę'
+    text = ('✈️ %s → %s\n\n💰 %.2f zł %s\n📅 %s\n'
             'Lotniska: %s → %s\n' % (
                 deal['origin_city'], deal['dest_city'], deal['price'],
-                deal['date_out'], deal['date_in'], deal['origin'], deal['dest']))
+                unit, dates, deal['origin'], deal['dest']))
     if deal.get('airline'):
         text += 'Linia: %s\n' % deal['airline']
     return text + '\nSprawdź szczegóły i aktualną cenę na https://polataj.se/%s/' % deal['port']
