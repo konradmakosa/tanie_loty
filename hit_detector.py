@@ -78,19 +78,22 @@ def ai_description(deal, dates):
         % (deal["origin_city"], deal["dest_city"], deal["price"],
            "w jedną stronę" if deal.get("trip") == "oneway" else "w dwie strony",
            ", ".join(d["date_out"] for d in dates[:3])))
-    try:
-        req = urllib.request.Request(
-            "https://openrouter.ai/api/v1/chat/completions",
-            data=json.dumps({"model": "openrouter/auto",
-                             "messages": [{"role": "user", "content": prompt}],
-                             "max_tokens": 220, "temperature": 0.9}).encode(),
-            headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=20) as r:
-            message = json.load(r)["choices"][0]["message"]
-        text = (message.get("content") or "").strip()
-        return text if 30 < len(text) < 800 and "http" not in text else None
-    except (OSError, ValueError, KeyError, IndexError, http.client.HTTPException):
-        return None
+    for model in ("openrouter/auto", "deepseek/deepseek-v4.1-flash-1017"):
+        try:
+            req = urllib.request.Request(
+                "https://openrouter.ai/api/v1/chat/completions",
+                data=json.dumps({"model": model,
+                                 "messages": [{"role": "user", "content": prompt}],
+                                 "max_tokens": 220, "temperature": 0.9}).encode(),
+                headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                message = json.load(r)["choices"][0]["message"]
+            text = (message.get("content") or "").strip()
+            if 30 < len(text) < 800 and "http" not in text:
+                return text
+        except (OSError, ValueError, KeyError, IndexError, http.client.HTTPException):
+            continue
+    return None
 
 
 def _env_value(name):
