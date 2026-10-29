@@ -52,13 +52,26 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
 
 
 def test_deal(root=ROOT):
-    """Prawdziwa, najtańsza świeża oferta — test wygląda 1:1 jak alert."""
+    """Prawdziwa, najtańsza oferta — test wygląda 1:1 jak alert."""
+    import json as _json
     from hit_detector import collect_hit_candidates
     now = datetime.now(timezone.utc)
     _, candidates = collect_hit_candidates(root, now)
     fresh = [d for d in candidates.values() if d.get('dest_geo')]
     if not fresh:
-        raise RuntimeError('brak świeżych ofert do testu')
+        cfg = _json.loads((root / 'config.json').read_text())['ports']
+        for port, info in cfg.items():
+            for name in ('deals.json', 'far.json', 'oneway.json'):
+                path = root / 'docs' / port / name
+                if not path.exists():
+                    continue
+                for deal in _json.loads(path.read_text())['deals']:
+                    if deal.get('dest_geo') and deal['date_out'] > now.date().isoformat():
+                        fresh.append({**deal, 'port': port,
+                                      'origin_city': info['city'],
+                                      'origin_city_gen': info['city_gen']})
+    if not fresh:
+        raise RuntimeError('brak ofert do testu')
     return min(fresh, key=lambda d: d['price'])
 
 
