@@ -10,7 +10,7 @@ from pathlib import Path
 import http.client as _hc
 
 
-def map_image(deal):
+def map_image(deal, label="facebook"):
     if not deal.get("dest_geo"):
         return None
     try:
