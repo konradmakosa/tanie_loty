@@ -102,6 +102,33 @@ def _env_value(name):
     return ""
 
 
+def hit_map_url(deal, root=ROOT):
+    photo = map_image(deal, label="hit-admin", bare=True)
+    if photo is None:
+        return None, None
+    name = "%s-%s-%s.png" % (deal["origin"].lower(), deal["dest"].lower(),
+                             hashlib.sha256(photo).hexdigest()[:8])
+    url = "https://polataj.se/assets/hits/" + name
+    path = root / "docs" / "assets" / "hits" / name
+    if path.exists():
+        return photo, url
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(photo)
+    try:
+        from deploy import load_env, ftp_connect, mkdirs
+        env = load_env(root / ".env")
+        ftp = ftp_connect(env)
+        target = env["TL_WEB_DIR"].rstrip("/") + "/polataj/assets/hits"
+        mkdirs(ftp, target)
+        with open(path, "rb") as f:
+            ftp.storbinary("STOR " + target + "/" + name, f)
+        ftp.quit()
+        return photo, url
+    except (OSError, ValueError, KeyError, http.client.HTTPException):
+        path.unlink(missing_ok=True)
+        return photo, None
+
+
 def fallback_description(deal):
     variants = (
         "Złapałem super okazję: %s – %s za %.0f zł! Ktoś chętny?",
@@ -115,7 +142,7 @@ def fallback_description(deal):
     return variants[index] % (deal["origin_city"], deal["dest_city"], deal["price"])
 
 
-def pepper_message(deal):
+def pepper_message(deal, map_url=None):
     esc = lambda value: html.escape(str(value))
     oneway = deal.get("trip") == "oneway" or not deal.get("date_in")
     title = "Loty: %s – %s za %.0f zł! (%s)" % (
@@ -125,21 +152,22 @@ def pepper_message(deal):
         "• %s" % esc(d["date_out"]) if not d.get("date_in")
         else "• %s – %s" % (esc(d["date_out"]), esc(d["date_in"]))
         for d in deal["_dates"][:MAX_DATES])
+    image_block = "\n\n<b>OBRAZEK (URL):</b>\n%s" % esc(map_url) if map_url else ""
     return (
         "🔥 <b>HIT NA PEPPER.PL</b> 🔥\n\n"
         "<b>TYTUŁ:</b>\n%s\n\n"
         "<b>CENA:</b>\n%.0f\n\n"
         "<b>LINK:</b>\n%s\n\n"
         "<b>OPIS DO WKLEJENIA:</b>\n%s\n\n"
-        "<b>Przykładowe daty:</b>\n%s"
+        "<b>Przykładowe daty:</b>\n%s%s"
         % (esc(title), deal["price"], esc(route_url(deal)),
            esc(ai_description(deal, deal["_dates"]) or fallback_description(deal)),
-           dates))
+           dates, image_block))
 
 
 def send_admin_hit(config, deal):
-    text = pepper_message(deal)
-    photo = map_image(deal, label="hit-admin", bare=True)
+    photo, map_url = hit_map_url(deal)
+    text = pepper_message(deal, map_url=map_url)
     token = config["TELEGRAM_BOT_TOKEN"]
     chat = config["TELEGRAM_ADMIN_CHAT_ID"]
     if photo is not None:
