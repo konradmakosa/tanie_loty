@@ -7,7 +7,18 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from telegram_alerts import map_image
+import http.client as _hc
+
+
+def map_image(deal):
+    if not deal.get("dest_geo"):
+        return None
+    try:
+        from route_map import render_hit_image
+        return render_hit_image(deal)
+    except (ImportError, OSError, ValueError, KeyError, TypeError, _hc.HTTPException):
+        print("facebook: ilustracja niedostępna")
+        return None
 
 ROOT = Path(__file__).resolve().parent
 

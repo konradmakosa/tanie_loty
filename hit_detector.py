@@ -103,7 +103,11 @@ def _env_value(name):
 
 
 def hit_map_url(deal, root=ROOT):
-    photo = map_image(deal, label="hit-admin", bare=True)
+    try:
+        from route_map import render_hit_image
+        photo = render_hit_image(deal, root=root)
+    except (ImportError, OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
+        photo = None
     if photo is None:
         return None, None
     name = "%s-%s-%s.png" % (deal["origin"].lower(), deal["dest"].lower(),

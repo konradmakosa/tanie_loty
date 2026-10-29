@@ -1,7 +1,10 @@
 import io
 import json
 import math
+import re
 import time
+import unicodedata
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -72,6 +75,70 @@ def fetch_tile(zoom, x, y, root=ROOT):
     path.parent.mkdir(parents=True, exist_ok=True)
     tile.save(path, "PNG")
     return tile
+
+
+def _slug(text):
+    _PL = str.maketrans("ąćęłńóśźżĄĆĘŁŃÓŚŹŻ", "acelnoszzACELNOSZZ")
+    text = unicodedata.normalize("NFKD", text.translate(_PL))
+    return re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
+
+
+def city_photo(city, root=ROOT):
+    """Miniatura z Wikipedii (Wikimedia Commons) — darmowe zdjęcie miasta."""
+    cache = root / "data" / "cache" / "city_photos"
+    path = cache / (_slug(city) + ".jpg")
+    if path.exists() and time.time() - path.stat().st_mtime < 30 * 86400:
+        try:
+            return Image.open(path).convert("RGB")
+        except OSError:
+            pass
+    agent = {"User-Agent": "polataj.se/1.0 (city thumbnails)"}
+    for lang in ("pl", "en"):
+        try:
+            api = ("https://%s.wikipedia.org/api/rest_v1/page/summary/%s"
+                   % (lang, urllib.parse.quote(city)))
+            with urllib.request.urlopen(
+                    urllib.request.Request(api, headers=agent), timeout=10) as r:
+                data = json.load(r)
+            src = (data.get("thumbnail") or {}).get("source")
+            if not src:
+                continue
+            with urllib.request.urlopen(
+                    urllib.request.Request(src, headers=agent), timeout=15) as r:
+                image = Image.open(io.BytesIO(r.read(8_000_000))).convert("RGB")
+            cache.mkdir(parents=True, exist_ok=True)
+            image.save(path, "JPEG", quality=88)
+            return image
+        except (OSError, ValueError, KeyError):
+            continue
+    return None
+
+
+def _cover(image, width, height):
+    w, h = image.size
+    scale = max(width / w, height / h)
+    image = image.resize((round(w * scale), round(h * scale)))
+    x = (image.width - width) // 2
+    y = (image.height - height) // 2
+    return image.crop((x, y, x + width, y + height))
+
+
+def render_hit_image(deal, root=ROOT, tile_loader=None):
+    """Zdjęcie miasta (góra) + mapka trasy (dół). Fallback: sama mapka."""
+    if not deal.get("dest_geo"):
+        return None
+    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader, bare=True)
+    photo = city_photo(deal["dest_city"], root)
+    if photo is None:
+        return map_bytes
+    canvas = Image.new("RGB", (WIDTH, HEIGHT), "#0b1733")
+    canvas.paste(_cover(photo, WIDTH, 390), (0, 0))
+    with Image.open(io.BytesIO(map_bytes)) as m:
+        canvas.paste(_cover(m.convert("RGB"), WIDTH, HEIGHT - 390), (0, 390))
+    ImageDraw.Draw(canvas).line((0, 390, WIDTH, 390), fill="#0b1733", width=4)
+    out = io.BytesIO()
+    canvas.save(out, "PNG", optimize=True)
+    return out.getvalue()
 
 
 def font(size):
