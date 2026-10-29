@@ -155,7 +155,12 @@ def render_hit_image(deal, root=ROOT, tile_loader=None):
     if photo is None:
         return map_bytes
     canvas = Image.open(io.BytesIO(map_bytes)).convert("RGB")
-    blend_start = int(WIDTH * 0.50)
+    # gradient zaczyna się za prawym końcem trasy — nie zasłania linii ani punktów
+    airports = airport_coordinates(root)
+    config = json.loads((root / "config.json").read_text(encoding="utf-8"))
+    origin = airports.get(deal["origin"]) or deal.get("origin_geo") or config["ports"][deal["port"]]["geo"]
+    _, _, _, pts = viewport(origin, coordinates(deal["dest_geo"]), HEIGHT)
+    blend_start = min(max(int(max(p[0] for p in pts) + 70), int(WIDTH * 0.45)), WIDTH - 260)
     mask = Image.new("L", (WIDTH, HEIGHT), 0)
     px = mask.load()
     for x in range(blend_start, WIDTH):
