@@ -66,10 +66,12 @@ def ai_description(deal, dates):
     if not key:
         return None
     prompt = (
-        "Napisz krótki (2–3 zdania), luźny opis okazji lotniczej na polskie "
-        "forum Pepper.pl. Trasa: %s – %s, cena %.0f zł %s, przykładowe daty: %s. "
-        "Bez linków, bez autopromocji polataj.se, bez emocji typu 'nie uwierzysz'. "
-        "Brzmi jak od użytkownika forum."
+        "Napisz opis okazji lotniczej w stylu postów na polskim forum Pepper.pl. "
+        "Styl: luźny, krótki (2–4 zdania), z entuzjastycznym ale naturalnym tonem "
+        "jak 'Super cena za...', 'Okazja by tanio polecieć do...', 'Piękna cena za...'. "
+        "Możesz zacząć od powitania typu 'Cześć Pepperki!' lub 'Siemka!'. "
+        "Wspomnij przykładowy termin podróży. Bez linków, bez wzmianki o botach/skannerach. "
+        "Dane: loty %s – %s za %.0f zł %s, terminy: %s."
         % (deal["origin_city"], deal["dest_city"], deal["price"],
            "w jedną stronę" if deal.get("trip") == "oneway" else "w dwie strony",
            ", ".join(d["date_out"] for d in dates[:3])))
