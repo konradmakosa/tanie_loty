@@ -1,9 +1,16 @@
 import hashlib
 import html
+import http.client
 import json
+import os
+import urllib.request
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
 from telegram_alerts import api_call, map_image, process
+from tools.build_pages import slug
+
+ROOT = Path(__file__).resolve().parent
 
 ABSOLUTE_MAX = 60.0
 DISCOUNT_RATIO = 0.30
@@ -49,10 +56,44 @@ def is_hit(deal):
                 price <= typical * DISCOUNT_RATIO)
 
 
-def booking_url(deal):
-    offers = deal.get("offers") or []
-    link = deal.get("direct_link") or (offers[0].get("link") if offers else "")
-    return link or "https://polataj.se/%s/" % deal["port"]
+def route_url(deal):
+    return "https://polataj.se/loty/%s-%s/" % (
+        slug(deal["origin_city"]), slug(deal["dest_city"]))
+
+
+def ai_description(deal, dates):
+    key = os.environ.get("OPENROUTER_API_KEY") or _env_value("OPENROUTER_API_KEY")
+    if not key:
+        return None
+    prompt = (
+        "Napisz krótki (2–3 zdania), luźny opis okazji lotniczej na polskie "
+        "forum Pepper.pl. Trasa: %s – %s, cena %.0f zł %s, przykładowe daty: %s. "
+        "Bez linków, bez autopromocji polataj.se, bez emocji typu 'nie uwierzysz'. "
+        "Brzmi jak od użytkownika forum."
+        % (deal["origin_city"], deal["dest_city"], deal["price"],
+           "w jedną stronę" if deal.get("trip") == "oneway" else "w dwie strony",
+           ", ".join(d["date_out"] for d in dates[:3])))
+    try:
+        req = urllib.request.Request(
+            "https://openrouter.ai/api/v1/chat/completions",
+            data=json.dumps({"model": "openrouter/auto",
+                             "messages": [{"role": "user", "content": prompt}],
+                             "max_tokens": 200}).encode(),
+            headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=20) as r:
+            text = json.load(r)["choices"][0]["message"]["content"].strip()
+        return text if 30 < len(text) < 800 and "http" not in text else None
+    except (OSError, ValueError, KeyError, IndexError, http.client.HTTPException):
+        return None
+
+
+def _env_value(name):
+    path = ROOT / ".env"
+    if path.exists():
+        for line in path.read_text().splitlines():
+            if line.startswith(name + "="):
+                return line.split("=", 1)[1].strip().strip('"').strip("'")
+    return ""
 
 
 def pepper_message(deal):
@@ -70,19 +111,19 @@ def pepper_message(deal):
         "<b>TYTUŁ:</b>\n%s\n\n"
         "<b>CENA:</b>\n%.0f\n\n"
         "<b>LINK:</b>\n%s\n\n"
-        "<b>OPIS DO WKLEJENIA:</b>\n"
-        "Wyszukaliśmy okazję na loty: %s – %s.\n%s\n\n"
+        "<b>OPIS DO WKLEJENIA:</b>\n%s\n\n"
         "<b>Przykładowe daty:</b>\n%s\n\n"
         "Szybsze alerty o takich błędach cenowych i okazjach wpadają na nasz Telegram: "
         "https://t.me/polataj_se"
-        % (esc(title), deal["price"], esc(booking_url(deal)),
-           esc(deal["origin_city"]), esc(deal["dest_city"]),
-           esc("https://polataj.se/%s/" % deal["port"]), dates))
+        % (esc(title), deal["price"], esc(route_url(deal)),
+           esc(ai_description(deal, deal["_dates"]) or
+               "Wyszukaliśmy okazję na loty: %s – %s." % (deal["origin_city"], deal["dest_city"])),
+           dates))
 
 
 def send_admin_hit(config, deal):
     text = pepper_message(deal)
-    photo = map_image(deal, label="hit-admin")
+    photo = map_image(deal, label="hit-admin", bare=True)
     token = config["TELEGRAM_BOT_TOKEN"]
     chat = config["TELEGRAM_ADMIN_CHAT_ID"]
     if photo is not None:

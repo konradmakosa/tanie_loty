@@ -40,8 +40,7 @@ def project(point, zoom):
             (1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * size)
 
 
-def viewport(origin, dest):
-    height = HEIGHT - HEADER - FOOTER
+def viewport(origin, dest, height):
     for zoom in range(9, -1, -1):
         a, b = project(origin, zoom), project(dest, zoom)
         world = 256 * 2 ** zoom
@@ -84,13 +83,13 @@ def font(size):
     return ImageFont.load_default()
 
 
-def render_route_map(deal, root=ROOT, tile_loader=None):
+def render_route_map(deal, root=ROOT, tile_loader=None, bare=False):
     airports = airport_coordinates(root)
     config = json.loads((root / "config.json").read_text(encoding="utf-8"))
     origin = airports.get(deal["origin"]) or deal.get("origin_geo") or config["ports"][deal["port"]]["geo"]
     dest = coordinates(deal["dest_geo"])
-    zoom, left, top, points = viewport(origin, dest)
-    height = HEIGHT - HEADER - FOOTER
+    height = HEIGHT if bare else HEIGHT - HEADER - FOOTER
+    zoom, left, top, points = viewport(origin, dest, height)
     base = Image.new("RGB", (WIDTH, height), "#e3f1f4")
     loader = tile_loader or (lambda z, x, y: fetch_tile(z, x, y, root))
     count = 0
@@ -126,6 +125,15 @@ def render_route_map(deal, root=ROOT, tile_loader=None):
         draw.rounded_rectangle((label_x, label_y, label_x + text_width + 24, label_y + 34),
                                radius=8, fill="#0b1733")
         draw.text((label_x + 12, label_y + 4), label, font=font(20), fill="white")
+    attribution = "Tiles © Esri · Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors"
+    if bare:
+        draw = ImageDraw.Draw(base)
+        tw = draw.textlength(attribution, font=font(11))
+        draw.rounded_rectangle((6, HEIGHT - 20, 14 + tw, HEIGHT - 4), radius=4, fill=(11, 23, 51))
+        draw.text((10, HEIGHT - 19), attribution, font=font(11), fill="#d1daeb")
+        output = io.BytesIO()
+        base.save(output, "PNG", optimize=True)
+        return output.getvalue()
     image = Image.new("RGB", (WIDTH, HEIGHT), "#0b1733")
     image.paste(base, (0, HEADER))
     draw = ImageDraw.Draw(image)
@@ -134,12 +142,11 @@ def render_route_map(deal, root=ROOT, tile_loader=None):
     while size > 15 and draw.textlength(title, font=font(size)) > 680:
         size -= 1
     draw.text((24, 13), title, font=font(size), fill="white")
-    draw.text((24, 48), "polataj.se · schemat połączenia, nie przebieg lotu", font=font(17), fill="#b7c9ee")
+    draw.text((24, 48), "polataj.se", font=font(17), fill="#b7c9ee")
     price = "%.0f zł" % deal["price"]
     draw.text((WIDTH - draw.textlength(price, font=font(32)) - 24, 22),
               price, font=font(32), fill="#4ade80")
-    attribution = "Tiles © Esri · Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors"
-    draw.text((12, HEIGHT - 29), attribution, font=font(15), fill="#d1daeb")
+    draw.text((12, HEIGHT - 26), attribution, font=font(12), fill="#d1daeb")
     output = io.BytesIO()
     image.save(output, "PNG", optimize=True)
     return output.getvalue()

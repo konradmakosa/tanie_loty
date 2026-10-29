@@ -90,12 +90,12 @@ def format_alert(deal):
     )
 
 
-def map_image(deal, label="telegram"):
+def map_image(deal, label="telegram", bare=False):
     if not deal.get("dest_geo"):
         return None
     try:
         from route_map import render_route_map
-        return render_route_map(deal)
+        return render_route_map(deal, bare=bare)
     except (ImportError, OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
         print("%s: mapka niedostępna — wysyłam sam tekst" % label)
         return None
