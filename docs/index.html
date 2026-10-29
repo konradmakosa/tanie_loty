@@ -13,7 +13,7 @@ try {
     [localStorage.getItem("airport")];
   if (port &&
       !/[?&]wybor/.test(location.search) && location.hash !== "#wybor") {
-    location.replace(port);
+    location.replace(port + location.search + location.hash);
   }
 } catch (e) {}
 </script>
@@ -371,7 +371,7 @@ function pick(ap) {
   var n = 3, t;
   function tick() {
     render(n);
-    if (n <= 0) { location.replace(target()[2]); return; }
+    if (n <= 0) { location.replace(target()[2] + location.search + location.hash); return; }
     n -= 1; t = setTimeout(tick, 1000);
   }
   var btn = document.createElement("button");
