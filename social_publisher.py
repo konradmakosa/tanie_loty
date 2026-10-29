@@ -7,6 +7,7 @@ from pathlib import Path
 import facebook_publisher as facebook
 import hit_detector
 import telegram_alerts as telegram
+import wykop_publisher as wykop
 
 ROOT = Path(__file__).resolve().parent
 
@@ -48,6 +49,30 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
             return hit_detector.publish_admin_hits(
                 tg, h_batch, h_candidates, root / 'data/cache/hits_admin.sqlite', now)
         jobs['admin_hits'] = admin_hits
+    wy = wykop.load_config()
+    if wy['key'] and wy['secret']:
+        def wykop_daily():
+            deals = sorted(candidates.values(), key=lambda d: d['price'])[:wykop.MAX_DEALS]
+            image = None
+            if deals:
+                try:
+                    image = facebook.map_image(deals[0])[0]
+                except (IndexError, TypeError):
+                    pass
+            return wykop.run(wy, None, deals, image, False, now)
+        jobs['wykop'] = wykop_daily
+        def wykop_hits():
+            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
+            hits = list(hit_detector.group_hits(h_candidates).values())
+            if not hits:
+                return None
+            image = None
+            try:
+                image = facebook.map_image(hits[0])[0]
+            except (IndexError, TypeError):
+                pass
+            return wykop.run(wy, None, hits, image, True, now)
+        jobs['wykop_hit'] = wykop_hits
     return settle(jobs)
 
 
