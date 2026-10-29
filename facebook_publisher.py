@@ -8,17 +8,24 @@ import urllib.request
 from pathlib import Path
 
 import http.client as _hc
+import io as _io
 
 
 def map_image(deal, label="facebook"):
-    if not deal.get("dest_geo"):
-        return None
+    """Osobne pliki: czysta mapka trasy + zdjęcie miasta (jeśli jest)."""
+    images = []
     try:
-        from route_map import render_hit_image
-        return render_hit_image(deal)
+        from route_map import render_route_map, city_photo, _cover, WIDTH, HEIGHT
+        if deal.get("dest_geo"):
+            images.append(render_route_map(deal, bare=True))
+        photo = city_photo(deal["dest_city"])
+        if photo is not None:
+            buf = _io.BytesIO()
+            _cover(photo, WIDTH, HEIGHT).save(buf, "JPEG", quality=88)
+            images.append(buf.getvalue())
     except (ImportError, OSError, ValueError, KeyError, TypeError, _hc.HTTPException):
-        print("facebook: ilustracja niedostępna")
-        return None
+        print("%s: ilustracja niedostępna" % label)
+    return images
 
 ROOT = Path(__file__).resolve().parent
 
@@ -115,13 +122,22 @@ def publish_post(config, deal):
     if not config['FB_PAGE_ID'].isdigit():
         raise ValueError('nieprawidłowy FB_PAGE_ID')
     message = format_post(deal)
-    photo = map_image(deal, label='facebook')
-    if photo is not None:
-        result = graph_request(config, config['FB_PAGE_ID'] + '/photos', {
-            'message': message, 'published': 'true',
-        }, photo=photo)
-        if result.get('id'):
-            result = {**result, 'photo_id': result['id'], 'id': result.get('post_id') or result['id']}
+    images = map_image(deal, label='facebook')
+    media_ids = []
+    for image in images:
+        try:
+            uploaded = graph_request(config, config['FB_PAGE_ID'] + '/photos',
+                                     {'published': 'false'}, photo=image)
+            if uploaded.get('id'):
+                media_ids.append(uploaded['id'])
+        except FacebookError:
+            print('facebook: zdjęcie nieopublikowane, pomijam')
+    if media_ids:
+        result = graph_request(config, config['FB_PAGE_ID'] + '/feed', {
+            'message': message,
+            'attached_media': json.dumps([{'media_fbid': i} for i in media_ids]),
+        })
+        result['photo_id'] = ','.join(media_ids)
     else:
         result = graph_request(config, config['FB_PAGE_ID'] + '/feed', {'message': message})
     if not result.get('id'):

@@ -228,8 +228,8 @@ def render_route_map(deal, root=ROOT, tile_loader=None, bare=False, height=HEIGH
     if bare:
         draw = ImageDraw.Draw(base)
         tw = draw.textlength(attribution, font=font(11))
-        draw.rounded_rectangle((6, HEIGHT - 20, 14 + tw, HEIGHT - 4), radius=4, fill=(11, 23, 51))
-        draw.text((10, HEIGHT - 19), attribution, font=font(11), fill="#d1daeb")
+        draw.rounded_rectangle((6, HEIGHT - 20, 14 + tw, HEIGHT - 4), radius=4, fill="white")
+        draw.text((10, HEIGHT - 19), attribution, font=font(11), fill="#444444")
         output = io.BytesIO()
         base.save(output, "PNG", optimize=True)
         return output.getvalue()
