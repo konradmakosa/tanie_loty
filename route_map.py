@@ -83,8 +83,33 @@ def _slug(text):
     return re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
 
 
+BAD_WORDS = ("logo", "map", "flag", "coat", "seal", "herb", "collage",
+             "montage", "mosaic", "diagram", "chart", "coa", "arms")
+
+
+def _image_candidates(lang, city, agent):
+    api = ("https://%s.wikipedia.org/w/api.php?action=query&generator=images"
+           "&gimlimit=30&prop=imageinfo&iiprop=url%%7Csize&format=json&titles=%s"
+           % (lang, urllib.parse.quote(city)))
+    with urllib.request.urlopen(
+            urllib.request.Request(api, headers=agent), timeout=10) as r:
+        pages = json.load(r).get("query", {}).get("pages", {})
+    out = []
+    for page in pages.values():
+        info = (page.get("imageinfo") or [{}])[0]
+        url = info.get("url", "")
+        name = page.get("title", "").lower()
+        w, h = info.get("width", 0), info.get("height", 0)
+        if not url or url.lower().endswith((".svg", ".gif")) or w < 700 or h < 300:
+            continue
+        score = min(w, 2000) + (500 if 1.2 <= w / max(h, 1) <= 2.4 else 0)
+        score -= sum(600 for bad in BAD_WORDS if bad in name)
+        out.append((score, url))
+    return out
+
+
 def city_photo(city, root=ROOT):
-    """Miniatura z Wikipedii (Wikimedia Commons) — darmowe zdjęcie miasta."""
+    """Najlepsze (wg heurystyki) zdjęcie miasta z Wikimedia Commons."""
     cache = root / "data" / "cache" / "city_photos"
     path = cache / (_slug(city) + ".jpg")
     if path.exists() and time.time() - path.stat().st_mtime < 30 * 86400:
@@ -92,23 +117,21 @@ def city_photo(city, root=ROOT):
             return Image.open(path).convert("RGB")
         except OSError:
             pass
-    agent = {"User-Agent": "polataj.se/1.0 (city thumbnails)"}
+    agent = {"User-Agent": "polataj.se/1.0 (city photos)"}
     for lang in ("pl", "en"):
         try:
-            api = ("https://%s.wikipedia.org/api/rest_v1/page/summary/%s"
-                   % (lang, urllib.parse.quote(city)))
-            with urllib.request.urlopen(
-                    urllib.request.Request(api, headers=agent), timeout=10) as r:
-                data = json.load(r)
-            src = (data.get("thumbnail") or {}).get("source")
-            if not src:
-                continue
-            with urllib.request.urlopen(
-                    urllib.request.Request(src, headers=agent), timeout=15) as r:
-                image = Image.open(io.BytesIO(r.read(8_000_000))).convert("RGB")
-            cache.mkdir(parents=True, exist_ok=True)
-            image.save(path, "JPEG", quality=88)
-            return image
+            for _, src in sorted(_image_candidates(lang, city, agent),
+                                 reverse=True)[:5]:
+                try:
+                    with urllib.request.urlopen(
+                            urllib.request.Request(src, headers=agent),
+                            timeout=15) as r:
+                        image = Image.open(io.BytesIO(r.read(8_000_000))).convert("RGB")
+                except (OSError, ValueError):
+                    continue
+                cache.mkdir(parents=True, exist_ok=True)
+                image.save(path, "JPEG", quality=88)
+                return image
         except (OSError, ValueError, KeyError):
             continue
     return None
@@ -127,15 +150,18 @@ def render_hit_image(deal, root=ROOT, tile_loader=None):
     """Zdjęcie miasta (góra) + mapka trasy (dół). Fallback: sama mapka."""
     if not deal.get("dest_geo"):
         return None
-    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader, bare=True)
+    photo_h = 390
+    map_h = HEIGHT - photo_h
+    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader,
+                                 bare=True, height=map_h)
     photo = city_photo(deal["dest_city"], root)
     if photo is None:
         return map_bytes
     canvas = Image.new("RGB", (WIDTH, HEIGHT), "#0b1733")
-    canvas.paste(_cover(photo, WIDTH, 390), (0, 0))
+    canvas.paste(_cover(photo, WIDTH, photo_h), (0, 0))
     with Image.open(io.BytesIO(map_bytes)) as m:
-        canvas.paste(_cover(m.convert("RGB"), WIDTH, HEIGHT - 390), (0, 390))
-    ImageDraw.Draw(canvas).line((0, 390, WIDTH, 390), fill="#0b1733", width=4)
+        canvas.paste(m.convert("RGB"), (0, photo_h))
+    ImageDraw.Draw(canvas).line((0, photo_h, WIDTH, photo_h), fill="#0b1733", width=4)
     out = io.BytesIO()
     canvas.save(out, "PNG", optimize=True)
     return out.getvalue()
@@ -150,12 +176,12 @@ def font(size):
     return ImageFont.load_default()
 
 
-def render_route_map(deal, root=ROOT, tile_loader=None, bare=False):
+def render_route_map(deal, root=ROOT, tile_loader=None, bare=False, height=HEIGHT):
     airports = airport_coordinates(root)
     config = json.loads((root / "config.json").read_text(encoding="utf-8"))
     origin = airports.get(deal["origin"]) or deal.get("origin_geo") or config["ports"][deal["port"]]["geo"]
     dest = coordinates(deal["dest_geo"])
-    height = HEIGHT if bare else HEIGHT - HEADER - FOOTER
+    height = height if bare else height - HEADER - FOOTER
     zoom, left, top, points = viewport(origin, dest, height)
     base = Image.new("RGB", (WIDTH, height), "#e3f1f4")
     loader = tile_loader or (lambda z, x, y: fetch_tile(z, x, y, root))
