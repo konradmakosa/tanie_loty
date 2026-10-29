@@ -65,7 +65,7 @@ def refresh_social_links():
 def render(tpl, p):
     out = tpl.replace("{{OG_IMAGE_URL}}", og_image_url()).replace("{{SOCIAL_LINKS}}", social_links())
     for k in ("PORT", "CITY", "CITY_GEN", "AIRPORTS_DESC", "GEO_LAT",
-              "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG", "ROUTE_LINKS"):
+              "GEO_LON", "EXAMPLE_ROUTE", "CITY_SLUG", "ROUTE_LINKS", "WYKOP_SRC"):
         out = out.replace("{{%s}}" % k, str(p["__vals__"][k]))
     return out
 
