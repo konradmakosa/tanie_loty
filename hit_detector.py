@@ -57,6 +57,8 @@ def is_hit(deal):
 
 
 def route_url(deal):
+    if deal.get("trip") == "oneway" or not deal.get("date_in"):
+        return "https://polataj.se/%s/#wjedna" % deal["port"]
     return "https://polataj.se/loty/%s-%s/" % (
         slug(deal["origin_city"]), slug(deal["dest_city"]))
 
