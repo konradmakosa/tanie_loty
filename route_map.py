@@ -147,21 +147,22 @@ def _cover(image, width, height):
 
 
 def render_hit_image(deal, root=ROOT, tile_loader=None):
-    """Zdjęcie miasta (góra) + mapka trasy (dół). Fallback: sama mapka."""
+    """Mapka trasy po lewej, zdjęcie miasta wchodzi gradientem od prawej."""
     if not deal.get("dest_geo"):
         return None
-    photo_h = 390
-    map_h = HEIGHT - photo_h
-    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader,
-                                 bare=True, height=map_h)
+    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader, bare=True)
     photo = city_photo(deal["dest_city"], root)
     if photo is None:
         return map_bytes
-    canvas = Image.new("RGB", (WIDTH, HEIGHT), "#0b1733")
-    canvas.paste(_cover(photo, WIDTH, photo_h), (0, 0))
-    with Image.open(io.BytesIO(map_bytes)) as m:
-        canvas.paste(m.convert("RGB"), (0, photo_h))
-    ImageDraw.Draw(canvas).line((0, photo_h, WIDTH, photo_h), fill="#0b1733", width=4)
+    canvas = Image.open(io.BytesIO(map_bytes)).convert("RGB")
+    blend_start = int(WIDTH * 0.50)
+    mask = Image.new("L", (WIDTH, HEIGHT), 0)
+    px = mask.load()
+    for x in range(blend_start, WIDTH):
+        alpha = min(255, int((x - blend_start) / (WIDTH - blend_start) * 255 * 1.35))
+        for y in range(HEIGHT):
+            px[x, y] = alpha
+    canvas.paste(_cover(photo, WIDTH, HEIGHT), (0, 0), mask)
     out = io.BytesIO()
     canvas.save(out, "PNG", optimize=True)
     return out.getvalue()
