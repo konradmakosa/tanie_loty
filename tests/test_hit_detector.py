@@ -40,8 +40,8 @@ class HitDetectorTest(unittest.TestCase):
         for block in ('TYTUŁ:', 'CENA:', 'LINK:', 'OPIS DO WKLEJENIA:', 'Przykładowe daty:'):
             self.assertIn(block, msg)
         self.assertEqual(msg.count('•'), 3)
-        self.assertIn('https://polataj.se/zwarszawy/', msg)
-        self.assertIn('https://t.me/polataj_se', msg)
+        self.assertIn('https://polataj.se/loty/warszawa-oslo/', msg)
+        self.assertNotIn('t.me/polataj', msg)
 
     def test_send_uses_admin_chat_not_channel(self):
         api = Mock(return_value={'message_id': 7})

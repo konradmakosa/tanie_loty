@@ -115,9 +115,7 @@ def pepper_message(deal):
         "<b>CENA:</b>\n%.0f\n\n"
         "<b>LINK:</b>\n%s\n\n"
         "<b>OPIS DO WKLEJENIA:</b>\n%s\n\n"
-        "<b>Przykładowe daty:</b>\n%s\n\n"
-        "Szybsze alerty o takich błędach cenowych i okazjach wpadają na nasz Telegram: "
-        "https://t.me/polataj_se"
+        "<b>Przykładowe daty:</b>\n%s"
         % (esc(title), deal["price"], esc(route_url(deal)),
            esc(ai_description(deal, deal["_dates"]) or
                "Wyszukaliśmy okazję na loty: %s – %s." % (deal["origin_city"], deal["dest_city"])),
