@@ -68,11 +68,12 @@ def ai_description(deal, dates):
     if not key:
         return None
     prompt = (
-        "Napisz opis okazji lotniczej w stylu postów na polskim forum Pepper.pl. "
-        "Styl: luźny, krótki (2–4 zdania), z entuzjastycznym ale naturalnym tonem "
-        "jak 'Super cena za...', 'Okazja by tanio polecieć do...', 'Piękna cena za...'. "
-        "Możesz zacząć od powitania typu 'Cześć Pepperki!' lub 'Siemka!'. "
-        "Wspomnij przykładowy termin podróży. Bez linków, bez wzmianki o botach/skannerach. "
+        "Wymyśl opis okazji lotniczej w stylu użytkowników polskiego forum Pepper.pl. "
+        "Bądź kreatywny i zróżnicowany: raz entuzjastycznie ('Super cena za Wilno!'), "
+        "raz rzeczowo ('Złapałem bezpośrednie loty...'), raz z nutką żartu. "
+        "2–4 zdania. Wpleć naturalnie coś o destynacji (atramkcje, jedzenie, klimat). "
+        "Wspomnij przykładowy termin podróży. Możesz zacząć od 'Cześć Pepperki!' "
+        "albo 'Siemka!'. Zakaz: linków, botów/skannerów/AI, przesadnego klikbajtu. "
         "Dane: loty %s – %s za %.0f zł %s, terminy: %s."
         % (deal["origin_city"], deal["dest_city"], deal["price"],
            "w jedną stronę" if deal.get("trip") == "oneway" else "w dwie strony",
@@ -82,7 +83,7 @@ def ai_description(deal, dates):
             "https://openrouter.ai/api/v1/chat/completions",
             data=json.dumps({"model": "openrouter/auto",
                              "messages": [{"role": "user", "content": prompt}],
-                             "max_tokens": 200}).encode(),
+                             "max_tokens": 220, "temperature": 0.9}).encode(),
             headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
         with urllib.request.urlopen(req, timeout=20) as r:
             message = json.load(r)["choices"][0]["message"]
@@ -99,6 +100,19 @@ def _env_value(name):
             if line.startswith(name + "="):
                 return line.split("=", 1)[1].strip().strip('"').strip("'")
     return ""
+
+
+def fallback_description(deal):
+    variants = (
+        "Złapałem super okazję: %s – %s za %.0f zł! Ktoś chętny?",
+        "Cześć Pepperki! Piękna cena za loty %s – %s — tylko %.0f zł.",
+        "Okazja by tanio polecieć: %s – %s za %.0f zł. Szybko znika!",
+        "Super cena na trasie %s – %s: %.0f zł. Przy takich cenach długo nie będzie.",
+        "Kolejna perełka cenowa — %s – %s za jedyne %.0f zł!",
+    )
+    index = int(hashlib.sha256(
+        ("%s-%s" % (deal["origin"], deal["dest"])).encode()).hexdigest(), 16) % len(variants)
+    return variants[index] % (deal["origin_city"], deal["dest_city"], deal["price"])
 
 
 def pepper_message(deal):
@@ -119,8 +133,7 @@ def pepper_message(deal):
         "<b>OPIS DO WKLEJENIA:</b>\n%s\n\n"
         "<b>Przykładowe daty:</b>\n%s"
         % (esc(title), deal["price"], esc(route_url(deal)),
-           esc(ai_description(deal, deal["_dates"]) or
-               "Wyszukaliśmy okazję na loty: %s – %s." % (deal["origin_city"], deal["dest_city"])),
+           esc(ai_description(deal, deal["_dates"]) or fallback_description(deal)),
            dates))
 
 
