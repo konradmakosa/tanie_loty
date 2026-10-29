@@ -84,7 +84,7 @@ def ai_description(deal, dates):
                 "https://openrouter.ai/api/v1/chat/completions",
                 data=json.dumps({"model": model,
                                  "messages": [{"role": "user", "content": prompt}],
-                                 "max_tokens": 220, "temperature": 0.9}).encode(),
+                                 "max_tokens": 900, "temperature": 0.9}).encode(),
                 headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
             with urllib.request.urlopen(req, timeout=20) as r:
                 message = json.load(r)["choices"][0]["message"]
