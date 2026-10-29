@@ -83,7 +83,8 @@ def ai_description(deal, dates):
                              "max_tokens": 200}).encode(),
             headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
         with urllib.request.urlopen(req, timeout=20) as r:
-            text = json.load(r)["choices"][0]["message"]["content"].strip()
+            message = json.load(r)["choices"][0]["message"]
+        text = (message.get("content") or "").strip()
         return text if 30 < len(text) < 800 and "http" not in text else None
     except (OSError, ValueError, KeyError, IndexError, http.client.HTTPException):
         return None
