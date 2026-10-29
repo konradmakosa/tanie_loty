@@ -105,13 +105,13 @@ def format_post(deal):
                 deal['date_out'], deal['date_in'], deal['origin'], deal['dest']))
     if deal.get('airline'):
         text += 'Linia: %s\n' % deal['airline']
-    return text + '\nSprawdź szczegóły i aktualną cenę na polataj.se.'
+    return text + '\nSprawdź szczegóły i aktualną cenę na https://polataj.se/%s/' % deal['port']
 
 
 def publish_post(config, deal):
     if not config['FB_PAGE_ID'].isdigit():
         raise ValueError('nieprawidłowy FB_PAGE_ID')
-    message = format_post(deal) + '\n\nhttps://polataj.se/%s/' % deal['port']
+    message = format_post(deal)
     photo = map_image(deal, label='facebook')
     if photo is not None:
         result = graph_request(config, config['FB_PAGE_ID'] + '/photos', {
