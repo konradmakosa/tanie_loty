@@ -7,6 +7,7 @@ import json
 import re
 import unicodedata
 from pathlib import Path
+from urllib.parse import quote
 
 try:
     from .social_links import social_links
@@ -86,6 +87,10 @@ def main(routes=None):
             "GEO_LON": "%.2f" % v["geo"][1],
             "EXAMPLE_ROUTE": v["example_route"],
             "CITY_SLUG": slug(v["city"]),
+            "WYKOP_SRC": ("https://wykop.pl/dataprovider/diggerwidget?type=normal"
+                          "&url=%s&title=%s&bg=0B1733" % (
+                              quote("https://polataj.se/%s/" % port, safe=""),
+                              quote("Tanie loty %s | polataj.se" % v["city_gen"], safe=""))),
             "ROUTE_LINKS": "".join(
                 '<a href="/loty/%s/">%s<span>od %.0f zł</span></a>'
                 % (html.escape(r["slug"], quote=True),

@@ -14,8 +14,15 @@ import unicodedata
 from collections import defaultdict
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 from build_pages import og_image_url, social_links
+
+
+def wykop_src(url, title):
+    return ("https://wykop.pl/dataprovider/diggerwidget?type=normal"
+            "&url=%s&title=%s&bg=0B1733" % (quote(url, safe=""),
+                                            quote(title, safe="")))
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
@@ -312,6 +319,7 @@ def render_route(r, cfg, related_from, related_to):
         "TITLE": esc(title), "DESCRIPTION": esc(desc),
         "CANONICAL": esc(canonical), "ROBOTS": robots,
         "JSONLD": jsonld_html, "BODY": "".join(b),
+        "WYKOP_SRC": wykop_src(canonical, title),
     }.items():
         out = out.replace("{{%s}}" % k, v)
     return out
@@ -347,6 +355,8 @@ def render_index(routes, cfg):
                            "z polskich lotnisk. Skaner cen odświeżany co 6 h."),
         "CANONICAL": SITE + "/loty/",
         "ROBOTS": "", "JSONLD": "", "BODY": body,
+        "WYKOP_SRC": wykop_src(SITE + "/loty/",
+                             "Tanie loty z Polski — wszystkie trasy | polataj.se"),
     }.items():
         out = out.replace("{{%s}}" % k, v)
     return out
