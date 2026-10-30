@@ -41,7 +41,7 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
             return telegram.process(
                 {**fb, 'RECIPIENT_ID': 'facebook:' + fb['FB_PAGE_ID']},
                 batch, candidates, root / 'data/cache/facebook.sqlite', now,
-                sender=facebook.send_alert, label='facebook')
+                sender=facebook.send_alert, label='facebook', route_days=7)
         jobs['facebook'] = publish_facebook
     if tg.get('TELEGRAM_ADMIN_CHAT_ID'):
         def admin_hits():

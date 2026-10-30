@@ -152,7 +152,8 @@ def collect_candidates(root, now):
 
 
 def process(config, batch, candidates, state_path, now, sender=send_alert,
-            allowed_ports=None, allow_deal=None, label="telegram"):
+            allowed_ports=None, allow_deal=None, label="telegram",
+            route_days=0):
     state_path = Path(state_path)
     state_path.parent.mkdir(parents=True, exist_ok=True)
     with state_path.with_suffix(".lock").open("a") as lock:
@@ -165,6 +166,9 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
             db.execute("CREATE TABLE IF NOT EXISTS batches ("
                        "channel TEXT, batch TEXT, attempts INTEGER DEFAULT 0, "
                        "PRIMARY KEY(channel,batch))")
+            db.execute("CREATE TABLE IF NOT EXISTS routes ("
+                       "channel TEXT, route TEXT, sent_at TEXT, "
+                       "PRIMARY KEY(channel,route))")
             channel = config.get("RECIPIENT_ID") or config["TELEGRAM_CHANNEL_ID"]
             for key, deal in candidates.items():
                 db.execute("INSERT INTO deals(channel,id,payload,seen_at) VALUES(?,?,?,?) "
@@ -188,6 +192,13 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
                     continue
                 if allow_deal is not None and not allow_deal(deal):
                     continue
+                if route_days:
+                    route = "%s-%s" % (deal["origin"], deal["dest"])
+                    row = db.execute("SELECT sent_at FROM routes WHERE channel=? AND route=?",
+                                     (channel, route)).fetchone()
+                    if (row and datetime.fromisoformat(row[0])
+                            > now - timedelta(days=route_days)):
+                        continue
                 if attempts >= MAX_MESSAGES:
                     break
                 attempts += 1
@@ -198,6 +209,9 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
                     print("%s: wysyłka niepotwierdzona, ponowienie w następnym przebiegu" % label)
                     break
                 db.execute("UPDATE deals SET sent=1 WHERE channel=? AND id=?", (channel, key))
+                if route_days:
+                    db.execute("INSERT OR REPLACE INTO routes(channel,route,sent_at) "
+                               "VALUES(?,?,?)", (channel, route, now.isoformat()))
                 db.commit()
                 sent += 1
                 print("%s: wysłano %s" % (label, key))
