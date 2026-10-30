@@ -3,6 +3,8 @@ import html
 import http.client
 import json
 import os
+import re
+import threading
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -69,12 +71,15 @@ def ai_description(deal, dates):
         return None
     prompt = (
         "Napisz krótki, luźny opis okazji lotniczej (2–3 zdania) jak na polskie "
-        "forum Pepper.pl — naturalny ton użytkownika, może powitanie 'Siemka!' "
-        "lub 'Cześć Pepperki!'. Możesz wpleść coś ciekawego o destynacji. "
-        "Bez linków, bez wzmianki o botach. Dane: %s – %s, %.0f zł %s, termin %s."
+        "forum — naturalny, ciekawy ton. Bez żadnych powitań, zwłaszcza Siemka, "
+        "cześć i witajcie. Zacznij od konkretu związanego z miastem docelowym: "
+        "atrakcji, klimatu lub pomysłu na pobyt. Nie wymyślaj warunków biletu, "
+        "bagażu, rabatów ani presji czasowej. Bez linków i autopromocji, bez "
+        "wzmianki o botach lub AI. Dane: %s – %s, %.0f zł %s, termin %s."
         % (deal["origin_city"], deal["dest_city"], deal["price"],
-           "w jedną stronę" if deal.get("trip") == "oneway" else "w dwie strony",
-           ", ".join(d["date_out"] for d in dates[:3])))
+           "w jedną stronę" if deal.get("trip") == "oneway" or not deal.get("date_in") else "w dwie strony",
+           ", ".join(d["date_out"] + (" – " + d["date_in"] if d.get("date_in") else "")
+                     for d in dates[:3])))
     for model in ("openrouter/auto", "deepseek/deepseek-v4.1-flash-1017"):
         try:
             req = urllib.request.Request(
@@ -86,7 +91,8 @@ def ai_description(deal, dates):
             with urllib.request.urlopen(req, timeout=20) as r:
                 message = json.load(r)["choices"][0]["message"]
             text = (message.get("content") or "").strip()
-            if 30 < len(text) < 800 and "http" not in text:
+            if (30 < len(text) < 800 and "http" not in text.lower()
+                    and not re.search(r"\b(siemka|cześć|witajcie|hej|dzień dobry)\b", text, re.I)):
                 return text
         except (OSError, ValueError, KeyError, IndexError, http.client.HTTPException):
             continue
@@ -136,14 +142,27 @@ def hit_map_url(deal, root=ROOT):
 def fallback_description(deal):
     variants = (
         "Złapałem super okazję: %s – %s za %.0f zł! Ktoś chętny?",
-        "Cześć Pepperki! Piękna cena za loty %s – %s — tylko %.0f zł.",
-        "Okazja by tanio polecieć: %s – %s za %.0f zł. Szybko znika!",
-        "Super cena na trasie %s – %s: %.0f zł. Przy takich cenach długo nie będzie.",
+        "Pomysł na kolejny wyjazd: %s – %s za %.0f zł.",
+        "Okazja, by tanio polecieć: %s – %s za %.0f zł.",
+        "Loty na trasie %s – %s za %.0f zł — warto sprawdzić podane terminy.",
         "Kolejna perełka cenowa — %s – %s za jedyne %.0f zł!",
     )
     index = int(hashlib.sha256(
         ("%s-%s" % (deal["origin"], deal["dest"])).encode()).hexdigest(), 16) % len(variants)
     return variants[index] % (deal["origin_city"], deal["dest_city"], deal["price"])
+
+
+_descriptions = {}
+_description_lock = threading.Lock()
+
+
+def description(deal):
+    key = tuple(deal.get(k) for k in (
+        "origin", "dest", "origin_city", "dest_city", "price", "date_out", "date_in", "trip"))
+    with _description_lock:
+        if key not in _descriptions:
+            _descriptions[key] = ai_description(deal, [deal]) or fallback_description(deal)
+        return _descriptions[key]
 
 
 def pepper_message(deal, map_url=None):
@@ -165,7 +184,7 @@ def pepper_message(deal, map_url=None):
         "<b>OPIS DO WKLEJENIA:</b>\n%s\n\n"
         "<b>Przykładowe daty:</b>\n%s%s"
         % (esc(title), deal["price"], esc(route_url(deal)),
-           esc(ai_description(deal, deal["_dates"]) or fallback_description(deal)),
+           esc(description(deal)),
            dates, image_block))
 
 

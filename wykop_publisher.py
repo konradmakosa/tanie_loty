@@ -132,7 +132,10 @@ def format_deal(index, deal):
 
 
 def format_digest(deals):
-    body = "\n\n".join(format_deal(i + 1, d) for i, d in enumerate(deals[:MAX_DEALS]))
+    if not deals:
+        raise ValueError('brak ofert do podsumowania')
+    body = "\n\n".join(format_deal(i + 1, d) + "\n" + d.get('_description', '')
+                       for i, d in enumerate(deals[:MAX_DEALS]))
     return ("✈️ **Najlepsze tanie loty z polskich lotnisk — podsumowanie**\n\n"
             + body +
             "\n\n---\nSkaner & alerty w czasie rzeczywistym: https://polataj.se | "
@@ -141,7 +144,8 @@ def format_digest(deals):
 
 
 def format_hit(deal):
-    return ("🔥 **Błąd cenowy / hit cenowy!**\n\n" + format_deal(1, deal) +
+    return ("🔥 **Hit cenowy!**\n\n" + format_deal(1, deal) +
+            "\n" + deal.get('_description', '') +
             "\n\n---\nSzczegóły: https://polataj.se/%s/\n"
             "#tanieloty #okazja #polatajse" % deal["port"])
 
@@ -157,12 +161,17 @@ def post(config, content, image=None):
 
 def run(config, batch_state, deals, image, is_hit, now):
     """Decyduje i publikuje. Zwraca 'digest'/'hit'/None."""
+    if not deals or not config['enabled']:
+        return None
     state = _load_state()
+    if (is_hit and not can_hit(state, now)) or (not is_hit and not can_digest(state, now)):
+        return None
+    from hit_detector import description
+    deals = [{**d, '_description': description(d)} for d in deals[:1 if is_hit else MAX_DEALS]]
     if is_hit:
-        if not can_hit(state, now):
-            return None
         result = post(config, format_hit(deals[0]), image)
-        if result or not config["enabled"]:
+        if result:
+            state = _load_state()
             state["hit_ts"] = now.timestamp()
             _save_state(state)
             return "hit" if result else None
@@ -170,7 +179,8 @@ def run(config, batch_state, deals, image, is_hit, now):
     if not can_digest(state, now):
         return None
     result = post(config, format_digest(deals), image)
-    if result or not config["enabled"]:
+    if result:
+        state = _load_state()
         state["digest_date"] = now.strftime("%Y-%m-%d")
         _save_state(state)
         return "digest" if result else None

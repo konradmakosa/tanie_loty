@@ -61,7 +61,11 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
                 except (IndexError, TypeError):
                     image = None
                 results['hit'] = wykop.run(wy, None, hits, image, True, now)
-            deals = sorted(candidates.values(), key=lambda d: d['price'])[:wykop.MAX_DEALS]
+            routes = {}
+            for deal in sorted(h_candidates.values(), key=lambda d: d['price']):
+                if deal.get('price', 0) > 0:
+                    routes.setdefault((deal['origin_city'], deal['dest_city']), deal)
+            deals = list(routes.values())[:wykop.MAX_DEALS]
             image = None
             if deals:
                 try:

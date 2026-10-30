@@ -19,6 +19,31 @@ def deal(price, typical=300, origin='WAW', dest='OSL', d='2026-11-12', r='2026-1
 
 
 class HitDetectorTest(unittest.TestCase):
+    def test_empty_wykop_never_posts_or_changes_state(self):
+        import wykop_publisher as wykop
+        from unittest.mock import patch
+        with patch.object(wykop, 'post') as post, patch.object(wykop, '_save_state') as save:
+            for is_hit in (True, False):
+                self.assertIsNone(wykop.run({'enabled': True}, None, [], None, is_hit, NOW))
+            post.assert_not_called()
+            save.assert_not_called()
+        with self.assertRaises(ValueError):
+            wykop.format_digest([])
+
+    def test_wykop_descriptions_and_refresh_state_survive(self):
+        import wykop_publisher as wykop
+        from unittest.mock import patch
+        text = 'Oslo to pomysł na spacer nad fiordem i wizytę w muzeach.'
+        with patch.object(wykop, '_load_state', side_effect=[{}, {'rtoken': 'rotated'}]), \
+                patch.object(wykop, '_save_state') as save, \
+                patch.object(wykop, 'post', return_value={'id': 1}) as post, \
+                patch.object(hit_detector, 'description', return_value=text):
+            self.assertEqual(wykop.run({'enabled': True}, None, [deal(55)], b'png', False, NOW), 'digest')
+            self.assertIn(text, post.call_args.args[1])
+            self.assertEqual(post.call_args.args[2], b'png')
+            self.assertEqual(save.call_args.args[0]['rtoken'], 'rotated')
+            self.assertEqual(save.call_args.args[0]['digest_date'], '2026-10-28')
+
     def test_thresholds(self):
         self.assertTrue(hit_detector.is_hit(deal(60, typical=1000)))
         self.assertFalse(hit_detector.is_hit(deal(61, typical=100)))

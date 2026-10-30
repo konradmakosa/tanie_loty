@@ -121,7 +121,8 @@ def format_post(deal):
 def publish_post(config, deal):
     if not config['FB_PAGE_ID'].isdigit():
         raise ValueError('nieprawidłowy FB_PAGE_ID')
-    message = format_post(deal)
+    from hit_detector import description
+    message = description(deal) + '\n\n' + format_post(deal)
     images = map_image(deal, label='facebook')
     media_ids = []
     for image in images:

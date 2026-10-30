@@ -251,6 +251,15 @@
   `deploy_site.py` musi wgrywać `.css` zawsze, bo podmiana stylu może mieć
   ten sam rozmiar pliku.
 
+## Wspólne opisy publikacji
+
+- Opisy AI dla Telegrama (publicznego, prywatnego i admina), Facebooka oraz
+  każdej oferty digestu/hitu Wykopa pochodzą z `hit_detector.description()`.
+  Bez powitań (zwłaszcza „Siemka!”), bez linków w opisie, z nawiązaniem do
+  miasta docelowego. Cena, daty i link pozostają w szablonach kanałów.
+- Wykop pomija pusty zestaw ofert bez publikacji i zmiany limitów. Digest
+  wybiera różne trasy ze wszystkich świeżych ofert, nie tylko rekordów RT ≤200 zł.
+
 ## Social / branding
 
 - `docs/og.png` (1200×630) to aktualna grafika dostarczona ręcznie:

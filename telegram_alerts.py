@@ -102,7 +102,8 @@ def map_image(deal, label="telegram", bare=False):
 
 
 def send_alert(config, deal):
-    text = format_alert(deal)
+    from hit_detector import description
+    text = format_alert(deal) + '\n\n' + html.escape(description(deal))
     photo = map_image(deal) if len(text) <= 1024 else None
     if photo is not None:
         result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendPhoto", {
