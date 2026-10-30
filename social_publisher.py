@@ -52,6 +52,15 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
     wy = wykop.load_config()
     if wy['key'] and wy['secret']:
         def wykop_daily():
+            results = {}
+            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
+            hits = list(hit_detector.group_hits(h_candidates).values())
+            if hits:
+                try:
+                    image = facebook.map_image(hits[0])[0]
+                except (IndexError, TypeError):
+                    image = None
+                results['hit'] = wykop.run(wy, None, hits, image, True, now)
             deals = sorted(candidates.values(), key=lambda d: d['price'])[:wykop.MAX_DEALS]
             image = None
             if deals:
@@ -59,20 +68,9 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
                     image = facebook.map_image(deals[0])[0]
                 except (IndexError, TypeError):
                     pass
-            return wykop.run(wy, None, deals, image, False, now)
+            results['digest'] = wykop.run(wy, None, deals, image, False, now)
+            return results
         jobs['wykop'] = wykop_daily
-        def wykop_hits():
-            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
-            hits = list(hit_detector.group_hits(h_candidates).values())
-            if not hits:
-                return None
-            image = None
-            try:
-                image = facebook.map_image(hits[0])[0]
-            except (IndexError, TypeError):
-                pass
-            return wykop.run(wy, None, hits, image, True, now)
-        jobs['wykop_hit'] = wykop_hits
     return settle(jobs)
 
 
