@@ -31,7 +31,8 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
     jobs = {}
     if tg.get('TELEGRAM_ENABLED') == '1':
         jobs['telegram'] = lambda: telegram.process(
-            tg, batch, candidates, root / 'data/cache/telegram.sqlite', now)
+            tg, batch, candidates, root / 'data/cache/telegram.sqlite', now,
+            route_days=3)
         jobs['telegram_private'] = lambda: telegram.publish_private(
             tg, batch, candidates, root / 'data/cache/telegram.sqlite', now,
             subscribers_path=root / 'data/cache/telegram_subscribers.sqlite')
@@ -52,28 +53,11 @@ def publish_all(batch, candidates, now, tg, fb, root=ROOT):
     wy = wykop.load_config()
     if wy['key'] and wy['secret']:
         def wykop_daily():
-            results = {}
-            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
-            hits = list(hit_detector.group_hits(h_candidates).values())
-            if hits:
-                try:
-                    image = facebook.map_image(hits[0])[0]
-                except (IndexError, TypeError):
-                    image = None
-                results['hit'] = wykop.run(wy, None, hits, image, True, now)
-            routes = {}
-            for deal in sorted(h_candidates.values(), key=lambda d: d['price']):
-                if deal.get('price', 0) > 0:
-                    routes.setdefault((deal['origin_city'], deal['dest_city']), deal)
-            deals = list(routes.values())[:wykop.MAX_DEALS]
-            image = None
-            if deals:
-                try:
-                    image = facebook.map_image(deals[0])[0]
-                except (IndexError, TypeError):
-                    pass
-            results['digest'] = wykop.run(wy, None, deals, image, False, now)
-            return results
+            # te same oferty co na pozostałych kanałach, 1 obrazek na wpis
+            def image_for(deal):
+                images = facebook.map_image(deal)
+                return images[0] if images else None
+            return {'posts': wykop.publish(wy, candidates.values(), image_for, now)}
         jobs['wykop'] = wykop_daily
     return settle(jobs)
 

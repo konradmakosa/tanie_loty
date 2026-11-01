@@ -7,25 +7,14 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-import http.client as _hc
-import io as _io
-
-
 def map_image(deal, label="facebook"):
     """Osobne pliki: czysta mapka trasy + zdjęcie miasta (jeśli jest)."""
-    images = []
     try:
-        from route_map import render_route_map, city_photo, _cover, WIDTH, HEIGHT
-        if deal.get("dest_geo"):
-            images.append(render_route_map(deal, bare=True))
-        photo = city_photo(deal["dest_city"])
-        if photo is not None:
-            buf = _io.BytesIO()
-            _cover(photo, WIDTH, HEIGHT).save(buf, "JPEG", quality=88)
-            images.append(buf.getvalue())
-    except (ImportError, OSError, ValueError, KeyError, TypeError, _hc.HTTPException):
+        from route_map import alert_images
+        return alert_images(deal, bare=True)
+    except (ImportError, OSError, ValueError, KeyError, TypeError):
         print("%s: ilustracja niedostępna" % label)
-    return images
+        return []
 
 ROOT = Path(__file__).resolve().parent
 

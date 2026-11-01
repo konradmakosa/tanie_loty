@@ -9,7 +9,7 @@ import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from telegram_alerts import api_call, map_image, process
+from telegram_alerts import api_call, process
 from tools.build_pages import slug
 
 ROOT = Path(__file__).resolve().parent
@@ -70,7 +70,7 @@ def ai_description(deal, dates):
     if not key:
         return None
     prompt = (
-        "Napisz krótki, luźny opis okazji lotniczej (2–3 zdania) jak na polskie "
+        "Napisz krótki, luźny opis okazji lotniczej (3–4 zdania) jak na polskie "
         "forum — naturalny, ciekawy ton. Bez żadnych powitań, zwłaszcza Siemka, "
         "cześć i witajcie. Zacznij od konkretu związanego z miastem docelowym: "
         "atrakcji, klimatu lub pomysłu na pobyt. Nie wymyślaj warunków biletu, "
@@ -110,8 +110,8 @@ def _env_value(name):
 
 def hit_map_url(deal, root=ROOT):
     try:
-        from route_map import render_hit_image
-        photo = render_hit_image(deal, root=root)
+        from route_map import render_route_map
+        photo = render_route_map(deal, root=root, bare=True)
     except (ImportError, OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
         photo = None
     if photo is None:
@@ -177,7 +177,7 @@ def pepper_message(deal, map_url=None):
         for d in deal["_dates"][:MAX_DATES])
     image_block = "\n\n<b>OBRAZEK (URL):</b>\n%s" % esc(map_url) if map_url else ""
     return (
-        "🔥 <b>HIT NA PEPPER.PL</b> 🔥\n\n"
+        "🔥 <b>OKAZJA DO PUBLIKACJI</b>\n\n"
         "<b>TYTUŁ:</b>\n%s\n\n"
         "<b>CENA:</b>\n%.0f\n\n"
         "<b>LINK:</b>\n%s\n\n"
@@ -193,12 +193,28 @@ def send_admin_hit(config, deal):
     text = pepper_message(deal, map_url=map_url)
     token = config["TELEGRAM_BOT_TOKEN"]
     chat = config["TELEGRAM_ADMIN_CHAT_ID"]
-    if photo is not None:
+    images = [photo] if photo is not None else []
+    try:
+        from route_map import city_photo_bytes
+        extra = city_photo_bytes(deal)
+    except (ImportError, OSError, ValueError, KeyError, TypeError):
+        extra = None
+    if extra is not None:
+        images.append(extra)
+    if len(images) > 1 and len(text) <= 1024:
+        media = [{"type": "photo", "media": "attach://photo0",
+                  "caption": text, "parse_mode": "HTML"},
+                 {"type": "photo", "media": "attach://photo1"}]
+        result = api_call(token, "sendMediaGroup",
+                          {"chat_id": chat, "media": json.dumps(media)},
+                          photos=images)
+        return isinstance(result, list) and bool(result)
+    if images:
         if len(text) <= 1024:
             result = api_call(token, "sendPhoto", {
-                "chat_id": chat, "caption": text, "parse_mode": "HTML"}, photo=photo)
+                "chat_id": chat, "caption": text, "parse_mode": "HTML"}, photo=images[0])
             return isinstance(result, dict) and bool(result.get("message_id"))
-        ok = api_call(token, "sendPhoto", {"chat_id": chat}, photo=photo)
+        ok = api_call(token, "sendPhoto", {"chat_id": chat}, photo=images[0])
         if not (isinstance(ok, dict) and ok.get("message_id")):
             return False
     result = api_call(token, "sendMessage", {

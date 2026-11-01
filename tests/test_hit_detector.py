@@ -19,30 +19,53 @@ def deal(price, typical=300, origin='WAW', dest='OSL', d='2026-11-12', r='2026-1
 
 
 class HitDetectorTest(unittest.TestCase):
-    def test_empty_wykop_never_posts_or_changes_state(self):
-        import wykop_publisher as wykop
-        from unittest.mock import patch
-        with patch.object(wykop, 'post') as post, patch.object(wykop, '_save_state') as save:
-            for is_hit in (True, False):
-                self.assertIsNone(wykop.run({'enabled': True}, None, [], None, is_hit, NOW))
-            post.assert_not_called()
-            save.assert_not_called()
-        with self.assertRaises(ValueError):
-            wykop.format_digest([])
-
-    def test_wykop_descriptions_and_refresh_state_survive(self):
+    def test_wykop_publish_dedup_and_route_cooldown(self):
         import wykop_publisher as wykop
         from unittest.mock import patch
         text = 'Oslo to pomysł na spacer nad fiordem i wizytę w muzeach.'
-        with patch.object(wykop, '_load_state', side_effect=[{}, {'rtoken': 'rotated'}]), \
-                patch.object(wykop, '_save_state') as save, \
+        # drugi deal na tej samej trasie (inne daty) — nie może wyjść w jednym przebiegu
+        other = deal(45, d='2026-11-20', r='2026-11-24')
+        state = {}
+        def load():
+            return dict(state)
+        def save(s):
+            state.clear(); state.update(s)
+        with patch.object(wykop, '_load_state', side_effect=load), \
+                patch.object(wykop, '_save_state', side_effect=save), \
                 patch.object(wykop, 'post', return_value={'id': 1}) as post, \
                 patch.object(hit_detector, 'description', return_value=text):
-            self.assertEqual(wykop.run({'enabled': True}, None, [deal(55)], b'png', False, NOW), 'digest')
+            self.assertEqual(wykop.publish({'enabled': True},
+                                           [deal(55), other], lambda d: b'png', NOW), 1)
             self.assertIn(text, post.call_args.args[1])
-            self.assertEqual(post.call_args.args[2], b'png')
-            self.assertEqual(save.call_args.args[0]['rtoken'], 'rotated')
-            self.assertEqual(save.call_args.args[0]['digest_date'], '2026-10-28')
+            self.assertIn('https://polataj.se/loty/warszawa-oslo/', post.call_args.args[1])
+            # ten sam deal nie publikuje się ponownie
+            self.assertEqual(wykop.publish({'enabled': True},
+                                           [deal(55), other], lambda d: b'png', NOW), 0)
+            # trasa w cooldownzie nawet dla innego deala
+            self.assertEqual(wykop.publish({'enabled': True}, [other],
+                                           lambda d: b'png', NOW), 0)
+        self.assertEqual(post.call_count, 1)
+
+    def test_wykop_new_route_posts_when_old_route_cools_down(self):
+        import wykop_publisher as wykop
+        from unittest.mock import patch
+        state = {}
+        def load():
+            return dict(state)
+        def save(s):
+            state.clear(); state.update(s)
+        with patch.object(wykop, '_load_state', side_effect=load), \
+                patch.object(wykop, '_save_state', side_effect=save), \
+                patch.object(wykop, 'post', return_value={'id': 1}) as post, \
+                patch.object(hit_detector, 'description', return_value='opis'):
+            self.assertEqual(wykop.publish({'enabled': True}, [deal(55)],
+                                           lambda d: b'png', NOW), 1)
+            later = NOW + __import__('datetime').timedelta(days=6)
+            # inny deal na tej samej trasie — po cooldownzie może wyjść
+            self.assertEqual(wykop.publish({'enabled': True},
+                                           [deal(55, d='2026-12-01', r='2026-12-05')],
+                                           lambda d: b'png', later), 1)
+        self.assertEqual(post.call_count, 2)
 
     def test_thresholds(self):
         self.assertTrue(hit_detector.is_hit(deal(60, typical=1000)))
@@ -72,7 +95,8 @@ class HitDetectorTest(unittest.TestCase):
         api = Mock(return_value={'message_id': 7})
         best = deal(55); best['_dates'] = [best]
         import unittest.mock as m
-        with m.patch('hit_detector.api_call', api):
+        with m.patch('hit_detector.api_call', api), \
+                m.patch('route_map.city_photo_bytes', side_effect=OSError):
             self.assertTrue(hit_detector.send_admin_hit(ADMIN, best))
         payload = api.call_args.args[2]
         self.assertEqual(payload['chat_id'], '922')

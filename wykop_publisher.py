@@ -1,13 +1,13 @@
 """Publikacja okazji na Wykop (mikroblog) — API v3.
 
-Digest: max 1 wpis dziennie (rano, gdy timer go uruchomi).
-Hit: natychmiastowy wpis, max 1 na 4 h, niezależnie od digestu.
-Grafika: dokładnie 1 załącznik (mapka trasy / ilustracja).
+Wykop publikuje te same oferty co pozostałe kanały przy każdym skanie:
+max MAX_POSTS nowych wpisów, deduplikacja ofert, cooldown ROUTE_DAYS na trasę
+(na poziomie miasta — WAW/WMI/RDO do tego samego celu to jedna trasa).
+Grafika: dokładnie 1 załącznik (mapka trasy).
 """
 import json
 import os
 import time
-import urllib.parse
 import urllib.request
 import urllib.error
 import http.client
@@ -16,8 +16,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 STATE_PATH = ROOT / "data" / "cache" / "wykop_state.json"
 API = "https://wykop.pl/api/v3"
-HIT_COOLDOWN = 4 * 3600
-MAX_DEALS = 5
+MAX_POSTS = 3
+ROUTE_DAYS = 5
 
 
 def load_config():
@@ -46,30 +46,14 @@ def _save_state(state):
     STATE_PATH.write_text(json.dumps(state))
 
 
-def can_digest(state, now):
-    return state.get("digest_date") != now.strftime("%Y-%m-%d")
+def _deal_id(deal):
+    return "%s-%s-%s-%s" % (deal["origin"], deal["dest"],
+                            deal["date_out"], deal.get("date_in"))
 
 
-def can_hit(state, now):
-    return now.timestamp() - state.get("hit_ts", 0) >= HIT_COOLDOWN
-
-
-def _token(config):
-    req = urllib.request.Request(API + "/auth", headers={
-        "Content-Type": "application/json", "accept": "application/json"},
-        data=json.dumps({"data": {"key": config["key"],
-                                  "secret": config["secret"]}}).encode())
-    with urllib.request.urlopen(req, timeout=20) as r:
-        return json.load(r)["data"]["token"]
-
-
-def _jwt_expired(token):
-    try:
-        payload = json.loads(__import__("base64").urlsafe_b64decode(
-            token.split(".")[1] + "==").decode())
-        return payload.get("exp", 0) < time.time() + 60
-    except (ValueError, KeyError, IndexError):
-        return True
+def _route(deal):
+    return "%s-%s" % (deal.get("origin_city") or deal["origin"],
+                      deal.get("dest_city") or deal["dest"])
 
 
 def _user_token(config):
@@ -86,6 +70,15 @@ def _user_token(config):
     state.update({"token": data["token"], "rtoken": data["refresh_token"]})
     _save_state(state)
     return data["token"]
+
+
+def _jwt_expired(token):
+    try:
+        payload = json.loads(__import__("base64").urlsafe_b64decode(
+            token.split(".")[1] + "==").decode())
+        return payload.get("exp", 0) < time.time() + 60
+    except (ValueError, KeyError, IndexError):
+        return True
 
 
 def _upload(token, image):
@@ -114,40 +107,28 @@ def _entry(token, content, media_key=None):
         return json.load(r)["data"]
 
 
+def format_entry(deal):
+    """Jeden wpis = jedna oferta, jak na pozostałych kanałach."""
+    dates = deal["date_out"] + (" – %s" % deal["date_in"] if deal.get("date_in")
+                                else " (w jedną stronę)")
+    return ("✈️ **%s ➡️ %s** – od %.0f zł (%s)\n"
+            "📅 Daty: %s\n\n"
+            "%s\n\n"
+            "🔗 Szczegóły: %s\n\n"
+            "---\nSkaner & alerty w czasie rzeczywistym: https://polataj.se | "
+            "Telegram: https://t.me/polataj_se\n"
+            "#polatajse #tanieloty #podroze #promocje"
+            % (deal["origin_city"], deal["dest_city"], deal["price"],
+               "w jedną stronę" if not deal.get("date_in") else "w dwie strony",
+               dates, deal.get("_description", ""), _deal_url(deal)))
+
+
 def _deal_url(deal):
     if deal.get("trip") == "oneway" or not deal.get("date_in"):
         return "https://polataj.se/%s/#wjedna" % deal["port"]
-    return "https://polataj.se/%s/" % deal["port"]
-
-
-def format_deal(index, deal):
-    dates = deal["date_out"] + (" – %s" % deal["date_in"] if deal.get("date_in")
-                                else " (w jedną stronę)")
-    return ("%d. **%s ➡️ %s** – od %.0f zł (%s)\n"
-            "   📅 Daty: %s\n"
-            "   🔗 %s" % (index, deal["origin_city"], deal["dest_city"],
-                         deal["price"],
-                         "w jedną stronę" if not deal.get("date_in") else "dwie strony",
-                         dates, _deal_url(deal)))
-
-
-def format_digest(deals):
-    if not deals:
-        raise ValueError('brak ofert do podsumowania')
-    body = "\n\n".join(format_deal(i + 1, d) + "\n" + d.get('_description', '')
-                       for i, d in enumerate(deals[:MAX_DEALS]))
-    return ("✈️ **Najlepsze tanie loty z polskich lotnisk — podsumowanie**\n\n"
-            + body +
-            "\n\n---\nSkaner & alerty w czasie rzeczywistym: https://polataj.se | "
-            "Telegram: https://t.me/polataj_se\n"
-            "#polatajse #tanieloty #podroze #tworczoscwlasna #promocje")
-
-
-def format_hit(deal):
-    return ("🔥 **Hit cenowy!**\n\n" + format_deal(1, deal) +
-            "\n" + deal.get('_description', '') +
-            "\n\n---\nSzczegóły: https://polataj.se/%s/\n"
-            "#tanieloty #okazja #polatajse" % deal["port"])
+    from tools.build_pages import slug
+    return "https://polataj.se/loty/%s-%s/" % (
+        slug(deal["origin_city"]), slug(deal["dest_city"]))
 
 
 def post(config, content, image=None):
@@ -159,29 +140,40 @@ def post(config, content, image=None):
     return _entry(token, content, media)
 
 
-def run(config, batch_state, deals, image, is_hit, now):
-    """Decyduje i publikuje. Zwraca 'digest'/'hit'/None."""
-    if not deals or not config['enabled']:
-        return None
+def publish(config, deals, image_for, now):
+    """Publikuje nowe oferty (jak pozostałe kanały). Zwraca liczbę wpisów."""
+    if not config["enabled"]:
+        return 0
     state = _load_state()
-    if (is_hit and not can_hit(state, now)) or (not is_hit and not can_digest(state, now)):
-        return None
+    posted = set(state.get("posted_ids") or [])
+    routes = state.get("routes") or {}
     from hit_detector import description
-    deals = [{**d, '_description': description(d)} for d in deals[:1 if is_hit else MAX_DEALS]]
-    if is_hit:
-        result = post(config, format_hit(deals[0]), image)
-        if result:
-            state = _load_state()
-            state["hit_ts"] = now.timestamp()
-            _save_state(state)
-            return "hit" if result else None
-        return None
-    if not can_digest(state, now):
-        return None
-    result = post(config, format_digest(deals), image)
-    if result:
-        state = _load_state()
-        state["digest_date"] = now.strftime("%Y-%m-%d")
-        _save_state(state)
-        return "digest" if result else None
-    return None
+    sent = 0
+    run_routes = set()
+    for deal in sorted(deals, key=lambda d: d["price"]):
+        if sent >= MAX_POSTS:
+            break
+        key, route = _deal_id(deal), _route(deal)
+        if (key in posted or route in run_routes or
+                routes.get(route, 0) > now.timestamp() - ROUTE_DAYS * 86400):
+            continue
+        content = format_entry({**deal, "_description": description(deal)})
+        try:
+            image = image_for(deal) if image_for else None
+        except (OSError, ValueError, KeyError, TypeError, IndexError,
+                http.client.HTTPException):
+            image = None
+        if not post(config, content, image):
+            print("wykop: wpis niepotwierdzony, ponowienie przy kolejnym skanie")
+            break
+        posted.add(key)
+        run_routes.add(route)
+        routes[route] = now.timestamp()
+        sent += 1
+        print("wykop: opublikowano %s" % key)
+    state = _load_state()
+    state["posted_ids"] = list(posted | set(state.get("posted_ids") or []))[-300:]
+    state["routes"] = {r: ts for r, ts in routes.items()
+                       if ts > now.timestamp() - 30 * 86400}
+    _save_state(state)
+    return sent

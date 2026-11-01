@@ -146,31 +146,32 @@ def _cover(image, width, height):
     return image.crop((x, y, x + width, y + height))
 
 
-def render_hit_image(deal, root=ROOT, tile_loader=None):
-    """Mapka trasy po lewej, zdjęcie miasta wchodzi gradientem od prawej."""
-    if not deal.get("dest_geo"):
-        return None
-    map_bytes = render_route_map(deal, root=root, tile_loader=tile_loader, bare=True)
+def city_photo_bytes(deal, root=ROOT):
+    """Zdjęcie miasta docelowego jako JPEG w kadrze alertu (lub None)."""
     photo = city_photo(deal["dest_city"], root)
     if photo is None:
-        return map_bytes
-    canvas = Image.open(io.BytesIO(map_bytes)).convert("RGB")
-    # gradient zaczyna się za prawym końcem trasy — nie zasłania linii ani punktów
-    airports = airport_coordinates(root)
-    config = json.loads((root / "config.json").read_text(encoding="utf-8"))
-    origin = airports.get(deal["origin"]) or deal.get("origin_geo") or config["ports"][deal["port"]]["geo"]
-    _, _, _, pts = viewport(origin, coordinates(deal["dest_geo"]), HEIGHT)
-    blend_start = min(max(int(max(p[0] for p in pts) + 70), int(WIDTH * 0.45)), WIDTH - 260)
-    mask = Image.new("L", (WIDTH, HEIGHT), 0)
-    px = mask.load()
-    for x in range(blend_start, WIDTH):
-        alpha = min(255, int((x - blend_start) / (WIDTH - blend_start) * 255 * 1.35))
-        for y in range(HEIGHT):
-            px[x, y] = alpha
-    canvas.paste(_cover(photo, WIDTH, HEIGHT), (0, 0), mask)
-    out = io.BytesIO()
-    canvas.save(out, "PNG", optimize=True)
-    return out.getvalue()
+        return None
+    buf = io.BytesIO()
+    _cover(photo, WIDTH, HEIGHT).save(buf, "JPEG", quality=88)
+    return buf.getvalue()
+
+
+def alert_images(deal, root=ROOT, tile_loader=None, bare=False):
+    """Osobne obrazki do publikacji: mapka trasy + zdjęcie miasta (bez kolażu)."""
+    images = []
+    if deal.get("dest_geo"):
+        try:
+            images.append(render_route_map(
+                deal, root=root, tile_loader=tile_loader, bare=bare))
+        except (OSError, ValueError, KeyError, TypeError, TimeoutError):
+            pass
+    try:
+        photo = city_photo_bytes(deal, root)
+    except (OSError, ValueError, KeyError, TypeError):
+        photo = None
+    if photo is not None:
+        images.append(photo)
+    return images
 
 
 def font(size):

@@ -20,7 +20,8 @@ DEAL = {'origin_city': 'Warszawa', 'dest_city': 'Oslo', 'origin': 'WAW', 'dest':
 
 class SocialPublisherTest(unittest.TestCase):
     def test_facebook_token_is_sent_in_header_not_url(self):
-        with patch('facebook_publisher.urllib.request.urlopen') as request:
+        with patch('facebook_publisher.map_image', return_value=[]), \
+                patch('facebook_publisher.urllib.request.urlopen') as request:
             request.return_value.__enter__.return_value.read.return_value = b'{"id":"123_456"}'
             self.assertEqual(facebook.publish_post(FB, DEAL), {'id': '123_456'})
         req = request.call_args.args[0]
@@ -32,15 +33,21 @@ class SocialPublisherTest(unittest.TestCase):
         self.assertIn(b'https%3A%2F%2Fpolataj.se%2Fzwarszawy%2F', req.data)
 
     def test_facebook_photo_uses_route_map_and_post_id(self):
-        with patch('facebook_publisher.map_image', return_value=b'png-bytes'), \
-                patch('facebook_publisher.graph_request', return_value={'id': 'photo1', 'post_id': '123_456'}) as api:
+        def graph(config, path, payload=None, photo=None):
+            if path.endswith('/photos'):
+                return {'id': 'photo1'}
+            return {'id': '123_456'}
+        with patch('facebook_publisher.map_image', return_value=[b'png-bytes']), \
+                patch('facebook_publisher.graph_request', side_effect=graph) as api:
             result = facebook.publish_post(FB, DEAL)
         self.assertEqual(result['id'], '123_456')
         self.assertEqual(result['photo_id'], 'photo1')
-        self.assertEqual(api.call_args.args[1], '123/photos')
-        self.assertEqual(api.call_args.kwargs['photo'], b'png-bytes')
-        self.assertNotIn('link', api.call_args.args[2])
-        self.assertIn('https://polataj.se/zwarszawy/', api.call_args.args[2]['message'])
+        self.assertEqual(api.call_args_list[0].args[1], '123/photos')
+        feed = api.call_args_list[1]
+        self.assertEqual(feed.args[1], '123/feed')
+        self.assertIn('attached_media', feed.args[2])
+        self.assertNotIn('link', feed.args[2])
+        self.assertIn('https://polataj.se/zwarszawy/', feed.args[2]['message'])
 
     def test_photo_upload_uses_binary_multipart_without_exposing_token(self):
         with patch('facebook_publisher.urllib.request.urlopen') as request:

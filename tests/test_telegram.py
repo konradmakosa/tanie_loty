@@ -60,7 +60,8 @@ class TelegramTest(unittest.TestCase):
         self.assertIn('<b>Lotniska:</b>', text)
 
     def test_send_checks_message_id(self):
-        with patch('telegram_alerts.api_call', return_value={"message_id": 42}) as call:
+        with patch('telegram_alerts.deal_images', return_value=[]), \
+                patch('telegram_alerts.api_call', return_value={"message_id": 42}) as call:
             self.assertTrue(send_alert(CONFIG, deal()))
         payload = call.call_args.args[2]
         self.assertEqual(payload['chat_id'], '@test')
@@ -70,7 +71,7 @@ class TelegramTest(unittest.TestCase):
             self.assertFalse(send_alert(CONFIG, deal()))
 
     def test_photo_uses_caption_and_does_not_send_second_message(self):
-        with patch('telegram_alerts.map_image', return_value=b'PNG'):
+        with patch('telegram_alerts.deal_images', return_value=[b'PNG']):
             with patch('telegram_alerts.api_call', return_value={'message_id': 123}) as call:
                 self.assertTrue(send_alert(CONFIG, deal()))
         call.assert_called_once()
@@ -78,15 +79,27 @@ class TelegramTest(unittest.TestCase):
         self.assertEqual(call.call_args.kwargs['photo'], b'PNG')
         self.assertIn('caption', call.call_args.args[2])
 
+    def test_two_images_are_sent_as_media_group(self):
+        with patch('telegram_alerts.deal_images', return_value=[b'PNG', b'JPG']):
+            with patch('telegram_alerts.api_call', return_value=[{'message_id': 1}, {'message_id': 2}]) as call:
+                self.assertTrue(send_alert(CONFIG, deal()))
+        call.assert_called_once()
+        self.assertEqual(call.call_args.args[1], 'sendMediaGroup')
+        self.assertEqual(call.call_args.kwargs['photos'], [b'PNG', b'JPG'])
+        media = json.loads(call.call_args.args[2]['media'])
+        self.assertEqual(len(media), 2)
+        self.assertIn('caption', media[0])
+        self.assertNotIn('caption', media[1])
+
     def test_failed_upload_does_not_send_duplicate_text(self):
-        with patch('telegram_alerts.map_image', return_value=b'PNG'):
+        with patch('telegram_alerts.deal_images', return_value=[b'PNG']):
             with patch('telegram_alerts.api_call', return_value=None) as call:
                 self.assertFalse(send_alert(CONFIG, deal()))
         call.assert_called_once()
         self.assertEqual(call.call_args.args[1], 'sendPhoto')
 
     def test_map_failure_falls_back_to_text(self):
-        with patch('route_map.render_route_map', side_effect=TimeoutError):
+        with patch('telegram_alerts.deal_images', return_value=[]):
             with patch('telegram_alerts.api_call', return_value={'message_id': 1}) as call:
                 self.assertTrue(send_alert(CONFIG, {**deal(), 'dest_geo': '60.19,11.1'}))
         self.assertEqual(call.call_args.args[1], 'sendMessage')
@@ -150,7 +163,8 @@ class TelegramTest(unittest.TestCase):
             self.assertNotEqual(batch, collect_candidates(root, NOW)[0])
 
     def test_global_limit_persists_and_sent_deals_are_not_repeated(self):
-        candidates = {str(i): {**deal(100 + i), 'dest': str(i)} for i in range(6)}
+        candidates = {str(i): {**deal(100 + i), 'dest': str(i), 'dest_city': 'Miasto %d' % i}
+                      for i in range(6)}
         with tempfile.TemporaryDirectory() as temp:
             state = Path(temp) / 'state.sqlite'
             sender = Mock(return_value=True)

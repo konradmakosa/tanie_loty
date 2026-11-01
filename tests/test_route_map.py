@@ -14,7 +14,7 @@ class RouteMapTest(unittest.TestCase):
     def test_viewport_fits_routes_including_dateline(self):
         for start, end in [([52.17, 20.97], [60.19, 11.1]),
                            ([50, 179], [51, -179]), ([52, 21], [52, 21])]:
-            zoom, _, _, points = viewport(start, end)
+            zoom, _, _, points = viewport(start, end, HEIGHT - HEADER - FOOTER)
             self.assertTrue(0 <= zoom <= 9)
             for x, y in points:
                 self.assertTrue(0 < x < WIDTH)

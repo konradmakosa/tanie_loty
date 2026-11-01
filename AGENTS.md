@@ -254,11 +254,18 @@
 ## Wspólne opisy publikacji
 
 - Opisy AI dla Telegrama (publicznego, prywatnego i admina), Facebooka oraz
-  każdej oferty digestu/hitu Wykopa pochodzą z `hit_detector.description()`.
+  wpisów Wykopa pochodzą z `hit_detector.description()` (3–4 zdania).
   Bez powitań (zwłaszcza „Siemka!”), bez linków w opisie, z nawiązaniem do
   miasta docelowego. Cena, daty i link pozostają w szablonach kanałów.
-- Wykop pomija pusty zestaw ofert bez publikacji i zmiany limitów. Digest
-  wybiera różne trasy ze wszystkich świeżych ofert, nie tylko rekordów RT ≤200 zł.
+- Wszystkie kanały publikują te same oferty i te same opisy po każdym skanie.
+  Kandydaci: `alert_worthy()` = rekord LUB cena ≤ 55% typowej, RT ≤200 zł.
+  Rotacja: 1 wpis na trasę w przebiegu + cooldown tras na poziomie MIASTA
+  (origin_city–dest_city): Telegram 3 dni, Facebook 7 dni, Wykop 5 dni
+  (`wykop_publisher.ROUTE_DAYS`). Wykop: max 3 wpisy/skan, trwała deduplikacja
+  `posted_ids` w `data/cache/wykop_state.json`, 1 załącznik (mapka trasy).
+- Obrazki: wszędzie dwa osobne pliki (mapka + zdjęcie miasta) — Telegram
+  `sendMediaGroup`, Facebook album `attached_media`, admin hit album;
+  Wykop zostaje przy 1 pliku (limit API). Kolaż/gradient usunięty.
 
 ## Social / branding
 

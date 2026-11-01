@@ -33,25 +33,29 @@ def load_config():
     return config
 
 
-def api_call(token, method, payload, photo=None):
+def api_call(token, method, payload, photo=None, photos=None):
     content_type = "application/json"
     body = json.dumps(payload).encode("utf-8")
-    if photo is not None:
+    uploads = photos if photos is not None else ([photo] if photo is not None else None)
+    if uploads:
         boundary = "polataj_" + os.urandom(16).hex()
         parts = []
         for key, value in payload.items():
             parts.append(('--%s\r\nContent-Disposition: form-data; name="%s"\r\n\r\n%s\r\n'
                           % (boundary, key, value)).encode("utf-8"))
-        parts.append(('--%s\r\nContent-Disposition: form-data; name="photo"; '
-                      'filename="trasa.png"\r\nContent-Type: image/png\r\n\r\n'
-                      % boundary).encode("utf-8") + photo + b'\r\n')
+        for index, blob in enumerate(uploads):
+            name = "photo" if photos is None else "photo%d" % index
+            filename = "trasa.png" if photos is None else "trasa%d.png" % index
+            parts.append(('--%s\r\nContent-Disposition: form-data; name="%s"; '
+                          'filename="%s"\r\nContent-Type: image/png\r\n\r\n'
+                          % (boundary, name, filename)).encode("utf-8") + blob + b'\r\n')
         body = b''.join(parts) + ('--%s--\r\n' % boundary).encode("utf-8")
         content_type = "multipart/form-data; boundary=" + boundary
     req = urllib.request.Request(
         "https://api.telegram.org/bot%s/%s" % (token, method),
         data=body, headers={"Content-Type": content_type})
     try:
-        with urllib.request.urlopen(req, timeout=30 if photo is not None else 15) as response:
+        with urllib.request.urlopen(req, timeout=30 if uploads else 15) as response:
             result = json.load(response)
         if not isinstance(result, dict):
             print("telegram: nieprawidłowa odpowiedź API")
@@ -90,35 +94,63 @@ def format_alert(deal):
     )
 
 
-def map_image(deal, label="telegram", bare=False):
-    if not deal.get("dest_geo"):
-        return None
+def deal_images(deal, label="telegram", bare=False):
     try:
-        from route_map import render_route_map
-        return render_route_map(deal, bare=bare)
+        from route_map import alert_images
+        return alert_images(deal, bare=bare)
     except (ImportError, OSError, ValueError, KeyError, TypeError, http.client.HTTPException):
-        print("%s: mapka niedostępna — wysyłam sam tekst" % label)
-        return None
+        print("%s: obrazki niedostępne — wysyłam sam tekst" % label)
+        return []
 
 
 def send_alert(config, deal):
     from hit_detector import description
     text = format_alert(deal) + '\n\n' + html.escape(description(deal))
-    photo = map_image(deal) if len(text) <= 1024 else None
-    if photo is not None:
-        result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendPhoto", {
-            "chat_id": config["TELEGRAM_CHANNEL_ID"], "caption": text,
-            "parse_mode": "HTML",
-        }, photo=photo)
+    token = config["TELEGRAM_BOT_TOKEN"]
+    chat = config["TELEGRAM_CHANNEL_ID"]
+    images = deal_images(deal) if len(text) <= 1024 else []
+    if len(images) > 1:
+        media = [{"type": "photo", "media": "attach://photo0",
+                  "caption": text, "parse_mode": "HTML"}]
+        media += [{"type": "photo", "media": "attach://photo%d" % i}
+                  for i in range(1, len(images))]
+        result = api_call(token, "sendMediaGroup",
+                          {"chat_id": chat, "media": json.dumps(media)},
+                          photos=images)
+        ok = isinstance(result, list) and bool(result)
+        if ok:
+            print("telegram: album z %d obrazkami wysłany" % len(images))
+        return ok
+    if images:
+        result = api_call(token, "sendPhoto", {
+            "chat_id": chat, "caption": text, "parse_mode": "HTML",
+        }, photo=images[0])
     else:
-        result = api_call(config["TELEGRAM_BOT_TOKEN"], "sendMessage", {
-            "chat_id": config["TELEGRAM_CHANNEL_ID"], "text": text,
+        result = api_call(token, "sendMessage", {
+            "chat_id": chat, "text": text,
             "parse_mode": "HTML", "link_preview_options": {"is_disabled": True},
         })
     ok = isinstance(result, dict) and bool(result.get("message_id"))
-    if ok and photo is not None:
+    if ok and images:
         print("telegram: mapka wysłana, message_id=%s" % result["message_id"])
     return ok
+
+
+def alert_worthy(deal):
+    """Rekord LUB wyraźna zniżka wobec typowej ceny — dla rotacji i różnorodności."""
+    if deal.get("record_low") is True:
+        return True
+    typical = deal.get("typical_price")
+    price = deal.get("price")
+    return bool(isinstance(typical, (int, float)) and not isinstance(typical, bool)
+                and typical > 0 and isinstance(price, (int, float))
+                and not isinstance(price, bool) and price <= typical * 0.55)
+
+
+def route_key(deal):
+    """Trasa na poziomie miasta — WAW/WMI/RDO do tego samego celu to jedna trasa."""
+    return "%s-%s" % (deal.get("origin_city") or deal["origin"],
+                      deal.get("dest_city") or deal["dest"])
 
 
 def collect_candidates(root, now):
@@ -136,7 +168,7 @@ def collect_candidates(root, now):
                 continue
             for deal in data["deals"]:
                 price = deal.get("price")
-                if (deal.get("record_low") is not True or
+                if (not alert_worthy(deal) or
                         isinstance(price, bool) or not isinstance(price, (int, float)) or
                         not math.isfinite(price) or not 0 < price <= MAX_PRICE or
                         not deal.get("date_in") or
@@ -188,13 +220,16 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
             pending = [(key, deal) for key, deal in pending
                        if deal["date_out"] > now.date().isoformat()]
             sent = 0
+            run_routes = set()
             for key, deal in sorted(pending, key=lambda item: (item[1]["price"], item[0])):
                 if allowed_ports is not None and deal.get("port") not in allowed_ports:
                     continue
                 if allow_deal is not None and not allow_deal(deal):
                     continue
+                route = route_key(deal)
+                if route in run_routes:
+                    continue
                 if route_days:
-                    route = "%s-%s" % (deal["origin"], deal["dest"])
                     row = db.execute("SELECT sent_at FROM routes WHERE channel=? AND route=?",
                                      (channel, route)).fetchone()
                     if (row and datetime.fromisoformat(row[0])
@@ -210,6 +245,7 @@ def process(config, batch, candidates, state_path, now, sender=send_alert,
                     print("%s: wysyłka niepotwierdzona, ponowienie w następnym przebiegu" % label)
                     break
                 db.execute("UPDATE deals SET sent=1 WHERE channel=? AND id=?", (channel, key))
+                run_routes.add(route)
                 if route_days:
                     db.execute("INSERT OR REPLACE INTO routes(channel,route,sent_at) "
                                "VALUES(?,?,?)", (channel, route, now.isoformat()))
