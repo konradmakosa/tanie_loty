@@ -103,21 +103,20 @@ def format_tg(main, extras, desc, url):
     esc = lambda v: html.escape(str(v))
     parts = ['<b>✈️ %s → %s</b>' % (esc(main['origin_city']), esc(main['dest_city']))]
     parts += [esc(f) for f in _facts(main)]
-    parts += ['', esc(desc)]
+    parts += ['', esc(desc),
+              '', '<a href="%s">Sprawdź szczegóły na polataj.se</a>' % esc(url)]
     if extras:
         parts += ['', '<b>Znaleźliśmy też jeszcze:</b>']
         parts += [esc(_extra_line(d)) for d in extras]
-    parts += ['', '<a href="%s">Sprawdź szczegóły na polataj.se</a>' % esc(url)]
     return '\n'.join(parts)
 
 
 def format_fb(main, extras, desc, url):
     parts = ['✈️ %s → %s' % (main['origin_city'], main['dest_city'])]
     parts += _facts(main)
-    parts += ['', desc]
+    parts += ['', desc, '', 'Sprawdź szczegóły i aktualną cenę na %s' % url]
     if extras:
         parts += ['', 'Znaleźliśmy też jeszcze:'] + [_extra_line(d) for d in extras]
-    parts += ['', 'Sprawdź szczegóły i aktualną cenę na %s' % url]
     return '\n'.join(parts)
 
 
@@ -127,10 +126,11 @@ def format_wykop(main, extras, desc, url):
     parts = ['✈️ **%s ➡️ %s** – od %.0f zł (%s)' % (
                  main['origin_city'], main['dest_city'], main['price'],
                  'w jedną stronę' if oneway else 'w dwie strony'),
-             '📅 Daty: ' + dates, '', desc]
+             '📅 Daty: ' + dates, '', desc,
+             '', '🔗 Szczegóły: %s' % url]
     if extras:
         parts += ['', '**Znaleźliśmy też jeszcze:**'] + [_extra_line(d) for d in extras]
-    parts += ['', '🔗 Szczegóły: %s' % url, '',
+    parts += ['',
               '---', 'Skaner & alerty w czasie rzeczywistym: https://polataj.se | '
               'Telegram: https://t.me/polataj_se', '#polatajse #tanieloty #podroze #promocje']
     return '\n'.join(parts)
@@ -194,7 +194,7 @@ def publish_daily(tg, fb, root=ROOT, now=None):
         return {'daily': {'ok': True, 'result': 'brak ofert'}}
     desc = hit_detector.description(main)
     url = hit_detector.route_url(main)
-    images = telegram.deal_images(main)
+    images = telegram.deal_images(main, bare=True)
     text_tg = format_tg(main, extras, desc, url)
     jobs = {}
     if 'telegram' in todo:

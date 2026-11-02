@@ -108,7 +108,7 @@ def send_alert(config, deal):
     text = format_alert(deal) + '\n\n' + html.escape(description(deal))
     token = config["TELEGRAM_BOT_TOKEN"]
     chat = config["TELEGRAM_CHANNEL_ID"]
-    images = deal_images(deal) if len(text) <= 1024 else []
+    images = deal_images(deal, bare=True) if len(text) <= 1024 else []
     if len(images) > 1:
         media = [{"type": "photo", "media": "attach://photo0",
                   "caption": text, "parse_mode": "HTML"}]
