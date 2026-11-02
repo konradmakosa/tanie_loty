@@ -1,4 +1,5 @@
 import argparse
+import html
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
@@ -10,6 +11,8 @@ import telegram_alerts as telegram
 import wykop_publisher as wykop
 
 ROOT = Path(__file__).resolve().parent
+DAILY_ROUTE_DAYS = 7
+MAX_EXTRAS = 3
 
 
 def settle(jobs):
@@ -27,39 +30,205 @@ def settle(jobs):
     return outcomes
 
 
-def publish_all(batch, candidates, now, tg, fb, root=ROOT):
-    jobs = {}
+def _daily_path(root):
+    return root / 'data/cache/daily.json'
+
+
+def load_daily(root):
+    try:
+        state = json.loads(_daily_path(root).read_text())
+    except (OSError, ValueError):
+        state = {}
+    if 'routes' not in state:
+        # jednorazowy seed z historii Wykopa — nie powtarzamy świeżych wpisów
+        try:
+            wy = json.loads((root / 'data/cache/wykop_state.json').read_text())
+            state['routes'] = wy.get('routes') or {}
+        except (OSError, ValueError):
+            state['routes'] = {}
+    return state
+
+
+def save_daily(root, state):
+    path = _daily_path(root)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(state))
+
+
+def pick_daily(candidates, now, root):
+    """Główna oferta + do MAX_EXTRAS dodatkowych (najlepiej z innych miast),
+    bez tras publikowanych w ciągu ostatniego tygodnia."""
+    routes = load_daily(root).get('routes') or {}
+    cutoff = now.timestamp() - DAILY_ROUTE_DAYS * 86400
+    fresh = sorted((d for d in candidates.values() if d.get('price', 0) > 0),
+                   key=lambda d: (0 if d.get('dest_geo') else 1, d['price']))
+    free = [d for d in fresh if routes.get(telegram.route_key(d), 0) <= cutoff]
+    if not free:
+        return None, []
+    main = free[0]
+    used = {telegram.route_key(main)}
+    extras = []
+    for only_other_cities in (True, False):
+        for d in free:
+            if len(extras) >= MAX_EXTRAS:
+                break
+            r = telegram.route_key(d)
+            if r in used or (only_other_cities and
+                             d.get('origin_city') == main.get('origin_city')):
+                continue
+            extras.append(d)
+            used.add(r)
+    return main, extras
+
+
+def _extra_line(d):
+    dates = d['date_out'] + (' – %s' % d['date_in'] if d.get('date_in') else '')
+    return '• %s → %s — %.0f zł (%s)' % (d['origin_city'], d['dest_city'],
+                                       d['price'], dates)
+
+
+def _facts(main):
+    oneway = main.get('trip') == 'oneway' or not main.get('date_in')
+    dates = main['date_out'] + (' – %s' % main['date_in'] if main.get('date_in')
+                                else ' (w jedną stronę)')
+    facts = ['💰 %.2f zł %s' % (main['price'], 'w jedną stronę' if oneway else 'w dwie strony'),
+             '📅 ' + dates,
+             'Lotniska: %s → %s' % (main['origin'], main['dest'])]
+    if main.get('airline'):
+        facts.append('Linia: ' + main['airline'])
+    return facts
+
+
+def format_tg(main, extras, desc, url):
+    esc = lambda v: html.escape(str(v))
+    parts = ['<b>✈️ %s → %s</b>' % (esc(main['origin_city']), esc(main['dest_city']))]
+    parts += [esc(f) for f in _facts(main)]
+    parts += ['', esc(desc)]
+    if extras:
+        parts += ['', '<b>Znaleźliśmy też jeszcze:</b>']
+        parts += [esc(_extra_line(d)) for d in extras]
+    parts += ['', '<a href="%s">Sprawdź szczegóły na polataj.se</a>' % esc(url)]
+    return '\n'.join(parts)
+
+
+def format_fb(main, extras, desc, url):
+    parts = ['✈️ %s → %s' % (main['origin_city'], main['dest_city'])]
+    parts += _facts(main)
+    parts += ['', desc]
+    if extras:
+        parts += ['', 'Znaleźliśmy też jeszcze:'] + [_extra_line(d) for d in extras]
+    parts += ['', 'Sprawdź szczegóły i aktualną cenę na %s' % url]
+    return '\n'.join(parts)
+
+
+def format_wykop(main, extras, desc, url):
+    oneway = main.get('trip') == 'oneway' or not main.get('date_in')
+    dates = main['date_out'] + (' – %s' % main['date_in'] if main.get('date_in') else '')
+    parts = ['✈️ **%s ➡️ %s** – od %.0f zł (%s)' % (
+                 main['origin_city'], main['dest_city'], main['price'],
+                 'w jedną stronę' if oneway else 'w dwie strony'),
+             '📅 Daty: ' + dates, '', desc]
+    if extras:
+        parts += ['', '**Znaleźliśmy też jeszcze:**'] + [_extra_line(d) for d in extras]
+    parts += ['', '🔗 Szczegóły: %s' % url, '',
+              '---', 'Skaner & alerty w czasie rzeczywistym: https://polataj.se | '
+              'Telegram: https://t.me/polataj_se', '#polatajse #tanieloty #podroze #promocje']
+    return '\n'.join(parts)
+
+
+def tg_send(config, chat_id, text, images):
+    """Ta sama wiadomość + album (mapka + zdjęcie miasta) do wskazanego czatu."""
+    token = config['TELEGRAM_BOT_TOKEN']
+    if images and len(text) <= 1024:
+        if len(images) > 1:
+            media = [{'type': 'photo', 'media': 'attach://photo0',
+                      'caption': text, 'parse_mode': 'HTML'}]
+            media += [{'type': 'photo', 'media': 'attach://photo%d' % i}
+                      for i in range(1, len(images))]
+            res = telegram.api_call(token, 'sendMediaGroup',
+                                    {'chat_id': chat_id, 'media': json.dumps(media)},
+                                    photos=images)
+            return isinstance(res, list) and bool(res)
+        res = telegram.api_call(token, 'sendPhoto', {
+            'chat_id': chat_id, 'caption': text, 'parse_mode': 'HTML'},
+            photo=images[0])
+        return isinstance(res, dict) and bool(res.get('message_id'))
+    if images:
+        media = [{'type': 'photo', 'media': 'attach://photo%d' % i}
+                 for i in range(len(images))]
+        res = telegram.api_call(token, 'sendMediaGroup',
+                                {'chat_id': chat_id, 'media': json.dumps(media)},
+                                photos=images)
+        if not (isinstance(res, list) and res):
+            return False
+    res = telegram.api_call(token, 'sendMessage', {
+        'chat_id': chat_id, 'text': text, 'parse_mode': 'HTML',
+        'link_preview_options': {'is_disabled': True}})
+    return isinstance(res, dict) and bool(res.get('message_id'))
+
+
+def publish_daily(tg, fb, root=ROOT, now=None):
+    """Jeden zbiorczy post dziennie — ta sama treść i obrazki na wszystkich kanałach."""
+    now = now or datetime.now(timezone.utc)
+    today = now.strftime('%Y-%m-%d')
+    state = load_daily(root)
+    sent = set(state.get('sent') or []) if state.get('date') == today else set()
+    needed = set()
     if tg.get('TELEGRAM_ENABLED') == '1':
-        jobs['telegram'] = lambda: telegram.process(
-            tg, batch, candidates, root / 'data/cache/telegram.sqlite', now,
-            route_days=3)
-        jobs['telegram_private'] = lambda: telegram.publish_private(
-            tg, batch, candidates, root / 'data/cache/telegram.sqlite', now,
-            subscribers_path=root / 'data/cache/telegram_subscribers.sqlite')
+        needed.update(('telegram', 'telegram_private'))
+        if tg.get('TELEGRAM_ADMIN_CHAT_ID'):
+            needed.add('admin')
     if fb.get('FACEBOOK_ENABLED') == '1':
-        def publish_facebook():
-            facebook.check_config(fb)
-            return telegram.process(
-                {**fb, 'RECIPIENT_ID': 'facebook:' + fb['FB_PAGE_ID']},
-                batch, candidates, root / 'data/cache/facebook.sqlite', now,
-                sender=facebook.send_alert, label='facebook', route_days=7)
-        jobs['facebook'] = publish_facebook
-    if tg.get('TELEGRAM_ADMIN_CHAT_ID'):
-        def admin_hits():
-            h_batch, h_candidates = hit_detector.collect_hit_candidates(root, now)
-            return hit_detector.publish_admin_hits(
-                tg, h_batch, h_candidates, root / 'data/cache/hits_admin.sqlite', now)
-        jobs['admin_hits'] = admin_hits
+        needed.add('facebook')
     wy = wykop.load_config()
-    if wy['key'] and wy['secret']:
-        def wykop_daily():
-            # te same oferty co na pozostałych kanałach, 1 obrazek na wpis
-            def image_for(deal):
-                images = facebook.map_image(deal)
-                return images[0] if images else None
-            return {'posts': wykop.publish(wy, candidates.values(), image_for, now)}
-        jobs['wykop'] = wykop_daily
-    return settle(jobs)
+    if wy['key'] and wy['secret'] and wy['enabled']:
+        needed.add('wykop')
+    todo = needed - sent
+    if not todo:
+        return {'daily': {'ok': True, 'result': 'już opublikowane dziś' if needed else 'brak kanałów'}}
+    _, candidates = telegram.collect_candidates(root, now)
+    main, extras = pick_daily(candidates, now, root)
+    if main is None:
+        return {'daily': {'ok': True, 'result': 'brak ofert'}}
+    desc = hit_detector.description(main)
+    url = hit_detector.route_url(main)
+    images = telegram.deal_images(main)
+    text_tg = format_tg(main, extras, desc, url)
+    jobs = {}
+    if 'telegram' in todo:
+        jobs['telegram'] = lambda: tg_send(
+            tg, tg['TELEGRAM_CHANNEL_ID'], text_tg, images)
+    if 'telegram_private' in todo:
+        def private():
+            from telegram_bot import active_subscribers
+            subs = root / 'data/cache/telegram_subscribers.sqlite'
+            ok = True
+            for chat_id, _ports in active_subscribers(subs):
+                ok = tg_send(tg, str(chat_id), text_tg, images) and ok
+            return ok
+        jobs['telegram_private'] = private
+    if 'admin' in todo:
+        jobs['admin'] = lambda: tg_send(
+            tg, tg['TELEGRAM_ADMIN_CHAT_ID'], text_tg, images)
+    if 'facebook' in todo:
+        jobs['facebook'] = lambda: bool(facebook.post_message(
+            fb, format_fb(main, extras, desc, url), images).get('id'))
+    if 'wykop' in todo:
+        jobs['wykop'] = lambda: bool(wykop.post(
+            wy, format_wykop(main, extras, desc, url),
+            images[0] if images else None))
+    outcomes = settle(jobs)
+    done = [name for name, r in outcomes.items() if r['ok'] and r['result']]
+    if done:
+        routes = state.get('routes') or {}
+        for d in [main] + extras:
+            routes[telegram.route_key(d)] = now.timestamp()
+        state['routes'] = {r: ts for r, ts in routes.items()
+                           if ts > now.timestamp() - 14 * 86400}
+        state['sent'] = sorted(sent | set(done))
+        state['date'] = today
+        save_daily(root, state)
+    return outcomes
 
 
 def test_deal(root=ROOT):
@@ -108,22 +277,24 @@ def publish_test(tg, fb, platform='all'):
 def main():
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument('--auto', action='store_true')
+    mode.add_argument('--auto', action='store_true',
+                      help='alias --daily (jeden zbiorczy post dziennie)')
+    mode.add_argument('--daily', action='store_true')
     mode.add_argument('--send-test', action='store_true')
     parser.add_argument('--platform', choices=['all', 'facebook', 'telegram'], default='all')
     args = parser.parse_args()
     tg, fb = telegram.load_config(), facebook.load_config()
     if args.send_test:
         results = publish_test(tg, fb, args.platform)
+    elif args.daily or args.auto:
+        results = publish_daily(tg, fb)
     else:
         now = datetime.now(timezone.utc)
         batch, candidates = telegram.collect_candidates(ROOT, now)
-        if not args.auto:
-            print('social: dry-run, %d rekordów do 200 zł; limit 3 na platformę/odbiorcę' % len(candidates))
-            return 0
-        results = publish_all(batch, candidates, now, tg, fb)
+        print('social: dry-run, %d rekordów do 200 zł; publikacja zbiorcza 1×/dziś (--daily)' % len(candidates))
+        return 0
     print(json.dumps(results, ensure_ascii=False))
-    return 0 if all(result['ok'] for result in results.values()) else 1
+    return 0 if all(result.get('ok') for result in results.values()) else 1
 
 
 if __name__ == '__main__':

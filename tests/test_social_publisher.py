@@ -94,28 +94,51 @@ class SocialPublisherTest(unittest.TestCase):
         self.assertTrue(result['facebook']['ok'])
         self.assertFalse(result['telegram']['ok'])
 
-    def test_facebook_has_separate_deduplication_and_budget(self):
+    def test_daily_publishes_once_per_day_per_channel(self):
         now = datetime(2026, 10, 28, 12, tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
-            with patch('facebook_publisher.check_config'), \
-                    patch('facebook_publisher.send_alert', return_value=True) as sender:
-                result = social.publish_all('batch', {'deal': DEAL}, now,
-                                            {'TELEGRAM_ENABLED': '0'}, FB, Path(temp))
-                self.assertTrue(result['facebook']['ok'])
-                self.assertEqual(result['facebook']['result'], 1)
-                again = social.publish_all('next', {'deal': DEAL}, now,
-                                           {'TELEGRAM_ENABLED': '0'}, FB, Path(temp))
-                self.assertEqual(again['facebook']['result'], 0)
-                sender.assert_called_once()
+            root = Path(temp)
+            with patch('social_publisher.telegram.collect_candidates',
+                       return_value=('b', {'a': DEAL})), \
+                    patch('social_publisher.hit_detector.description', return_value='x'), \
+                    patch('social_publisher.hit_detector.route_url', return_value='https://x/'), \
+                    patch('social_publisher.telegram.deal_images', return_value=[]), \
+                    patch('social_publisher.tg_send', return_value=True) as tg_send, \
+                    patch('telegram_bot.active_subscribers', return_value=[]), \
+                    patch('social_publisher.wykop.load_config',
+                          return_value={'key': '', 'secret': '', 'enabled': False}), \
+                    patch('social_publisher.facebook.post_message',
+                          return_value={'id': '1'}) as post:
+                result = social.publish_daily(TG, FB, root, now)
+                self.assertEqual(result['facebook']['result'], True)
+                self.assertEqual(result['telegram']['result'], True)
+                again = social.publish_daily(TG, FB, root, now)
+                self.assertEqual(again['daily']['result'], 'już opublikowane dziś')
+            self.assertEqual(post.call_count, 1)
+            self.assertEqual(tg_send.call_count, 1)  # kanał (admin wyłączony)
 
-    def test_disabling_facebook_does_not_disable_telegram(self):
-        with patch('telegram_alerts.process', return_value=1) as public, \
-                patch('telegram_alerts.publish_private', return_value=0):
-            result = social.publish_all('batch', {}, datetime.now(timezone.utc), TG,
-                                        {**FB, 'FACEBOOK_ENABLED': '0'})
-        self.assertNotIn('facebook', result)
-        self.assertTrue(result['telegram']['ok'])
-        public.assert_called_once()
+    def test_daily_marks_routes_and_skips_them_next_week(self):
+        now = datetime(2026, 10, 28, 12, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'data/cache').mkdir(parents=True)
+            main, extras = social.pick_daily({'a': DEAL}, now, root)
+            self.assertEqual(main['dest_city'], 'Oslo')
+            (root / 'data/cache/daily.json').write_text(json.dumps({
+                'date': '2026-10-28', 'sent': ['telegram'],
+                'routes': {'Warszawa-Oslo': now.timestamp()}}))
+            self.assertEqual(social.pick_daily({'a': DEAL}, now, root), (None, []))
+
+    def test_daily_extras_prefer_other_cities(self):
+        now = datetime(2026, 10, 28, 12, tzinfo=timezone.utc)
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / 'data/cache').mkdir(parents=True)
+            other = {**DEAL, 'origin_city': 'Kraków', 'origin': 'KRK',
+                     'dest_city': 'Kopenhaga', 'dest': 'CPH', 'price': 40}
+            main, extras = social.pick_daily({'a': DEAL, 'b': other}, now, root)
+            self.assertEqual(main['origin_city'], 'Kraków')  # najtańsza
+            self.assertEqual([e['dest_city'] for e in extras], ['Oslo'])
 
 
 if __name__ == '__main__':

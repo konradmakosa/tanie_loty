@@ -1,0 +1,9 @@
+[Unit]
+Description=polataj.se daily social digest (jeden post dziennie na wszystkich kanalach)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=tl
+WorkingDirectory=/home/tl/tanie_loty
+ExecStart=/usr/bin/flock -n /tmp/tl_social.lock /usr/bin/python3 /home/tl/tanie_loty/social_publisher.py --daily

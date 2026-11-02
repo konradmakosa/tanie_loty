@@ -251,21 +251,25 @@
   `deploy_site.py` musi wgrywać `.css` zawsze, bo podmiana stylu może mieć
   ten sam rozmiar pliku.
 
-## Wspólne opisy publikacji
+## Wspólne publikacje — JEDEN zbiorczy post dziennie
 
-- Opisy AI dla Telegrama (publicznego, prywatnego i admina), Facebooka oraz
-  wpisów Wykopa pochodzą z `hit_detector.description()` (3–4 zdania).
-  Bez powitań (zwłaszcza „Siemka!”), bez linków w opisie, z nawiązaniem do
-  miasta docelowego. Cena, daty i link pozostają w szablonach kanałów.
-- Wszystkie kanały publikują te same oferty i te same opisy po każdym skanie.
-  Kandydaci: `alert_worthy()` = rekord LUB cena ≤ 55% typowej, RT ≤200 zł.
-  Rotacja: 1 wpis na trasę w przebiegu + cooldown tras na poziomie MIASTA
-  (origin_city–dest_city): Telegram 3 dni, Facebook 7 dni, Wykop 5 dni
-  (`wykop_publisher.ROUTE_DAYS`). Wykop: max 3 wpisy/skan, trwała deduplikacja
-  `posted_ids` w `data/cache/wykop_state.json`, 1 załącznik (mapka trasy).
-- Obrazki: wszędzie dwa osobne pliki (mapka + zdjęcie miasta) — Telegram
-  `sendMediaGroup`, Facebook album `attached_media`, admin hit album;
-  Wykop zostaje przy 1 pliku (limit API). Kolaż/gradient usunięty.
+- `social_publisher.py --daily` publikuje JEDEN post dziennie na wszystkich
+  kanałach naraz (Telegram kanał + prywatni + admin, Facebook, Wykop).
+  Harmonogram: `tl-social.timer` `OnCalendar=12:00 Europe/Warsaw`
+  (unity w `tools/tl-social.*`). `run_search.sh` już NIE woła sociali —
+  skany tylko odświeżają dane co 6 h.
+- Wybór (`pick_daily`): główna oferta = najtańsza trasa niepublikowana przez
+  ostatnie 7 dni (cooldown na poziomie miasta: WAW/WMI/RDO = jedna trasa);
+  do 3 dodatkowych ofert, najlepiej z innych miast — lista „Znaleźliśmy też
+  jeszcze:". Kandydaci: `alert_worthy()` = rekord LUB ≤55% typowej, RT ≤200 zł.
+  Brak wolnych tras → brak posta.
+- Stan: `data/cache/daily.json` (`date`, `sent` per kanał, `routes`).
+  Sent per kanał → ręczny re-run `--daily` dosyła tylko brakujące kanały.
+- Opisy AI (3–4 zdania) z `hit_detector.description()` — bez powitań, bez
+  linków, z nawiązaniem do miasta. Ta sama treść wszędzie; formaty per kanał:
+  `format_tg` (HTML), `format_fb`, `format_wykop` (markdown).
+- Obrazki: 2 osobne pliki (mapka + zdjęcie miasta) — Telegram `sendMediaGroup`
+  (`tg_send`), FB album `post_message`; Wykop 1 plik (mapka, limit API).
 
 ## Social / branding
 

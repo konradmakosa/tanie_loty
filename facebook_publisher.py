@@ -107,12 +107,10 @@ def format_post(deal):
     return text + '\nSprawdź szczegóły i aktualną cenę na https://polataj.se/%s/' % deal['port']
 
 
-def publish_post(config, deal):
+def post_message(config, message, images):
+    """Post tekstowy z dołączonymi zdjęciami (album przy >1 pliku)."""
     if not config['FB_PAGE_ID'].isdigit():
         raise ValueError('nieprawidłowy FB_PAGE_ID')
-    from hit_detector import description
-    message = description(deal) + '\n\n' + format_post(deal)
-    images = map_image(deal, label='facebook')
     media_ids = []
     for image in images:
         try:
@@ -134,6 +132,12 @@ def publish_post(config, deal):
         raise FacebookError()
     print('facebook: opublikowano post id=%s' % result['id'])
     return result
+
+
+def publish_post(config, deal):
+    from hit_detector import description
+    message = description(deal) + '\n\n' + format_post(deal)
+    return post_message(config, message, map_image(deal, label='facebook'))
 
 
 def send_alert(config, deal):

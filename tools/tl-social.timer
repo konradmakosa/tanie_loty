@@ -1,0 +1,9 @@
+[Unit]
+Description=polataj.se daily social digest o 12:00 (Europe/Warsaw)
+
+[Timer]
+OnCalendar=*-*-* 12:00:00 Europe/Warsaw
+Persistent=true
+
+[Install]
+WantedBy=timers.target
