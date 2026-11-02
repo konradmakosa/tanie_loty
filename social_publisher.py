@@ -186,7 +186,9 @@ def publish_daily(tg, fb, root=ROOT, now=None):
     todo = needed - sent
     if not todo:
         return {'daily': {'ok': True, 'result': 'już opublikowane dziś' if needed else 'brak kanałów'}}
-    _, candidates = telegram.collect_candidates(root, now)
+    _, all_deals = hit_detector.collect_hit_candidates(root, now)
+    candidates = {k: d for k, d in all_deals.items()
+                  if telegram.alert_worthy(d) and d.get('price', 0) > 0}
     main, extras = pick_daily(candidates, now, root)
     if main is None:
         return {'daily': {'ok': True, 'result': 'brak ofert'}}

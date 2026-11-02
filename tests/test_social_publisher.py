@@ -15,7 +15,8 @@ FB = {'FB_PAGE_ID': '123', 'FB_PAGE_ACCESS_TOKEN': 'secret-token',
       'FB_GRAPH_VERSION': 'v24.0', 'FACEBOOK_ENABLED': '1'}
 TG = {'TELEGRAM_ENABLED': '1', 'TELEGRAM_CHANNEL_ID': '@test', 'TELEGRAM_BOT_TOKEN': 'secret-token'}
 DEAL = {'origin_city': 'Warszawa', 'dest_city': 'Oslo', 'origin': 'WAW', 'dest': 'OSL',
-        'port': 'zwarszawy', 'price': 99, 'date_out': '2026-11-12', 'date_in': '2026-11-16'}
+        'port': 'zwarszawy', 'price': 99, 'date_out': '2026-11-12', 'date_in': '2026-11-16',
+        'record_low': True}
 
 
 class SocialPublisherTest(unittest.TestCase):
@@ -98,7 +99,7 @@ class SocialPublisherTest(unittest.TestCase):
         now = datetime(2026, 10, 28, 12, tzinfo=timezone.utc)
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            with patch('social_publisher.telegram.collect_candidates',
+            with patch('social_publisher.hit_detector.collect_hit_candidates',
                        return_value=('b', {'a': DEAL})), \
                     patch('social_publisher.hit_detector.description', return_value='x'), \
                     patch('social_publisher.hit_detector.route_url', return_value='https://x/'), \
