@@ -187,8 +187,10 @@ def publish_daily(tg, fb, root=ROOT, now=None):
     if not todo:
         return {'daily': {'ok': True, 'result': 'już opublikowane dziś' if needed else 'brak kanałów'}}
     _, all_deals = hit_detector.collect_hit_candidates(root, now)
+    # tylko loty zagraniczne — krajowe odrzucamy wprost
     candidates = {k: d for k, d in all_deals.items()
-                  if telegram.alert_worthy(d) and d.get('price', 0) > 0}
+                  if telegram.alert_worthy(d) and d.get('price', 0) > 0
+                  and d.get('country_code') != 'PL' and not d.get('domestic')}
     main, extras = pick_daily(candidates, now, root)
     if main is None:
         return {'daily': {'ok': True, 'result': 'brak ofert'}}
