@@ -656,9 +656,13 @@ def load_tp_maps():
     }
 
 
+CITY_NAME_FIXES = {"Istambuł": "Stambuł"}
+
+
 def tp_city_name(maps, code):
     c = maps["cities"].get(code)
-    return (c or {}).get("name") or code or ""
+    name = (c or {}).get("name") or code or ""
+    return CITY_NAME_FIXES.get(name, name)
 
 
 def tp_country_code(maps, code):
