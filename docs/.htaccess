@@ -10,6 +10,8 @@ Options -Indexes
   RewriteCond %{HTTP_HOST} ^polataj\.se$ [NC]
   RewriteCond %{HTTPS} off
   RewriteRule ^ https://polataj.se%{REQUEST_URI} [R=301,L]
+  # stare adresy endpointów (historyczne) → właściwe API na makosa.org
+  RewriteRule ^(subscribe|confirm|unsubscribe|typical|history)\.php$ https://makosa.org/tanie_loty/api/$1.php [R=301,L]
 </IfModule>
 
 <IfModule mod_headers.c>
