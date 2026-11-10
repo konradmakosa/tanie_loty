@@ -55,17 +55,24 @@ def save_daily(root, state):
     path.write_text(json.dumps(state))
 
 
-def pick_daily(candidates, now, root):
+def pick_daily(candidates, now, root, wider=None):
     """Główna oferta + do MAX_EXTRAS dodatkowych (najlepiej z innych miast),
-    bez tras publikowanych w ciągu ostatniego tygodnia."""
+    bez tras publikowanych w ciągu ostatniego tygodnia.
+    Gdy cała pula `candidates` jest w cooldownzie, sięgamy po szerszą pulę
+    `wider` (wszystkie oferty zagraniczne) — najtańsza niepublikowana trasa
+    wygrywa; powrót do najdawniej publikowanej tylko gdy dosłownie
+    wszystko już było."""
     routes = load_daily(root).get('routes') or {}
     cutoff = now.timestamp() - DAILY_ROUTE_DAYS * 86400
+    sorter = lambda d: (0 if d.get('dest_geo') else 1, d['price'])
     fresh = sorted((d for d in candidates.values() if d.get('price', 0) > 0),
-                   key=lambda d: (0 if d.get('dest_geo') else 1, d['price']))
+                   key=sorter)
     free = [d for d in fresh if routes.get(telegram.route_key(d), 0) <= cutoff]
+    if not free and wider:
+        fresh = sorted((d for d in wider.values() if d.get('price', 0) > 0),
+                       key=sorter)
+        free = [d for d in fresh if routes.get(telegram.route_key(d), 0) <= cutoff]
     if not free:
-        # wszystko w cooldownzie — bierzemy trasę publikowaną najdawniej,
-        # żeby codzienny post nie wygasł całkowicie
         free = sorted(fresh, key=lambda d: routes.get(telegram.route_key(d), 0))
     main = free[0]
     used = {telegram.route_key(main)}
@@ -190,10 +197,11 @@ def publish_daily(tg, fb, root=ROOT, now=None):
         return {'daily': {'ok': True, 'result': 'już opublikowane dziś' if needed else 'brak kanałów'}}
     _, all_deals = hit_detector.collect_hit_candidates(root, now)
     # tylko loty zagraniczne — krajowe odrzucamy wprost
-    candidates = {k: d for k, d in all_deals.items()
-                  if telegram.alert_worthy(d) and d.get('price', 0) > 0
-                  and d.get('country_code') != 'PL' and not d.get('domestic')}
-    main, extras = pick_daily(candidates, now, root)
+    wider = {k: d for k, d in all_deals.items()
+             if d.get('price', 0) > 0 and d.get('country_code') != 'PL'
+             and not d.get('domestic')}
+    candidates = {k: d for k, d in wider.items() if telegram.alert_worthy(d)}
+    main, extras = pick_daily(candidates, now, root, wider=wider)
     if main is None:
         return {'daily': {'ok': True, 'result': 'brak ofert'}}
     desc = hit_detector.description(main)
