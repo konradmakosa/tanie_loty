@@ -64,7 +64,9 @@ def pick_daily(candidates, now, root):
                    key=lambda d: (0 if d.get('dest_geo') else 1, d['price']))
     free = [d for d in fresh if routes.get(telegram.route_key(d), 0) <= cutoff]
     if not free:
-        return None, []
+        # wszystko w cooldownzie — bierzemy trasę publikowaną najdawniej,
+        # żeby codzienny post nie wygasł całkowicie
+        free = sorted(fresh, key=lambda d: routes.get(telegram.route_key(d), 0))
     main = free[0]
     used = {telegram.route_key(main)}
     extras = []

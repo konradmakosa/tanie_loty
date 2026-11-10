@@ -128,7 +128,9 @@ class SocialPublisherTest(unittest.TestCase):
             (root / 'data/cache/daily.json').write_text(json.dumps({
                 'date': '2026-10-28', 'sent': ['telegram'],
                 'routes': {'Warszawa-Oslo': now.timestamp()}}))
-            self.assertEqual(social.pick_daily({'a': DEAL}, now, root), (None, []))
+            # wszystko w cooldownzie -> fallback na najdawniej publikowaną trasę
+            main, _ = social.pick_daily({'a': DEAL}, now, root)
+            self.assertEqual(main['dest_city'], 'Oslo')
 
     def test_daily_extras_prefer_other_cities(self):
         now = datetime(2026, 10, 28, 12, tzinfo=timezone.utc)
