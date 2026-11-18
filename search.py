@@ -48,6 +48,11 @@ EUROPE_CC = {
     "NO", "PL", "PT", "RO", "RU", "SM", "RS", "SK", "SI", "ES", "SE",
     "CH", "UA", "GB", "VA", "JE", "GG", "FO", "AX", "SJ",
 }
+
+# Lotniska w krajach europejskich, ale geograficznie poza Europą
+# (Wyspy Kanaryjskie — ES) — liczone do zakładki „Daleko",
+# z limitem ceny „far" zamiast koperty kontynentalnej.
+FAR_IATA = {"TFS", "TFN", "LPA", "ACE", "FUE", "SPC"}
 AVIASALES_API = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates"
 AVIASALES_SITE = "https://www.aviasales.com"
 TP_DATA = "https://api.travelpayouts.com/data/pl"
@@ -473,7 +478,9 @@ def ryanair_route(origin, dest, arr, cfg, jutro, max_out, months):
             if not (cfg["min_nights"] <= nights <= cfg["max_nights"]):
                 continue
             total = fo["price"]["value"] + fi["price"]["value"]
-            if total > price_limit(cfg, "FR"):
+            cap = ((cfg.get("far") or {}).get("max_price_pln")
+                   if dest in FAR_IATA else price_limit(cfg, "FR"))
+            if cap is not None and total > cap:
                 continue
             combos.append((total, fo, fi, nights))
     combos.sort(key=lambda c: c[0])
@@ -1116,7 +1123,11 @@ def aviasales_deal(r, cfg, marker, maps, jutro, koniec):
         raise ValueError("brak price/departure_at/return_at")
 
     code = r.get("airline") or ""
-    if float(price) > price_limit(cfg, code):
+    dest_iata = (r.get("destination_airport") or r.get("destination")
+                 or "")
+    cap = ((cfg.get("far") or {}).get("max_price_pln")
+           if dest_iata in FAR_IATA else price_limit(cfg, code))
+    if cap is not None and float(price) > cap:
         return None
     if (r.get("transfers") or 0) != 0 or (r.get("return_transfers") or 0) != 0:
         return None
@@ -1249,6 +1260,14 @@ def main():
     # Scalanie ofert z wielu źródeł dla tej samej trasy i dat.
     deals = merge_offers(ry + avi)
 
+    # Wyspy Kanaryjskie (kraj ES, ale geograficznie poza Europą)
+    # przenosimy do zakładki „Daleko" — tam jest ich limit ceny.
+    far_europe = [d for d in deals if d["dest"] in FAR_IATA]
+    if far_europe:
+        deals = [d for d in deals if d["dest"] not in FAR_IATA]
+        for d in far_europe:
+            d["far"] = True
+
     now = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
     # Zakładka „Daleko" — okazje poza Europą, osobny plik.
@@ -1256,6 +1275,7 @@ def main():
         cfg.get("far") or {}, token, marker, maps,
         cfg.get("avi_origins") or [cfg["avi_origin"]]) if token else []
     far_deals = merge_offers(far_raw)
+    far_deals.extend(far_europe)
     annotate_record_low(far_deals, history_by_route, cfg)
     annotate_typical(far_deals)
     annotate_geo(far_deals, maps)
@@ -1286,7 +1306,7 @@ def main():
         # może przyjść z przebiegu europejskiego i dalekiego.
         for d in ow_deals:
             cc = d.get("country_code")
-            if cc and cc not in EUROPE_CC:
+            if (cc and cc not in EUROPE_CC) or d["dest"] in FAR_IATA:
                 d["far"] = True
             else:
                 d.pop("far", None)
