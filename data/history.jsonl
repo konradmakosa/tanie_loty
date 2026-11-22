@@ -80190,3 +80190,641 @@
 {"ts": "2026-11-21T18:15:34+00:00", "origin": "KTW", "dest": "KUT", "price": 207.0, "source": "aviasales", "trip": "oneway"}
 {"ts": "2026-11-21T18:15:34+00:00", "origin": "KTW", "dest": "SSH", "price": 457.0, "source": "aviasales", "trip": "oneway"}
 {"ts": "2026-11-21T18:15:34+00:00", "origin": "KTW", "dest": "EVN", "price": 722.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "ARN", "price": 155.09, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "ATH", "price": 203.86, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BCN", "price": 205.65, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BGY", "price": 132.92, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BHX", "price": 156.73, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BRS", "price": 154.03, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BTS", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BUD", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BVA", "price": 163.96, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "CIA", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "CPH", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "DUB", "price": 270.36, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "EDI", "price": 247.31, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "EIN", "price": 236.1, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "HEL", "price": 281.97, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "LIS", "price": 332.44, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MAD", "price": 195.37, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MAN", "price": 165.26, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MLA", "price": 196.93, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MXP", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "PFO", "price": 198.87, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "PMI", "price": 252.64, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "PMO", "price": 162.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "SNN", "price": 199.51, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "SOF", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "STN", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "TIA", "price": 131.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "TSF", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "ZAG", "price": 171.2, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "AGP", "price": 216.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ALC", "price": 231.12, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BLQ", "price": 150.66, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BRI", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CRL", "price": 182.89, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CTA", "price": 177.26, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LBA", "price": 174.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LPL", "price": 150.04, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NAP", "price": 150.65, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "OPO", "price": 320.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PFO", "price": 194.99, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PSA", "price": 150.35, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SVQ", "price": 296.74, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TIA", "price": 150.66, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TRN", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "VCE", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SOF", "price": 217.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "RMO", "price": 233.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BUD", "price": 191.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BGY", "price": 164.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TRF", "price": 219.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "FCO", "price": 219.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "POZ", "price": 248.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "RMO", "price": 743.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "EVN", "price": 483.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "MXP", "price": 151.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GDN", "price": 230.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NYO", "price": 196.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CPH", "price": 242.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "KRK", "price": 247.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BSL", "price": 308.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LTN", "price": 342.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "VIE", "price": 416.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DUB", "price": 536.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ATH", "price": 481.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BER", "price": 731.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "AMS", "price": 658.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LUX", "price": 973.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "RIX", "price": 982.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NCE", "price": 1012.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TBS", "price": 846.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "IST", "price": 706.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "VNO", "price": 1110.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "IEG", "price": 168.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BBU", "price": 200.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LCA", "price": 264.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DTM", "price": 282.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LYS", "price": 300.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BCN", "price": 330.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "KUT", "price": 357.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SZZ", "price": 450.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HEL", "price": 715.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PRG", "price": 640.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DUS", "price": 776.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LIS", "price": 682.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HAM", "price": 816.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GYD", "price": 682.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TLV", "price": 536.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TLL", "price": 253.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "MLA", "price": 280.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ORY", "price": 368.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ZRH", "price": 637.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "STR", "price": 850.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GOT", "price": 874.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BEG", "price": 999.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GVA", "price": 1066.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "RAK", "price": 569.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "FRA", "price": 1003.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "AGA", "price": 475.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "RAK", "price": 548.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "EVN", "price": 551.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "AGA", "price": 585.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "AYT", "price": 610.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SSH", "price": 610.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "TFS", "price": 611.76, "source": "ryanair"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SAW", "price": 670.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "SAW", "price": 696.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TFS", "price": 731.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "HRG", "price": 747.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "SSH", "price": 747.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HRG", "price": 782.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CMN", "price": 796.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "GYD", "price": 849.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SPX", "price": 926.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "ESB", "price": 999.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CAI", "price": 1052.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BEY", "price": 1205.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "IST", "price": 1234.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GZP", "price": 1513.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NQZ", "price": 1746.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DSS", "price": 1802.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BUS", "price": 1838.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "DSS", "price": 1855.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TAS", "price": 1894.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DXB", "price": 1907.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "AMM", "price": 1997.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "JFK", "price": 2095.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SHJ", "price": 2151.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ORD", "price": 2163.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "EWR", "price": 2177.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DEL", "price": 2223.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "MIA", "price": 2253.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ALA", "price": 2276.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DOH", "price": 2407.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "DXB", "price": 2428.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HKG", "price": 2616.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ADD", "price": 2625.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "YYZ", "price": 2637.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "MNL", "price": 2643.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CMB", "price": 2660.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BSZ", "price": 2662.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BKK", "price": 2799.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CEB", "price": 2799.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "ICN", "price": 2844.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HKT", "price": 2915.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SIN", "price": 2956.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PVG", "price": 2962.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "DMK", "price": 2963.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "KUL", "price": 3032.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SGN", "price": 3074.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "CGK", "price": 3089.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HND", "price": 3091.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PEK", "price": 3131.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "MLE", "price": 3135.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "SEZ", "price": 3152.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GMP", "price": 3178.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NRT", "price": 3227.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LAX", "price": 3228.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BGI", "price": 3260.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "NBO", "price": 3300.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "UBN", "price": 3332.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "HAN", "price": 3425.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PKX", "price": 3440.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "TIA", "price": 56.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TIA", "price": 56.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "STN", "price": 60.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LBA", "price": 60.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "CPH", "price": 64.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "ARN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BTS", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "CIA", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MXP", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "SOF", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "VCE", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "TSF", "price": 66.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "EDI", "price": 66.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BGY", "price": 66.46, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BRS", "price": 66.46, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BUD", "price": 66.46, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "LPL", "price": 70.89, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BRI", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "PSA", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "TRN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BHX", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "BVA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "MAN", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WMI", "dest": "PMO", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "BLQ", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "IEG", "price": 77.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GDN", "price": 158.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "EVN", "price": 540.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:01:59+00:00", "origin": "WAW", "dest": "GYD", "price": 646.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ABZ", "price": 179.2, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AGA", "price": 323.58, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AGP", "price": 256.34, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ALC", "price": 226.03, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ARN", "price": 162.63, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BBU", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BCN", "price": 172.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BFS", "price": 259.87, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BGY", "price": 135.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BHX", "price": 175.05, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BLQ", "price": 173.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BOH", "price": 243.1, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BRI", "price": 184.5, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BRS", "price": 182.4, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BUD", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BVA", "price": 162.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CAG", "price": 218.5, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CIA", "price": 199.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CPH", "price": 141.79, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CRL", "price": 174.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CTA", "price": 166.76, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "DBV", "price": 168.39, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "DUB", "price": 276.67, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EDI", "price": 271.83, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EIN", "price": 217.3, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EMA", "price": 184.72, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "FAO", "price": 354.1, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "FMM", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GDN", "price": 130.02, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GLA", "price": 203.85, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GOT", "price": 142.28, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LBA", "price": 195.63, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LIS", "price": 328.01, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LPL", "price": 212.42, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LTN", "price": 176.93, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MAD", "price": 312.14, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MAN", "price": 203.31, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MLA", "price": 207.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MRS", "price": 201.08, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MXP", "price": 126.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "NAP", "price": 194.99, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "NCL", "price": 170.24, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "OPO", "price": 303.27, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "PFO", "price": 214.16, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "PMO", "price": 190.56, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "PRG", "price": 172.83, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "PSA", "price": 228.83, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "PSR", "price": 177.26, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "RAK", "price": 328.91, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "RBA", "price": 229.68, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "RIX", "price": 185.92, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SKG", "price": 232.59, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SNN", "price": 205.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SOF", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "STN", "price": 187.43, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SUF", "price": 155.09, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SVQ", "price": 302.47, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TIA", "price": 168.39, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TLS", "price": 279.24, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TRF", "price": 142.47, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TRS", "price": 131.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VCE", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VIE", "price": 133.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VLC", "price": 243.77, "source": "ryanair"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "FCO", "price": 216.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VNO", "price": 232.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "WAW", "price": 237.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BSL", "price": 200.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TLL", "price": 378.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ORY", "price": 590.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BEG", "price": 618.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "IST", "price": 668.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CDG", "price": 305.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AMS", "price": 829.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "HEL", "price": 1140.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MUC", "price": 734.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TLV", "price": 481.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "FUE", "price": 555.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EVN", "price": 585.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LPA", "price": 603.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TFS", "price": 610.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AYT", "price": 716.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SSH", "price": 723.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SAW", "price": 729.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GYD", "price": 749.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TBS", "price": 1041.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "DJE", "price": 1187.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SID", "price": 1270.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "HRG", "price": 1341.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AMM", "price": 1450.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ECN", "price": 1559.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BUS", "price": 1834.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "NQZ", "price": 2009.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SHJ", "price": 2104.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TAS", "price": 2162.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ALA", "price": 2169.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "JFK", "price": 2189.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ORD", "price": 2315.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "YYZ", "price": 2559.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ICN", "price": 2785.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CMB", "price": 2817.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MIA", "price": 2851.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SIN", "price": 2877.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BKK", "price": 3111.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "HKT", "price": 3121.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MLE", "price": 3348.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CPH", "price": 30.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GOT", "price": 53.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MXP", "price": 54.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TRF", "price": 57.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BVA", "price": 60.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BGY", "price": 62.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TRS", "price": 62.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VIE", "price": 62.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BBU", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "FMM", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SOF", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "GDN", "price": 65.01, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "MLA", "price": 70.89, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "OPO", "price": 70.89, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "RBA", "price": 70.89, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "VCE", "price": 72.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "ARN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BLQ", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BUD", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EMA", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "BHX", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CIA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EIN", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "LTN", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SNN", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SUF", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TIA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "RAK", "price": 96.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "CDG", "price": 143.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "WAW", "price": 165.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "AYT", "price": 237.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "TLV", "price": 266.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SSH", "price": 357.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "IST", "price": 373.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "EVN", "price": 531.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:05:54+00:00", "origin": "KRK", "dest": "SAW", "price": 533.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AAR", "price": 132.44, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AGA", "price": 294.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AGP", "price": 228.41, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "ALC", "price": 183.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "ARN", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BCN", "price": 211.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BGY", "price": 143.47, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BRS", "price": 166.94, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BUD", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "CPH", "price": 120.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "CTA", "price": 170.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "DUB", "price": 261.97, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "EDI", "price": 187.43, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "FCO", "price": 190.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "GOT", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "HAM", "price": 133.28, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "KRK", "price": 138.5, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LBA", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LPL", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MAD", "price": 181.69, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MAN", "price": 163.65, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MLA", "price": 170.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MXP", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "NAP", "price": 199.43, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "NCL", "price": 167.95, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "OPO", "price": 305.7, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "OTP", "price": 144.89, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PFO", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PMO", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PRG", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SFT", "price": 159.53, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "STN", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TIA", "price": 132.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TRF", "price": 123.56, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TRN", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TSF", "price": 141.7, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "WRO", "price": 134.51, "source": "ryanair"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "VNO", "price": 273.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LTN", "price": 324.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "WAW", "price": 262.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BLL", "price": 264.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TKU", "price": 362.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AMS", "price": 956.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "IST", "price": 752.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "FRA", "price": 1064.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TAT", "price": 109.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TLL", "price": 165.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LCA", "price": 297.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "KEF", "price": 382.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SAW", "price": 696.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TFS", "price": 800.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "RMF", "price": 805.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SSH", "price": 845.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "GYD", "price": 1062.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "EWR", "price": 1534.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "JFK", "price": 1560.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "ORD", "price": 1673.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MIA", "price": 1780.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "YYZ", "price": 1971.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TAS", "price": 2171.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SHJ", "price": 2235.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "ICN", "price": 2834.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BKK", "price": 3078.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "HKT", "price": 3129.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "HND", "price": 3156.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "HAM", "price": 50.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "ARN", "price": 50.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "CPH", "price": 53.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TRF", "price": 53.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "GOT", "price": 54.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MXP", "price": 56.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PRG", "price": 61.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BUD", "price": 63.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AAR", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LBA", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MAN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "STN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "KRK", "price": 65.01, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BGY", "price": 65.98, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TIA", "price": 66.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TSF", "price": 66.46, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "VNO", "price": 67.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SFT", "price": 68.57, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "WRO", "price": 69.5, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BLL", "price": 70.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "OTP", "price": 70.89, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PFO", "price": 73.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "LPL", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "PMO", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TRN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BRS", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "CTA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "MLA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "TLL", "price": 77.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "OSL", "price": 97.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "WAW", "price": 190.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "IST", "price": 541.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "SAW", "price": 553.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "AYT", "price": 706.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "HRG", "price": 728.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "EVN", "price": 728.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:08:58+00:00", "origin": "GDN", "dest": "BJV", "price": 857.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "AGP", "price": 214.36, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "ALC", "price": 212.73, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "ARN", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BCN", "price": 274.8, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BGY", "price": 140.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BHX", "price": 154.52, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BRI", "price": 178.3, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BRS", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BVA", "price": 144.76, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "CIA", "price": 177.66, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "CPH", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "DUB", "price": 212.72, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "EDI", "price": 212.53, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "LIS", "price": 316.29, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "LPL", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "MAN", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "MLA", "price": 170.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "OPO", "price": 244.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "PFO", "price": 196.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "PMO", "price": 170.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "SNN", "price": 195.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "STN", "price": 132.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TIA", "price": 132.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TRF", "price": 140.54, "source": "ryanair"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "VLC", "price": 168.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BSL", "price": 209.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "AMS", "price": 915.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "LTN", "price": 165.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "KUT", "price": 420.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "AYT", "price": 709.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "IST", "price": 764.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TBS", "price": 1303.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TLV", "price": 1598.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "NQZ", "price": 1921.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "AMM", "price": 1973.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "JFK", "price": 2349.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "EWR", "price": 2423.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "ICN", "price": 2821.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "MIA", "price": 2922.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BKK", "price": 3129.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BVA", "price": 49.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TRF", "price": 53.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "PMO", "price": 64.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "ARN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BHX", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "CPH", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "LPL", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "STN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BGY", "price": 65.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TIA", "price": 66.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "CIA", "price": 72.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "LTN", "price": 73.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BRS", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "MAN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "BRI", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "KUT", "price": 136.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "AYT", "price": 399.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "SAW", "price": 491.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "IST", "price": 632.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:11:10+00:00", "origin": "POZ", "dest": "TBS", "price": 852.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "AGA", "price": 240.97, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "AGP", "price": 290.15, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ALC", "price": 183.63, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ARN", "price": 164.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ATH", "price": 305.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BGY", "price": 149.33, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BLQ", "price": 149.27, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BOH", "price": 166.76, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BRS", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BVA", "price": 157.31, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "CIA", "price": 230.6, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "CRL", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "DUB", "price": 199.43, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EDI", "price": 225.78, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EMA", "price": 156.07, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "GDN", "price": 135.14, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "GLA", "price": 169.69, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LBA", "price": 163.16, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LIS", "price": 363.59, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LPL", "price": 158.75, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LTN", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MAD", "price": 192.97, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MAN", "price": 176.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MLA", "price": 191.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MRS", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "NAP", "price": 193.95, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "NCL", "price": 151.28, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "OPO", "price": 270.2, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "PFO", "price": 205.87, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "PMO", "price": 196.74, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "PSA", "price": 172.82, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "PSR", "price": 196.5, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "RAK", "price": 217.16, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SNN", "price": 192.2, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SOF", "price": 155.09, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "STN", "price": 153.76, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SUF", "price": 161.46, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SVQ", "price": 260.88, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TIA", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TRF", "price": 130.9, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TRN", "price": 149.73, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TSF", "price": 130.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "VLC", "price": 190.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "RMO", "price": 178.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BUD", "price": 209.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "WAW", "price": 253.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BCN", "price": 336.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "FRA", "price": 853.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "AMS", "price": 988.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "DTM", "price": 254.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LCA", "price": 388.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "CPH", "price": 837.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BIO", "price": 276.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "KUT", "price": 755.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SAW", "price": 807.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "GYD", "price": 807.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "IST", "price": 972.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ADB", "price": 1230.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SSH", "price": 1632.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "JFK", "price": 2577.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ORD", "price": 2669.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ICN", "price": 2681.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EWR", "price": 2828.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "PVG", "price": 3127.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ATL", "price": 3422.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BVA", "price": 60.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "DTM", "price": 63.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TRF", "price": 64.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BLQ", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "CRL", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LBA", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LPL", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "LTN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "STN", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TIA", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TSF", "price": 65.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "GDN", "price": 65.01, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ATH", "price": 73.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "ARN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BRS", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EDI", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EMA", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MRS", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "NCL", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BGY", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "BOH", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "CIA", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SUF", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TRN", "price": 75.73, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MAD", "price": 76.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "MAN", "price": 76.48, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "WAW", "price": 153.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "KUT", "price": 278.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "HRG", "price": 351.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "GYD", "price": 458.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "SAW", "price": 548.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "EVN", "price": 563.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:13:26+00:00", "origin": "WRO", "dest": "TBS", "price": 1128.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "AGP", "price": 244.79, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "ALC", "price": 201.36, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "ATH", "price": 248.2, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "BGY", "price": 150.64, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "CTA", "price": 170.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "DUB", "price": 274.8, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "FCO", "price": 175.63, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "MAN", "price": 178.19, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "MLA", "price": 212.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "NAP", "price": 132.92, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "PFO", "price": 180.88, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "STN", "price": 139.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TRN", "price": 148.0, "source": "ryanair"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "DTM", "price": 385.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "WAW", "price": 199.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "KUT", "price": 377.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "LTN", "price": 235.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "OPO", "price": 362.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "BCN", "price": 318.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "AYT", "price": 458.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "AGA", "price": 483.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "FUE", "price": 623.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TFS", "price": 668.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "SSH", "price": 707.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "HRG", "price": 871.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "RMF", "price": 900.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TBS", "price": 977.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TLV", "price": 989.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "CMB", "price": 2178.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "ACE", "price": 2464.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TAS", "price": 2530.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "SGN", "price": 2819.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "HKT", "price": 3149.0, "source": "aviasales"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "STN", "price": 53.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "BGY", "price": 58.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "NAP", "price": 66.46, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "TRN", "price": 74.0, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "FCO", "price": 75.33, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "MAN", "price": 76.26, "source": "ryanair", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "CTA", "price": 79.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "WAW", "price": 127.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "AYT", "price": 157.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "KUT", "price": 207.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "SSH", "price": 457.0, "source": "aviasales", "trip": "oneway"}
+{"ts": "2026-11-22T00:15:25+00:00", "origin": "KTW", "dest": "EVN", "price": 722.0, "source": "aviasales", "trip": "oneway"}
