@@ -354,3 +354,16 @@
    źródło nie zwraca dziś cen — sprawdzać okresowo.
 8. **Search Console:** usługa Domain dla polataj.se, w starej „Change of Address".
 9. Drobne: odświeżyć cache podglądu FB/LinkedIn dla og.png.
+
+## Blog Soro (eksperyment, od 2026-11)
+
+- `/blog/` — osadzony widget Soro (`trysoro`, embed JS `?theme=dark`)
+  plus statyczna lista „Wszystkie artykuły" dopisywana przez mirror.
+- `tools/mirror_soro.py` — pobiera artykuły z publicznego API embedu
+  (`app.trysoro.com/api/embed/<token>/articles` + `/article/<id>`)
+  i generuje statyczne strony `docs/blog/<slug>/index.html`
+  (canonical, og, JSON-LD BlogPosting). Stan: `data/cache/soro.json`.
+- Wołany w `tools/run_search.sh` przed `build_seo_routes.py`;
+  `build_seo_routes` dopisuje `docs/blog/*/index.html` do sitemap.
+- Odwracalne przez revert commitów `e9d304b5a` (strona) i commitu
+  mirror (skrypt + pipeline + sitemap).
