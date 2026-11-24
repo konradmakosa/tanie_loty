@@ -19,6 +19,8 @@ for p in zwarszawy zkrakowa zgdanska zpoznania zwroclawia zkatowic; do
   python3 ingest.py "$p" || echo "ingest $p: BLAD"
 done
 
+echo "=== mirror_soro ==="
+python3 tools/mirror_soro.py || echo "mirror_soro: BLAD"
 echo "=== build_seo_routes ==="
 python3 tools/build_seo_routes.py || echo "build_seo_routes: BLAD"
 

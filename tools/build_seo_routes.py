@@ -416,6 +416,8 @@ def main():
            [SITE + "/" + p + "/" for p in cfg["ports"]] + \
            [SITE + u for u in written] + [SITE + "/prywatnosc/",
                                           SITE + "/blog/"]
+    blog = sorted((DOCS / "blog").glob("*/index.html"))
+    urls += [SITE + "/blog/%s/" % p.parent.name for p in blog]
     sm = ['<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for u in urls:
