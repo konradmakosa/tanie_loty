@@ -110,6 +110,8 @@ class TestResale(unittest.TestCase):
         self.assertTrue(radar.is_resale("Sprzedam bilet do Oslo"))
         self.assertTrue(radar.is_resale("opłata za zmianę nazwiska"))
         self.assertTrue(radar.is_resale("Odsprzedam 2 bilety, pilne"))
+        self.assertTrue(radar.is_resale(
+            "Na stronie przewoźnika te loty kosztują teraz 2300 zł"))
 
     def test_real_questions_pass(self):
         self.assertFalse(radar.is_resale(

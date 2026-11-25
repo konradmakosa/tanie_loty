@@ -58,7 +58,7 @@ MAX_ITEM_AGE_DAYS = 14
 RESALE_RE = re.compile(
     r"sprzedam|odsprzedam|odst\w*pi|przepisz\w*|przepisani\w*|"
     r"zmian\w*\s+nazwisk\w*|na inne nazwisk\w*|"
-    r"bilet\w*\s+na\s+sprzeda|na stronie przew\w*znika", re.I)
+    r"bilet\w*\s+na\s+sprzeda|na\s+stronie\s+przew\w*nik", re.I)
 
 
 def is_resale(text):
@@ -505,6 +505,8 @@ def run(dry=False, only_if_requested=False):
             ts = 0
         if ts and ts < cutoff:
             continue            # starsze niż 14 dni — odpadają
+        if ck(i) in {ck(k) for k in keep}:
+            continue            # duplikat treści w istniejących
         keep.append(i)
     items = new_items + keep
     items.sort(key=lambda x: (-(x.get("score") or 0),
