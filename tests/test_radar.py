@@ -102,6 +102,27 @@ class TestCoverage(unittest.TestCase):
             self.assertIn("krakow: oslo", txt)
 
 
+class TestResale(unittest.TestCase):
+    def test_resale_posts_filtered(self):
+        self.assertTrue(radar.is_resale(
+            "Data wylotu: 22 grudnia — możliwość przepisania "
+            "na 4 dowolne osoby"))
+        self.assertTrue(radar.is_resale("Sprzedam bilet do Oslo"))
+        self.assertTrue(radar.is_resale("opłata za zmianę nazwiska"))
+        self.assertTrue(radar.is_resale("Odsprzedam 2 bilety, pilne"))
+
+    def test_real_questions_pass(self):
+        self.assertFalse(radar.is_resale(
+            "Jaką wyspę polecacie na pierwszą podróż do Tajlandii?"))
+        self.assertFalse(radar.is_resale(
+            "Gdzie kupić tanie bilety do Oslo?"))
+        # nagłówek grupy „sprzedam / kupię" sam w sobie nie jest
+        # ogłoszeniem sprzedaży
+        self.assertFalse(radar.is_resale(
+            "Tanie bilety lotnicze / promocje / sprzedam / kupię. "
+            "Polecacie jakieś lotnisko pod wyjazd?"))
+
+
 class TestMergeSort(unittest.TestCase):
     def test_sort_desc_by_score(self):
         items = [{"url": "u1", "score": 5, "found_at": "a"},

@@ -50,6 +50,21 @@ REDDIT_UA = "polataj.se radar (kontakt: kontakt@polataj.se)"
 MAX_RESULTS_PER_QUERY = 10
 MAX_GEMINI_PER_SCAN = 15
 HTTP_TIMEOUT = 25
+MAX_ITEM_AGE_DAYS = 14
+
+# Deterministyczny filtr odsprzedaży biletów — LLM przepuszczał takie
+# posty z wysokim score („sprzedam", „przepiszę" to NIE prośba o poradę).
+RESALE_RE = re.compile(
+    r"sprzedam|odsprzedam|odst\w*pi|przepisz\w*|przepisani\w*|"
+    r"zmian\w*\s+nazwisk\w*|na inne nazwisk\w*|"
+    r"bilet\w*\s+na\s+sprzeda", re.I)
+
+
+def is_resale(text):
+    # nagłówki grup „kupię / sprzedam" nie są treścią posta — wycinamy
+    t = re.sub(r"(sprzedam|kupi[eę])\s*/\s*(sprzedam|kupi[eę])", "",
+               text, flags=re.I)
+    return bool(RESALE_RE.search(t))
 
 
 # ---------- pomocnicze ----------
@@ -395,10 +410,13 @@ def run(dry=False, only_if_requested=False):
             "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
             " VALUES(?,?,?,1)", (it["url"], it["source"],
                                 datetime.now(timezone.utc).isoformat()))
+        if is_resale(it["title"] + " " + it["snippet"]):
+            continue        # odsprzedaż biletów — bez scoringu
         j = score_item(it, or_key, routes_text) if or_key else None
         scored += 1
         if j and j.get("is_relevant") and \
-                (j.get("relevance_score") or 0) >= 5:
+                (j.get("relevance_score") or 0) >= 5 and \
+                not is_resale(it["title"] + " " + it["snippet"]):
             it["score"] = j.get("relevance_score")
             it["reply"] = (j.get("suggested_reply") or "")[:800]
             it["variants"] = [
@@ -426,8 +444,22 @@ def run(dry=False, only_if_requested=False):
             existing = ex.get("items") or []
         except Exception:
             existing = []
-    keep = [i for i in existing
-            if i.get("url") not in {n["url"] for n in new_items}]
+    cutoff = (datetime.now(timezone.utc).timestamp()
+              - MAX_ITEM_AGE_DAYS * 86400)
+    keep = []
+    for i in existing:
+        if i.get("url") in {n["url"] for n in new_items}:
+            continue
+        if is_resale((i.get("title") or "") + " " + (i.get("snippet") or "")):
+            continue            # wywal stare odsprzedaże z panelu
+        try:
+            ts = datetime.fromisoformat(
+                i.get("found_at") or "").timestamp()
+        except ValueError:
+            ts = 0
+        if ts and ts < cutoff:
+            continue            # starsze niż 14 dni — odpadają
+        keep.append(i)
     items = new_items + keep
     items.sort(key=lambda x: (-(x.get("score") or 0),
                               x.get("found_at") or ""))
