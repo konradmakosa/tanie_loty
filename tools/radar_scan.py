@@ -304,9 +304,14 @@ def scan_requested(key):
 
 
 def upload(items, key, routes=None):
-    return api_call("upload", key,
-                    payload={"items": items, "routes": routes or {}},
-                    method="POST")
+    try:
+        return api_call("upload", key,
+                        payload={"items": items, "routes": routes or {}},
+                        method="POST")
+    except urllib.error.HTTPError as e:
+        print("radar: upload HTTP %s: %s"
+              % (e.code, e.read()[:300]), file=sys.stderr)
+        raise
 
 
 # ---------- główna pętla ----------
