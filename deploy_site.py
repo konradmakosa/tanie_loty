@@ -74,8 +74,30 @@ def main():
             ftp.storbinary("STOR " + remote, f)
         sent += 1
         print("  ↑ %s (%d B)" % (rel, size))
+    # config.php panelu radaru — generowany z env, poza Gitem.
+    radar_pw = env.get("RADAR_PASSWORD", "")
+    ingest = env.get("TL_INGEST_KEY", "")
+    if radar_pw and ingest:
+        cfg = ("<?php\n// generowany przez deploy_site.py — nie commitować\n"
+               "return [\n"
+               "    'RADAR_PASSWORD' => %s,\n"
+               "    'INGEST_KEY' => %s,\n"
+               "];\n" % (_php_str(radar_pw), _php_str(ingest)))
+        remote = target + "/panel-radar/config.php"
+        mkdirs(ftp, remote.rsplit("/", 1)[0])
+        ftp.storbinary("STOR " + remote, __import__("io")
+                       .BytesIO(cfg.encode("utf-8")))
+        print("  ↑ panel-radar/config.php (z env)")
+    else:
+        print("  ! brak RADAR_PASSWORD/TL_INGEST_KEY — "
+              "pomijam panel-radar/config.php")
+
     ftp.quit()
     print("Wgrano %d, pominięto %d niezmienionych." % (sent, skipped))
+
+
+def _php_str(s):
+    return "'" + s.replace("\\", "\\\\").replace("'", "\\'") + "'"
 
 
 if __name__ == "__main__":

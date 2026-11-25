@@ -1,0 +1,8 @@
+[Unit]
+Description=polataj.se — radar: sprawdzenie flagi "Szukaj teraz"
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/tl/tanie_loty
+ExecStart=/usr/bin/python3 tools/radar_scan.py --if-requested
+User=tl

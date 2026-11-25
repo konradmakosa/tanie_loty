@@ -1,0 +1,8 @@
+[Unit]
+Description=polataj.se — radar okazji do komentowania (skan)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/tl/tanie_loty
+ExecStart=/usr/bin/python3 tools/radar_scan.py
+User=tl

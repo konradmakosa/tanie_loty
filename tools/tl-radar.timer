@@ -1,0 +1,9 @@
+[Unit]
+Description=polataj.se — radar okazji (9:00 i 17:00)
+
+[Timer]
+OnCalendar=*-*-* 09,17:00:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

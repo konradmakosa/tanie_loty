@@ -367,3 +367,28 @@
   `build_seo_routes` dopisuje `docs/blog/*/index.html` do sitemap.
 - Odwracalne przez revert commitów `e9d304b5a` (strona) i commitu
   mirror (skrypt + pipeline + sitemap).
+
+## Panel radar (od 2026-11)
+
+- `/panel-radar/` — ukryty panel admina: radar wątków do merytorycznego
+  komentowania (FB/Reddit/fora). `noindex,nofollow` (meta + X-Robots-Tag
+  w `.htaccess`), login hasłem `RADAR_PASSWORD` (sesja PHP).
+- `docs/panel-radar/api.php` — JSON API: akcje sesyjne (items, set_status,
+  save_reply, save_queries, request_scan) + maszynowe `X-Ingest-Key`
+  (upload, scan_flag, queries, items_raw). Dane w `data/` (poza Gitem,
+  zablokowane .htaccess, pisze tylko PHP — deploy nie kasuje).
+- `docs/panel-radar/config.php` — generowany przez `deploy_site.py`
+  z env (`RADAR_PASSWORD`, `TL_INGEST_KEY`), gitignored.
+- `tools/radar_scan.py` — skaner (stdlib): Serper.dev (`SERPER_API_KEY`,
+  `tbs=qdr:w`, gl/hl=pl) + oficjalny JSON Reddita → deduplikacja
+  `data/cache/radar.sqlite` → ocena Gemini `google/gemini-2.5-flash`
+  przez OpenRouter (relevant/score/summary/reply) → POST items
+  do api.php. `--dry-run` podgląd, `--if-requested` tylko gdy flaga.
+- Zapytania: `tools/radar_queries.json` (domyślne w repo), edytowalne
+  z panelu → `data/queries.json` na home.pl (skaner pobiera przez API).
+- Timery VPS: `tl-radar.timer` (9:00 i 17:00) + `tl-radar-flag.timer`
+  (co 15 min, sprawdza flagę „Szukaj teraz"). Instalacja: skopiować
+  `tools/tl-radar*.service|.timer` → `/etc/systemd/system/`,
+  `daemon-reload`, `enable --now`.
+- Env: `SERPER_API_KEY` (serper.dev — 2500 zapytań free),
+  `RADAR_PASSWORD`, `OPENROUTER_API_KEY` (już jest), `TL_INGEST_KEY`.
