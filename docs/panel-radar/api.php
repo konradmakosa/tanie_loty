@@ -209,16 +209,19 @@ case 'gen_variants':        // AI: 3 warianty komentarza dla wątku
         . "głównie Europa + wybrane dalekie okazje. Aktualne strony tras "
         . "(slugi /loty/<port>-<dest>/):\n" . $routes_txt . "\n\n"
         . "Napisz 3 RÓŻNE wersje krótkiego, naturalnego komentarza po polsku "
-        . "z linkiem do polataj.se, każda w innym stylu:\n"
+        . "z linkiem do polataj.se, każda w innym stylu. Linki ZAWSZE pełne "
+        . "z https:// (https://polataj.se, https://polataj.se/loty/…) — "
+        . "sam „polataj.se\" nie robi się klikalne na forum/FB.\n"
         . "1. \"koleżeńska\" — 1-2 zdania, luźno, jak znajomy "
-        . "(styl np. „Wyszukasz tu polataj.se — sam sprawdzają co 6h "
-        . "tanie loty z polskich lotnisk\").\n"
+        . "(styl np. „Wyszukasz tu https://polataj.se — sam sprawdzają "
+        . "co 6h tanie loty z polskich lotnisk\").\n"
         . "2. \"merytoryczna\" — 2-3 zdania, najpierw konkretna pomoc "
         . "z pytaniem, potem nienachalny link jako narzędzie.\n"
-        . "3. \"konkretna\" — wplata pasującą podstronę: trasę "
-        . "/loty/<port>-<dest>/ WYŁĄCZNIE gdy para port-dest jest "
-        . "na liście powyżej (użyj dokładnego sluga), stronę portu "
-        . "/z<miasto>/ dla portów z listy, albo samo polataj.se.\n"
+        . "3. \"konkretna\" — wplata pasujący pełny URL: trasę "
+        . "https://polataj.se/loty/<port>-<dest>/ WYŁĄCZNIE gdy para "
+        . "port-dest jest na liście powyżej (użyj dokładnego sluga), "
+        . "stronę portu https://polataj.se/z<miasto>/ dla portów "
+        . "z listy, albo samo https://polataj.se.\n"
         . "Bez marketingowego żargonu, bez „jako AI\", bez wymyślania "
         . "faktów o wątku. Odpowiedz WYŁĄCZNIE JSON-em: "
         . "{\"variants\":[{\"style\":\"koleżeńska\",\"text\":\"...\"},"
@@ -248,6 +251,8 @@ case 'gen_variants':        // AI: 3 warianty komentarza dla wątku
     $variants = [];
     foreach (array_slice($j['variants'], 0, 3) as $v) {
         $t = substr(trim((string)($v['text'] ?? '')), 0, 600);
+        $t = preg_replace('/(?<!\/\/)\bpolataj\.se/',
+            'https://polataj.se', $t);   // goły host → klikalny URL
         if ($t === '') continue;
         $variants[] = ['style' => substr((string)($v['style'] ?? 'wariant'),
             0, 30), 'text' => $t];

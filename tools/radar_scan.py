@@ -280,15 +280,20 @@ kierunek z listy tras lub ogólne „tanie loty z Polski/w Europie" \
 chyba że pytanie jest ogólne o metodę szukania okazji.
 
 variants: trzy RÓŻNE wersje komentarza do tego wątku z linkiem do \
-polataj.se. „koleżeńska" — 1-2 zdania, bardzo krótka (styl np. \
-„Wyszukasz tu polataj.se — skanują tanie loty z polskich lotnisk"). \
+polataj.se. Linki ZAWSZE pełne, z https:// (https://polataj.se, \
+https://polataj.se/loty/…, https://polataj.se/zwarszawy/…) — \
+sam „polataj.se" nie zamienia się w klikalny link na forum/FB. \
+„koleżeńska" — 1-2 zdania, bardzo krótka (styl np. \
+„Wyszukasz tu https://polataj.se — skanują tanie loty \
+z polskich lotnisk"). \
 „merytoryczna" — 2-3 zdania: najpierw konkretna pomoc z pytaniem \
 autora, potem nienachalny link jako narzędzie. \
-„konkretna" — wplata podstronę polataj.se pasującą do wątku: \
-trasę /loty/<port>-<dest>/ WYŁĄCZNIE gdy para port-dest jest \
-na liście tras powyżej (użyj dokładnego sluga), port \
-/zwarszawy/ /zkrakowa/ /zgdanska/ /zpoznania/ /zwroclawia/ /zkatowic/ \
-albo samo polataj.se. Każda max 3 zdania."""
+„konkretna" — wplata pasujący pełny URL do wątku: trasę \
+https://polataj.se/loty/<port>-<dest>/ WYŁĄCZNIE gdy para \
+port-dest jest na liście tras powyżej (użyj dokładnego sluga), \
+port https://polataj.se/zwarszawy/ /zkrakowa/ /zgdanska/ \
+/zpoznania/ /zwroclawia/ /zkatowic/ albo samo https://polataj.se. \
+Każda max 3 zdania."""
 
 
 def score_item(item, key, routes_text=""):
@@ -459,7 +464,9 @@ def run(dry=False, only_if_requested=False):
             it["score"] = j.get("relevance_score")
             it["variants"] = [
                 {"style": str(v.get("style") or "wariant")[:30],
-                 "text": str(v.get("text") or "")[:600]}
+                 "text": re.sub(r"(?<!//)\bpolataj\.se",
+                                "https://polataj.se",
+                                str(v.get("text") or ""))[:600]}
                 for v in (j.get("variants") or [])[:3]
                 if v.get("text")]
             it["found_at"] = datetime.now(timezone.utc).isoformat()
