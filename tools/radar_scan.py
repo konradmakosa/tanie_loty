@@ -303,11 +303,22 @@ def scan_requested(key):
         return False
 
 
+def _clean(o):
+    """Usuwa niewłaściwe znaki UTF-8 (samotne surogaty itp.) —
+    PHP json_decode zwraca null na takich stringach → 400."""
+    if isinstance(o, str):
+        return o.encode("utf-8", "ignore").decode("utf-8")
+    if isinstance(o, list):
+        return [_clean(x) for x in o]
+    if isinstance(o, dict):
+        return {k: _clean(v) for k, v in o.items()}
+    return o
+
+
 def upload(items, key, routes=None):
+    payload = _clean({"items": items, "routes": routes or {}})
     try:
-        return api_call("upload", key,
-                        payload={"items": items, "routes": routes or {}},
-                        method="POST")
+        return api_call("upload", key, payload=payload, method="POST")
     except urllib.error.HTTPError as e:
         print("radar: upload HTTP %s: %s"
               % (e.code, e.read()[:300]), file=sys.stderr)

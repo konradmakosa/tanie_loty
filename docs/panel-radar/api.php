@@ -22,7 +22,11 @@ function out($x, $code = 200) {
 }
 function body() {
     $raw = file_get_contents('php://input', false, null, 0, 512 * 1024 + 1);
-    return $raw ? json_decode($raw, true) : [];
+    if (!$raw) return [];
+    $d = json_decode($raw, true);
+    if ($d === null)  // niewłaściwe UTF-8 (np. samotny surogat) → napraw
+        $d = json_decode(iconv('UTF-8', 'UTF-8//IGNORE', $raw), true);
+    return $d ?: [];
 }
 function rfile($p, $def) {
     return is_file($p) ? (json_decode(file_get_contents($p), true) ?: $def) : $def;
