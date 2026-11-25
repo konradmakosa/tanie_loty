@@ -8,8 +8,13 @@
   {"q": "site:facebook.com/groups/ (\"polecacie\" OR \"pomocy\" OR \"poradzicie\") (lotnisko OR przesiadka OR \"tanie loty\" OR bilety) podróż -oferta -promocja", "tbs": "qdr:w"},
   {"q": "(\"szukam tanich lotów\" OR \"jak znaleźć tani lot\" OR \"monitorowanie cen lotów\") forum", "tbs": "qdr:w"},
   {"q": "site:forum.gazeta.pl OR site:forum.interia.pl (\"tanie loty\" OR \"przesiadka\" OR \"bagaż\")", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/Polska OR site:reddit.com/r/warsaw OR site:reddit.com/r/krakow (loty OR \"tani lot\" OR lotnisko OR przesiadka OR bagaż)", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/travel OR site:reddit.com/r/solotravel (\"flights from Poland\" OR Warsaw OR Krakow) flight", "tbs": "qdr:w"}
+  {"q": "site:reddit.com/r/Polska loty", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/Polska lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/warsaw loty OR lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/krakow loty OR lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/travel Warsaw airport", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/solotravel Poland flights", "tbs": "qdr:w"},
+  {"q": "site:reddit.com tanie loty bilety lotnicze", "tbs": "qdr:w"}
  ],
  "reddit": [
   {"sub": "Polska", "q": "loty OR lotnisko OR \"bilety lotnicze\" OR \"tani lot\""},
