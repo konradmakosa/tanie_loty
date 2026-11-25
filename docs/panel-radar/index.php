@@ -6,10 +6,15 @@ if (!is_file(__DIR__ . '/config.php')) {
     exit('brak config.php — uruchom deploy_site.py');
 }
 $CFG = require __DIR__ . '/config.php';
-session_start();
+
+function radar_cookie() {
+    global $CFG;
+    return hash_hmac('sha256', 'radar-panel', (string)$CFG['PANEL_HASLO']);
+}
+$authed = hash_equals(radar_cookie(), (string)($_COOKIE['radar_auth'] ?? ''));
 
 if (($_GET['logout'] ?? '') === '1') {
-    session_destroy();
+    setcookie('radar_auth', '', time() - 3600, '/panel-radar/', '', true, true);
     header('Location: index.php');
     exit;
 }
@@ -19,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pw'])) {
     $pw = (string)($_POST['pw'] ?? '');
     $exp = (string)($CFG['PANEL_HASLO'] ?? '');
     if ($exp !== '' && hash_equals($exp, $pw)) {
-        $_SESSION['radar'] = 1;
+        setcookie('radar_auth', radar_cookie(), 0, '/panel-radar/', '',
+                  true, true);
         header('Location: index.php');
         exit;
     }
@@ -94,7 +100,7 @@ header('Cache-Control: no-store');
 </head>
 <body>
 <main>
-<?php if (empty($_SESSION['radar'])): ?>
+<?php if (!$authed): ?>
   <div class="login">
     <h1>radar</h1>
     <form method="post">

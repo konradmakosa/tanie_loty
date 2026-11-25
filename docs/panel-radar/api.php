@@ -35,8 +35,11 @@ function wfile($p, $x) {
 }
 
 // --- autoryzacja ---
-session_start();
-$session = !empty($_SESSION['radar']);
+// home.pl nie zapisuje sesji (session.save_path bez praw zapisu),
+// więc logowanie to podpisane ciasteczko HMAC zamiast sesji PHP.
+$session = hash_equals(
+    hash_hmac('sha256', 'radar-panel', (string)($CFG['PANEL_HASLO'] ?? '')),
+    (string)($_COOKIE['radar_auth'] ?? ''));
 $machine = false;
 $key = $_SERVER['HTTP_X_INGEST_KEY'] ?? '';
 $expected = $CFG['INGEST_KEY'] ?? '';
@@ -161,7 +164,7 @@ case 'scan_flag':           // dla timera flagowego na VPS
     out(['pending' => is_file($flag_p)]);
 
 case 'logout':
-    session_destroy();
+    setcookie('radar_auth', '', time() - 3600, '/panel-radar/', '', true, true);
     out(['ok' => true]);
 
 default:
