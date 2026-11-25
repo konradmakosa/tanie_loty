@@ -374,11 +374,16 @@
   komentowania (FB/Reddit/fora). `noindex,nofollow` (meta + X-Robots-Tag
   w `.htaccess`), login hasłem `PANEL_HASLO` (sesja PHP).
 - `docs/panel-radar/api.php` — JSON API: akcje sesyjne (items, set_status,
-  save_reply, save_queries, request_scan) + maszynowe `X-Ingest-Key`
-  (upload, scan_flag, queries, items_raw). Dane w `data/` (poza Gitem,
-  zablokowane .htaccess, pisze tylko PHP — deploy nie kasuje).
+  save_reply, save_queries, request_scan, gen_variants) + maszynowe
+  `X-Ingest-Key` (upload, scan_flag, queries, items_raw). Dane w `data/`
+  (poza Gitem, zablokowane .htaccess, pisze tylko PHP — deploy nie kasuje).
+- Warianty komentarza: `gen_variants` (POST `{id}`, `{fresh:1}` omija cache)
+  woła Gemini wprost z PHP → 3 style (koleżeńska/merytoryczna/konkretna
+  z podstroną), cache w `state.json` pod kluczem `variants`. Skaner
+  generuje je też od razu dla nowych wątków. UI: karta wątku, sekcja
+  `.variants` pod textarea (Wstaw/Kopiuj/„jeszcze raz").
 - `docs/panel-radar/config.php` — generowany przez `deploy_site.py`
-  z env (`PANEL_HASLO`, `TL_INGEST_KEY`), gitignored.
+  z env (`PANEL_HASLO`, `TL_INGEST_KEY`, `OPENROUTER_API_KEY`), gitignored.
 - `tools/radar_scan.py` — skaner (stdlib): Serper.dev (`SERPER_API_KEY`,
   `tbs=qdr:w`, gl/hl=pl) + oficjalny JSON Reddita → deduplikacja
   `data/cache/radar.sqlite` → ocena Gemini `google/gemini-2.5-flash`
