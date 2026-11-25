@@ -54,7 +54,7 @@ if ($expected && hash_equals($expected, $key)) $machine = true;
 
 $action = $_GET['action'] ?? '';
 // akcje czysto maszynowe
-$machine_ok = ['upload', 'scan_flag', 'queries', 'items_raw'];
+$machine_ok = ['upload', 'scan_flag', 'queries', 'items_raw', 'rejected'];
 if (!$session && !($machine && in_array($action, $machine_ok, true))) {
     out(['error' => 'brak autoryzacji'], 401);
 }
@@ -83,6 +83,18 @@ case 'items':               // widok dla panelu: items + status
 case 'items_raw':           // dla skanera — surowe items do scalenia
     if (!$machine) out(['error' => 'brak autoryzacji'], 401);
     out(['items' => rfile($items_p, [])]);
+
+case 'rejected':            // wątki odrzucone z panelu — negatywne
+    if (!$machine) out(['error' => 'brak autoryzacji'], 401);  // przykłady
+    $state = rfile($state_p, []);
+    $rej = [];
+    foreach (rfile($items_p, []) as $i) {
+        $id = sha1($i['url'] ?? '');
+        if (($state[$id]['status'] ?? '') === 'hidden')
+            $rej[] = ['title' => substr($i['title'] ?? '', 0, 150),
+                      'snippet' => substr($i['snippet'] ?? '', 0, 400)];
+    }
+    out(['rejected' => array_slice($rej, -10)]);
 
 case 'upload':              // skaner → pełny zapis items.json
     if (!$machine || $_SERVER['REQUEST_METHOD'] !== 'POST')

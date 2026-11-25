@@ -247,7 +247,7 @@ dalekie okazje.
 
 Aktualne strony tras serwisu (slugi /loty/<port>-<dest>/):
 {routes}
-
+{rejected}
 Wątek:
 Tytuł: {title}
 Źródło: {source}
@@ -302,10 +302,11 @@ wciskaj trasy/portu, użyj samo https://polataj.se. \
 Każda max 3 zdania."""
 
 
-def score_item(item, key, routes_text=""):
+def score_item(item, key, routes_text="", rejected_text=""):
     """Gemini: is_relevant/score/variants albo None."""
     prompt = SCORE_PROMPT.format(
         routes=routes_text or "(brak danych o trasach)",
+        rejected=rejected_text,
         title=item["title"][:300], source=item["source"],
         snippet=item["snippet"][:900])
     try:
@@ -357,6 +358,23 @@ def scan_requested(key):
         return bool(api_call("scan_flag", key).get("pending"))
     except Exception:
         return False
+
+
+def rejected_examples(key):
+    """Wątki odrzucone przez użytkownika w panelu — negatywne
+    przykłady do promptu scoringu."""
+    if not key:
+        return ""
+    try:
+        rej = api_call("rejected", key).get("rejected") or []
+    except Exception:
+        return ""
+    if not rej:
+        return ""
+    lines = "\n".join("- „%s" % r["title"][:110]
+                      for r in rej[-10:])
+    return ("\nWątki, które użytkownik ODRZUCIŁ (podobne → "
+            "is_relevant=false, score ≤3):\n" + lines + "\n")
 
 
 def _clean(o):
@@ -447,6 +465,7 @@ def run(dry=False, only_if_requested=False):
 
     routes = collect_routes()
     routes_text = coverage_text(routes)
+    rejected_text = rejected_examples(key)
     print("radar: pokrycie — %d tras (%d portów)"
           % (sum(len(v) for v in routes.values()), len(routes)))
 
@@ -462,7 +481,8 @@ def run(dry=False, only_if_requested=False):
             " VALUES(?,?,?,1)", (ck(it), it["source"], now))
         if skip_post(it):
             continue        # odsprzedaż/promo — bez scoringu
-        j = score_item(it, or_key, routes_text) if or_key else None
+        j = score_item(it, or_key, routes_text, rejected_text) \
+            if or_key else None
         scored += 1
         if j and j.get("is_relevant") and \
                 (j.get("relevance_score") or 0) >= 6 and \
