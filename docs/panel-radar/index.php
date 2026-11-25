@@ -79,10 +79,6 @@ header('Cache-Control: no-store');
   .snippet, .summary { color:var(--muted); font-size:.86rem;
     margin-bottom:8px; }
   .summary { color:var(--text); }
-  textarea { width:100%; min-height:84px; background:#12182a;
-    color:var(--text); border:1px solid var(--line); border-radius:8px;
-    padding:10px; font:inherit; font-size:.88rem; resize:vertical;
-    margin-bottom:8px; }
   .row { display:flex; gap:8px; flex-wrap:wrap; }
   .variants { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .variant { flex:1 1 200px; background:#12182a;
@@ -165,11 +161,7 @@ function card(i) {
     + 'Otwórz wątek ↗</a></div>'
     + '<div class="title">' + esc(i.title) + '</div>'
     + '<div class="snippet">' + esc(i.snippet) + '</div>'
-    + '<textarea placeholder="Twój komentarz… (Wstaw wariant lub '
-    + 'napisz własny)">' + esc(i.reply || '') + '</textarea>'
     + '<div class="row">'
-    + '<button onclick="copyReply(this)">Kopiuj komentarz</button>'
-    + '<button onclick="saveReply(this)">Zapisz edycję</button>'
     + '<button onclick="setStatus(this,\'done\')">Skomentowane ✓</button>'
     + '<button onclick="setStatus(this,\'hidden\')">Odrzuć</button>'
     + '</div>'
@@ -182,7 +174,6 @@ function card(i) {
 function variantHtml(v) {
   return '<div class="variant"><b>' + esc(v.style) + '</b>'
     + '<p>' + esc(v.text) + '</p>'
-    + '<button onclick="insertVariant(this)">Wstaw</button> '
     + '<button onclick="copyVariant(this)">Kopiuj</button></div>';
 }
 async function genVariants(b, fresh) {
@@ -199,11 +190,6 @@ async function genVariants(b, fresh) {
     b.disabled = false; b.textContent = r.error || 'Błąd — spróbuj ponownie';
   }
 }
-function insertVariant(b) {
-  const c = b.closest('.card');
-  c.querySelector('textarea').value =
-    b.closest('.variant').querySelector('p').textContent;
-}
 function copyVariant(b) {
   const t = b.closest('.variant').querySelector('p').textContent;
   navigator.clipboard.writeText(t);
@@ -214,19 +200,6 @@ async function setStatus(b, st) {
   await post('set_status', {id: c.dataset.id, status: st});
   c.classList.add(st === 'done' ? 'done' : 'hidden');
   if (!document.getElementById('showAll').checked) c.remove();
-}
-async function saveReply(b) {
-  const c = b.closest('.card');
-  await post('save_reply', {id: c.dataset.id,
-    text: c.querySelector('textarea').value});
-  b.textContent = 'Zapisano ✓'; setTimeout(() => b.textContent =
-    'Zapisz edycję', 1500);
-}
-function copyReply(b) {
-  const t = b.closest('.card').querySelector('textarea');
-  t.select(); navigator.clipboard.writeText(t.value);
-  b.textContent = 'Skopiowano ✓'; setTimeout(() => b.textContent =
-    'Kopiuj komentarz', 1500);
 }
 async function scanNow(b) {
   b.disabled = true; b.textContent = 'Kolejkuję…';

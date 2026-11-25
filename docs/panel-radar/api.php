@@ -75,9 +75,6 @@ case 'items':               // widok dla panelu: items + status
         $i['id'] = $id;
         $st = $state[$id] ?? [];
         $i['status'] = $st['status'] ?? 'new';
-        unset($i['reply']);   // AI-odpowiedź nie wypełnia pola —
-                              // zostaje tylko ręcznie zapisany tekst
-        if (!empty($st['reply'])) $i['reply'] = $st['reply'];
         if (empty($i['variants']) && !empty($st['variants']))
             $i['variants'] = $st['variants'];
     }
@@ -139,16 +136,6 @@ case 'set_status':          // now|done|hidden
     $state = rfile($state_p, []);
     $state[$id]['status'] = $st;
     $state[$id]['at'] = gmdate('c');
-    wfile($state_p, $state);
-    out(['ok' => true]);
-
-case 'save_reply':          // edytowany komentarz
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') out(['error'=>'metoda'],405);
-    $b = body();
-    $id = preg_replace('/[^a-f0-9]/', '', (string)($b['id'] ?? ''));
-    if (strlen($id) !== 40) out(['error' => 'nieprawidłowe dane'], 400);
-    $state = rfile($state_p, []);
-    $state[$id]['reply'] = substr((string)($b['text'] ?? ''), 0, 900);
     wfile($state_p, $state);
     out(['ok' => true]);
 
