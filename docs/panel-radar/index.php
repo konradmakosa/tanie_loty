@@ -169,6 +169,8 @@ function card(i) {
     + '<button onclick="setStatus(this,\'done\')">Skomentowane ✓</button>'
     + '<input class="rej" placeholder="powód odrzucenia…">'
     + '<button onclick="setStatus(this,\'hidden\')">Odrzuć</button>'
+    + '<button onclick="setStatus(this,\'hidden\',\'nie szukają lotu\')"'
+    + ' title="Odrzuć z powodem: nie szukają lotu">Nie szukają lotu</button>'
     + '</div>'
     + '<div class="variants">'
     + (i.variants && i.variants.length
@@ -200,10 +202,10 @@ function copyVariant(b) {
   navigator.clipboard.writeText(t);
   b.textContent = '✓'; setTimeout(() => b.textContent = 'Kopiuj', 1500);
 }
-async function setStatus(b, st) {
+async function setStatus(b, st, preset) {
   const c = b.closest('.card');
   const reason = st === 'hidden'
-    ? ((c.querySelector('.rej') || {}).value || '') : '';
+    ? (preset || (c.querySelector('.rej') || {}).value || '') : '';
   await post('set_status', {id: c.dataset.id, status: st, reason: reason});
   c.classList.add(st === 'done' ? 'done' : 'hidden');
   if (!document.getElementById('showAll').checked) c.remove();
