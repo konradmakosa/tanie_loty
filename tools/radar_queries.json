@@ -9,18 +9,22 @@
   {"q": "(\"szukam tanich lotów\" OR \"jak znaleźć tani lot\" OR \"monitorowanie cen lotów\") forum", "tbs": "qdr:w"},
   {"q": "site:forum.gazeta.pl OR site:forum.interia.pl (\"tanie loty\" OR \"przesiadka\" OR \"bagaż\")", "tbs": "qdr:w"},
   {"q": "site:reddit.com/r/Polska loty", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/Polska lotnisko", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/warsaw loty OR lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/Polska lotnisko OR bagaż OR przesiadka", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/Polska wylot OR \"tanie bilety\"", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/warszawa lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/warszawa loty OR wylot", "tbs": "qdr:w"},
   {"q": "site:reddit.com/r/krakow loty OR lotnisko", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/travel Warsaw airport", "tbs": "qdr:w"},
-  {"q": "site:reddit.com/r/solotravel Poland flights", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/wroclaw lotnisko OR loty", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/Trojmiasto lotnisko", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/poznan lotnisko OR loty", "tbs": "qdr:w"},
   {"q": "site:reddit.com tanie loty bilety lotnicze", "tbs": "qdr:w"}
  ],
  "reddit": [
-  {"sub": "Polska", "q": "loty OR lotnisko OR \"bilety lotnicze\" OR \"tani lot\""},
-  {"sub": "poland", "q": "flights OR airport OR cheap flights"},
-  {"sub": "warsaw", "q": "flights OR airport"},
-  {"sub": "krakow", "q": "flights OR airport"},
-  {"sub": "travel", "q": "\"flights from Poland\" OR Warsaw OR Krakow OR Gdansk"}
+  {"sub": "Polska", "q": "loty OR lotnisko OR \"bilety lotnicze\" OR \"tani lot\" OR wylot"},
+  {"sub": "warszawa", "q": "loty OR lotnisko OR Modlin OR Chopina"},
+  {"sub": "krakow", "q": "loty OR lotnisko OR Balice"},
+  {"sub": "wroclaw", "q": "loty OR lotnisko OR Strachowice"},
+  {"sub": "Trojmiasto", "q": "loty OR lotnisko OR Rębiechowo"},
+  {"sub": "poznan", "q": "loty OR lotnisko OR Ławica"}
  ]
 }
