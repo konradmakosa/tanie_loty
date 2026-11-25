@@ -277,7 +277,11 @@ relevance_score oceń pod kątem dopasowania do pokrycia serwisu: \
 kierunek z listy tras lub ogólne „tanie loty z Polski/w Europie" \
 → wysoki score (7-10); kierunek egzotyczny/daleki SPOZA listy \
 (Azja, USA, Australia, Ameryki) → max 4 — serwis rzadko tam pomoże, \
-chyba że pytanie jest ogólne o metodę szukania okazji.
+chyba że pytanie jest ogólne o metodę szukania okazji. \
+Ważne: wątek dotyczący wylotu WYŁĄCZNIE z miasta spoza naszych 6 \
+portów (np. Rzeszów, Szczecin, Łódź, Lublin, Bydgoszcz, Radom, \
+Olsztyn, Zielona Góra) → max 4, chyba że autor wprost dopuszcza \
+wylot z naszego portu lub pyta ogólnie.
 
 variants: trzy RÓŻNE wersje komentarza do tego wątku z linkiem do \
 polataj.se. Linki ZAWSZE pełne, z https:// (https://polataj.se, \
@@ -293,6 +297,8 @@ https://polataj.se/loty/<port>-<dest>/ WYŁĄCZNIE gdy para \
 port-dest jest na liście tras powyżej (użyj dokładnego sluga), \
 port https://polataj.se/zwarszawy/ /zkrakowa/ /zgdanska/ \
 /zpoznania/ /zwroclawia/ /zkatowic/ albo samo https://polataj.se. \
+Jeśli wylot w wątku jest z miasta SPOZA tych 6 portów — nie \
+wciskaj trasy/portu, użyj samo https://polataj.se. \
 Każda max 3 zdania."""
 
 

@@ -4,6 +4,8 @@
   {"q": "site:facebook.com/groups/ (\"gdzie na weekend\" OR \"gdzie lecieć\" OR \"tanie bilety\" OR \"wylot z\") loty -oferta -promocja", "tbs": "qdr:w"},
   {"q": "site:facebook.com/groups/ (\"ile kosztuje\" OR \"za ile\" OR \"czy warto\") (lot OR loty OR samolot) -oferta", "tbs": "qdr:w"},
   {"q": "site:facebook.com/groups/ podróże (\"z jakiego lotniska\" OR \"z Warszawy\" OR \"z Krakowa\" OR \"z Gdańska\") -oferta -promocja", "tbs": "qdr:w"},
+  {"q": "site:facebook.com/groups/ (\"lecę\" OR \"lecimy\" OR \"mam lot\" OR \"mam bilety\" OR \"szukam lotu\") (Warszawy OR Krakowa OR Wrocławia OR Gdańska OR Poznania OR Katowic OR Modlina OR Balic OR Lawicy OR Strachowic OR Pyrzowic OR Chopina) -oferta -promocja -sprzedam", "tbs": "qdr:w"},
+  {"q": "site:facebook.com/groups/ (\"polecacie\" OR \"pomocy\" OR \"poradzicie\") (lotnisko OR przesiadka OR \"tanie loty\" OR bilety) podróż -oferta -promocja", "tbs": "qdr:w"},
   {"q": "(\"szukam tanich lotów\" OR \"jak znaleźć tani lot\" OR \"monitorowanie cen lotów\") forum", "tbs": "qdr:w"},
   {"q": "site:forum.gazeta.pl OR site:forum.interia.pl (\"tanie loty\" OR \"przesiadka\" OR \"bagaż\")", "tbs": "qdr:w"},
   {"q": "site:reddit.com/r/Polska OR site:reddit.com/r/warsaw OR site:reddit.com/r/krakow (loty OR \"tani lot\" OR lotnisko OR przesiadka OR bagaż)", "tbs": "qdr:w"},
