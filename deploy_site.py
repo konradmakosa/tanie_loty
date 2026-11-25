@@ -75,12 +75,12 @@ def main():
         sent += 1
         print("  ↑ %s (%d B)" % (rel, size))
     # config.php panelu radaru — generowany z env, poza Gitem.
-    radar_pw = env.get("RADAR_PASSWORD", "")
+    radar_pw = env.get("PANEL_HASLO", "")
     ingest = env.get("TL_INGEST_KEY", "")
     if radar_pw and ingest:
         cfg = ("<?php\n// generowany przez deploy_site.py — nie commitować\n"
                "return [\n"
-               "    'RADAR_PASSWORD' => %s,\n"
+               "    'PANEL_HASLO' => %s,\n"
                "    'INGEST_KEY' => %s,\n"
                "];\n" % (_php_str(radar_pw), _php_str(ingest)))
         remote = target + "/panel-radar/config.php"
@@ -89,7 +89,7 @@ def main():
                        .BytesIO(cfg.encode("utf-8")))
         print("  ↑ panel-radar/config.php (z env)")
     else:
-        print("  ! brak RADAR_PASSWORD/TL_INGEST_KEY — "
+        print("  ! brak PANEL_HASLO/TL_INGEST_KEY — "
               "pomijam panel-radar/config.php")
 
     ftp.quit()

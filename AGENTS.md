@@ -372,13 +372,13 @@
 
 - `/panel-radar/` — ukryty panel admina: radar wątków do merytorycznego
   komentowania (FB/Reddit/fora). `noindex,nofollow` (meta + X-Robots-Tag
-  w `.htaccess`), login hasłem `RADAR_PASSWORD` (sesja PHP).
+  w `.htaccess`), login hasłem `PANEL_HASLO` (sesja PHP).
 - `docs/panel-radar/api.php` — JSON API: akcje sesyjne (items, set_status,
   save_reply, save_queries, request_scan) + maszynowe `X-Ingest-Key`
   (upload, scan_flag, queries, items_raw). Dane w `data/` (poza Gitem,
   zablokowane .htaccess, pisze tylko PHP — deploy nie kasuje).
 - `docs/panel-radar/config.php` — generowany przez `deploy_site.py`
-  z env (`RADAR_PASSWORD`, `TL_INGEST_KEY`), gitignored.
+  z env (`PANEL_HASLO`, `TL_INGEST_KEY`), gitignored.
 - `tools/radar_scan.py` — skaner (stdlib): Serper.dev (`SERPER_API_KEY`,
   `tbs=qdr:w`, gl/hl=pl) + oficjalny JSON Reddita → deduplikacja
   `data/cache/radar.sqlite` → ocena Gemini `google/gemini-2.5-flash`
@@ -391,4 +391,4 @@
   `tools/tl-radar*.service|.timer` → `/etc/systemd/system/`,
   `daemon-reload`, `enable --now`.
 - Env: `SERPER_API_KEY` (serper.dev — 2500 zapytań free),
-  `RADAR_PASSWORD`, `OPENROUTER_API_KEY` (już jest), `TL_INGEST_KEY`.
+  `PANEL_HASLO`, `OPENROUTER_API_KEY` (już jest), `TL_INGEST_KEY`.
