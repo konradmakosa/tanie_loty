@@ -20,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pw'])) {
     $exp = (string)($CFG['PANEL_HASLO'] ?? '');
     if ($exp !== '' && hash_equals($exp, $pw)) {
         $_SESSION['radar'] = 1;
-        session_regenerate_id(true);
         header('Location: index.php');
         exit;
     }
