@@ -118,14 +118,33 @@ def source_from_url(url):
     return "forum/www"
 
 
-def search_reddit(sub, q):
-    """Oficjalny JSON Reddita — bez klucza, tylko User-Agent."""
-    url = ("https://www.reddit.com/r/%s/search.json?q=%s&restrict_sr=1"
+def reddit_token(cid, secret):
+    """OAuth client_credentials — apka 'script' z reddit.com/prefs/apps."""
+    import base64
+    req = urllib.request.Request(
+        "https://www.reddit.com/api/v1/access_token",
+        data=urllib.parse.urlencode(
+            {"grant_type": "client_credentials"}).encode(),
+        headers={"Authorization": "Basic " + base64.b64encode(
+            (cid + ":" + secret).encode()).decode(),
+            "User-Agent": REDDIT_UA})
+    with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
+        return json.loads(r.read().decode("utf-8"))["access_token"]
+
+
+def search_reddit(sub, q, token=None):
+    """JSON Reddita — wymaga tokenu OAuth (bez niego 403 na
+    adresach DC). Bez tokenu zwraca [] — Reddit pokrywają
+    wtedy zapytania site:reddit.com przez Serper."""
+    if not token:
+        return []
+    url = ("https://oauth.reddit.com/r/%s/search?q=%s&restrict_sr=1"
            "&sort=new&t=week&limit=%d"
            % (sub, urllib.parse.quote(q), MAX_RESULTS_PER_QUERY))
     out = []
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": REDDIT_UA})
+        req = urllib.request.Request(url, headers={
+            "User-Agent": REDDIT_UA, "Authorization": "Bearer " + token})
         with urllib.request.urlopen(req, timeout=HTTP_TIMEOUT) as r:
             d = json.loads(r.read().decode("utf-8"))
     except Exception as e:
@@ -248,8 +267,19 @@ def collect(cfg, serper_key):
             break
         items += search_serper(q.get("q") or "", q.get("tbs"), serper_key)
         time.sleep(0.3)
+    token = None
+    cid, sec = env_get("REDDIT_CLIENT_ID"), env_get("REDDIT_SECRET")
+    if cid and sec and (cfg.get("reddit") or []):
+        try:
+            token = reddit_token(cid, sec)
+        except Exception as e:
+            print("reddit oauth błąd: %s" % e, file=sys.stderr)
+    elif cfg.get("reddit") and not serper_key:
+        print("reddit: brak REDDIT_CLIENT_ID/SECRET i SERPER_API_KEY"
+              " — pomijam", file=sys.stderr)
     for r in cfg.get("reddit") or []:
-        items += search_reddit(r.get("sub") or "", r.get("q") or "")
+        items += search_reddit(r.get("sub") or "", r.get("q") or "",
+                               token=token)
         time.sleep(0.5)
     return items
 

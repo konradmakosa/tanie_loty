@@ -5,7 +5,9 @@
   {"q": "site:facebook.com/groups/ (\"ile kosztuje\" OR \"za ile\" OR \"czy warto\") (lot OR loty OR samolot) -oferta", "tbs": "qdr:w"},
   {"q": "site:facebook.com/groups/ podróże (\"z jakiego lotniska\" OR \"z Warszawy\" OR \"z Krakowa\" OR \"z Gdańska\") -oferta -promocja", "tbs": "qdr:w"},
   {"q": "(\"szukam tanich lotów\" OR \"jak znaleźć tani lot\" OR \"monitorowanie cen lotów\") forum", "tbs": "qdr:w"},
-  {"q": "site:forum.gazeta.pl OR site:forum.interia.pl (\"tanie loty\" OR \"przesiadka\" OR \"bagaż\")", "tbs": "qdr:w"}
+  {"q": "site:forum.gazeta.pl OR site:forum.interia.pl (\"tanie loty\" OR \"przesiadka\" OR \"bagaż\")", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/Polska OR site:reddit.com/r/warsaw OR site:reddit.com/r/krakow (loty OR \"tani lot\" OR lotnisko OR przesiadka OR bagaż)", "tbs": "qdr:w"},
+  {"q": "site:reddit.com/r/travel OR site:reddit.com/r/solotravel (\"flights from Poland\" OR Warsaw OR Krakow) flight", "tbs": "qdr:w"}
  ],
  "reddit": [
   {"sub": "Polska", "q": "loty OR lotnisko OR \"bilety lotnicze\" OR \"tani lot\""},
