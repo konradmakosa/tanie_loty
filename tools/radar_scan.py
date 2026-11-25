@@ -257,7 +257,6 @@ Odpowiedz WYŁĄCZNIE poprawnym JSON-em (bez markdown, bez komentarza):
 {{
  "is_relevant": true|false,
  "relevance_score": 1-10,
- "suggested_reply": "naturalny komentarz po polsku, 2-4 zdania",
  "variants": [
   {{"style": "koleżeńska", "text": "1-2 zdania, luźno, jak znajomy"}},
   {{"style": "merytoryczna", "text": "najpierw konkretna pomoc, \
@@ -280,17 +279,11 @@ kierunek z listy tras lub ogólne „tanie loty z Polski/w Europie" \
 (Azja, USA, Australia, Ameryki) → max 4 — serwis rzadko tam pomoże, \
 chyba że pytanie jest ogólne o metodę szukania okazji.
 
-suggested_reply: najpierw konkretnie odpowiedz na pytanie autora, \
-potem nienachalnie podsuń polataj.se (https://polataj.se lub pasującą \
-podstronę jak /loty/<miasto>-<miasto>/ albo /<port>/) jako narzędzie \
-do sprawdzenia cen. Koleżeński ton, zero marketingowego żargonu, \
-bez „polecam sprawdzić na naszej stronie" — naturalnie, jak znajomy. \
-Nie wymyślaj faktów o wątku, których nie ma w snippetcie.
-
-variants: trzy RÓŻNE wersje tego samego komentarza w linkiem do \
+variants: trzy RÓŻNE wersje komentarza do tego wątku z linkiem do \
 polataj.se. „koleżeńska" — 1-2 zdania, bardzo krótka (styl np. \
 „Wyszukasz tu polataj.se — skanują tanie loty z polskich lotnisk"). \
-„merytoryczna" — jak suggested_reply, ale inaczej sformułowana. \
+„merytoryczna" — 2-3 zdania: najpierw konkretna pomoc z pytaniem \
+autora, potem nienachalny link jako narzędzie. \
 „konkretna" — wplata podstronę polataj.se pasującą do wątku: \
 trasę /loty/<port>-<dest>/ WYŁĄCZNIE gdy para port-dest jest \
 na liście tras powyżej (użyj dokładnego sluga), port \
@@ -299,7 +292,7 @@ albo samo polataj.se. Każda max 3 zdania."""
 
 
 def score_item(item, key, routes_text=""):
-    """Gemini: is_relevant/score/reply/variants albo None."""
+    """Gemini: is_relevant/score/variants albo None."""
     prompt = SCORE_PROMPT.format(
         routes=routes_text or "(brak danych o trasach)",
         title=item["title"][:300], source=item["source"],
@@ -464,7 +457,6 @@ def run(dry=False, only_if_requested=False):
                 (j.get("relevance_score") or 0) >= 6 and \
                 not skip_post(it):
             it["score"] = j.get("relevance_score")
-            it["reply"] = (j.get("suggested_reply") or "")[:800]
             it["variants"] = [
                 {"style": str(v.get("style") or "wariant")[:30],
                  "text": str(v.get("text") or "")[:600]}

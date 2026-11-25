@@ -75,6 +75,8 @@ case 'items':               // widok dla panelu: items + status
         $i['id'] = $id;
         $st = $state[$id] ?? [];
         $i['status'] = $st['status'] ?? 'new';
+        unset($i['reply']);   // AI-odpowiedź nie wypełnia pola —
+                              // zostaje tylko ręcznie zapisany tekst
         if (!empty($st['reply'])) $i['reply'] = $st['reply'];
         if (empty($i['variants']) && !empty($st['variants']))
             $i['variants'] = $st['variants'];
@@ -103,7 +105,6 @@ case 'upload':              // skaner → pełny zapis items.json
             'source' => substr($i['source'] ?? '', 0, 30),
             'score' => (int)($i['score'] ?? 0),
             'summary' => substr($i['summary'] ?? '', 0, 300),
-            'reply' => substr($i['reply'] ?? '', 0, 900),
             'variants' => is_array($i['variants'] ?? null)
                 ? array_slice($i['variants'], 0, 3) : [],
             'found_at' => substr($i['found_at'] ?? '', 0, 40),
