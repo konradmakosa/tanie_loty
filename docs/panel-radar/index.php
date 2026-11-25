@@ -164,7 +164,6 @@ function card(i) {
     + '<a href="' + esc(i.url) + '" target="_blank" rel="noopener">'
     + 'Otwórz wątek ↗</a></div>'
     + '<div class="title">' + esc(i.title) + '</div>'
-    + (i.summary ? '<div class="summary">' + esc(i.summary) + '</div>' : '')
     + '<div class="snippet">' + esc(i.snippet) + '</div>'
     + '<textarea>' + esc(i.reply) + '</textarea>'
     + '<div class="row">'

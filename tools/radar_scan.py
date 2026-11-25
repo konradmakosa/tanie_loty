@@ -206,7 +206,6 @@ Odpowiedz WYŁĄCZNIE poprawnym JSON-em (bez markdown, bez komentarza):
 {{
  "is_relevant": true|false,
  "relevance_score": 1-10,
- "topic_summary": "1 zdanie: o co pyta autor",
  "suggested_reply": "naturalny komentarz po polsku, 2-4 zdania",
  "variants": [
   {{"style": "koleżeńska", "text": "1-2 zdania, luźno, jak znajomy"}},
@@ -218,7 +217,9 @@ potem nienachalny link"}},
 
 Reguły is_relevant=false: reklama, spam, oferta biura podróży lub linii, \
 post konkurencyjnego serwisu okazji, ref-link, treść niezwiązana \
-z podróżami lotniczymi, język inny niż polski (chyba że wyraźnie Polak). \
+z podróżami lotniczymi, język inny niż polski (chyba że wyraźnie Polak), \
+ODSPRZEDAŻ/PRZEPISANIE biletów lub ogłoszenie „sprzedam/odstąpię/ \
+przepiszę bilety" (to nie prośba o poradę — autor już ma bilety). \
 is_relevant=true tylko gdy realna osoba prosi o poradę/inspirację \
 dotyczącą lotów.
 
@@ -247,7 +248,7 @@ albo samo polataj.se. Każda max 3 zdania."""
 
 
 def score_item(item, key, routes_text=""):
-    """Gemini: is_relevant/score/summary/reply/variants albo None."""
+    """Gemini: is_relevant/score/reply/variants albo None."""
     prompt = SCORE_PROMPT.format(
         routes=routes_text or "(brak danych o trasach)",
         title=item["title"][:300], source=item["source"],
@@ -391,7 +392,6 @@ def run(dry=False, only_if_requested=False):
         if j and j.get("is_relevant") and \
                 (j.get("relevance_score") or 0) >= 5:
             it["score"] = j.get("relevance_score")
-            it["summary"] = (j.get("topic_summary") or "")[:300]
             it["reply"] = (j.get("suggested_reply") or "")[:800]
             it["variants"] = [
                 {"style": str(v.get("style") or "wariant")[:30],
