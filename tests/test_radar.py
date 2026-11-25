@@ -123,6 +123,23 @@ class TestResale(unittest.TestCase):
             "Polecacie jakieś lotnisko pod wyjazd?"))
 
 
+class TestPromo(unittest.TestCase):
+    def test_offer_posts_filtered(self):
+        self.assertTrue(radar.is_promo(
+            "MAROKO – OSTATNIE WOLNE MIEJSCA ✈️ Dostępne terminy:"))
+        self.assertTrue(radar.is_promo(
+            "City Break w Barcelonie 🥰✈️🇪🇸 loty 190-299 PLN"))
+        self.assertTrue(radar.is_promo(
+            "W komentarzu również inne terminy i lotniska"))
+        self.assertTrue(radar.is_promo("Nasze biuro podróży oferuje"))
+
+    def test_real_questions_pass(self):
+        self.assertFalse(radar.is_promo(
+            "Jaką wyspę polecacie na pierwszą podróż do Tajlandii?"))
+        self.assertFalse(radar.is_promo(
+            "Szukam taniego lotu do Oslo na weekend, co polecacie?"))
+
+
 class TestMergeSort(unittest.TestCase):
     def test_sort_desc_by_score(self):
         items = [{"url": "u1", "score": 5, "found_at": "a"},

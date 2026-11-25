@@ -67,6 +67,24 @@ def is_resale(text):
     return bool(RESALE_RE.search(t))
 
 
+# Deterministyczny filtr postów promo/ofertowych — oferty biur,
+# deal-posty z emotkami itp. LLM przepuszcza je z wysokim score.
+PROMO_RE = re.compile(
+    r"ostatnie wolne miejsca|dost\w*pne terminy|w komentarzu r\w*nie\w*|"
+    r"biuro podr\w*|zapraszam\w*\s+(do\s+)?(rezerw|kontakt|priv|"
+    r"wsp\w*prac)|oferta wa\w*na", re.I)
+EMOJI_RE = re.compile("[\U0001F000-\U0001FAFF☀-➿⬅-⯿️]")
+
+
+def is_promo(text):
+    return bool(PROMO_RE.search(text)) or len(EMOJI_RE.findall(text)) >= 3
+
+
+def skip_post(item):
+    t = (item.get("title") or "") + " " + (item.get("snippet") or "")
+    return is_resale(t) or is_promo(t)
+
+
 # ---------- pomocnicze ----------
 
 def env_get(key):
@@ -417,13 +435,13 @@ def run(dry=False, only_if_requested=False):
             "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
             " VALUES(?,?,?,1)", (it["url"], it["source"],
                                 datetime.now(timezone.utc).isoformat()))
-        if is_resale(it["title"] + " " + it["snippet"]):
-            continue        # odsprzedaż biletów — bez scoringu
+        if skip_post(it):
+            continue        # odsprzedaż/promo — bez scoringu
         j = score_item(it, or_key, routes_text) if or_key else None
         scored += 1
         if j and j.get("is_relevant") and \
                 (j.get("relevance_score") or 0) >= 5 and \
-                not is_resale(it["title"] + " " + it["snippet"]):
+                not skip_post(it):
             it["score"] = j.get("relevance_score")
             it["reply"] = (j.get("suggested_reply") or "")[:800]
             it["variants"] = [
@@ -457,8 +475,8 @@ def run(dry=False, only_if_requested=False):
     for i in existing:
         if i.get("url") in {n["url"] for n in new_items}:
             continue
-        if is_resale((i.get("title") or "") + " " + (i.get("snippet") or "")):
-            continue            # wywal stare odsprzedaże z panelu
+        if skip_post(i):
+            continue            # wywal stare odsprzedaże/promo z panelu
         try:
             ts = datetime.fromisoformat(
                 i.get("found_at") or "").timestamp()
