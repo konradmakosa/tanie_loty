@@ -181,7 +181,13 @@ Odpowiedz WYŁĄCZNIE poprawnym JSON-em (bez markdown, bez komentarza):
  "is_relevant": true|false,
  "relevance_score": 1-10,
  "topic_summary": "1 zdanie: o co pyta autor",
- "suggested_reply": "naturalny komentarz po polsku, 2-4 zdania"
+ "suggested_reply": "naturalny komentarz po polsku, 2-4 zdania",
+ "variants": [
+  {{"style": "koleżeńska", "text": "1-2 zdania, luźno, jak znajomy"}},
+  {{"style": "merytoryczna", "text": "najpierw konkretna pomoc, \
+potem nienachalny link"}},
+  {{"style": "konkretna", "text": "wplata pasującą podstronę polataj.se"}}
+ ]
 }}
 
 Reguły is_relevant=false: reklama, spam, oferta biura podróży lub linii, \
@@ -195,7 +201,16 @@ potem nienachalnie podsuń polataj.se (https://polataj.se lub pasującą \
 podstronę jak /loty/<miasto>-<miasto>/ albo /<port>/) jako narzędzie \
 do sprawdzenia cen. Koleżeński ton, zero marketingowego żargonu, \
 bez „polecam sprawdzić na naszej stronie" — naturalnie, jak znajomy. \
-Nie wymyślaj faktów o wątku, których nie ma w snippetcie."""
+Nie wymyślaj faktów o wątku, których nie ma w snippetcie.
+
+variants: trzy RÓŻNE wersje tego samego komentarza w linkiem do \
+polataj.se. „koleżeńska" — 1-2 zdania, bardzo krótka (styl np. \
+„Wyszukasz tu polataj.se — skanują tanie loty z polskich lotnisk"). \
+„merytoryczna" — jak suggested_reply, ale inaczej sformułowana. \
+„konkretna" — wplata podstronę polataj.se pasującą do wątku: port \
+/zwarszawy/ /zkrakowa/ /zgdanska/ /zpoznania/ /zwroclawia/ /zkatowic/ \
+albo trasę /loty/<miasto>-<miasto>/ (użyj tylko gdy miasto wylotu \
+pasuje do portów, inaczej samo polataj.se). Każda max 3 zdania."""
 
 
 def score_item(item, key):
@@ -321,6 +336,11 @@ def run(dry=False, only_if_requested=False):
             it["score"] = j.get("relevance_score")
             it["summary"] = (j.get("topic_summary") or "")[:300]
             it["reply"] = (j.get("suggested_reply") or "")[:800]
+            it["variants"] = [
+                {"style": str(v.get("style") or "wariant")[:30],
+                 "text": str(v.get("text") or "")[:600]}
+                for v in (j.get("variants") or [])[:3]
+                if v.get("text")]
             it["found_at"] = datetime.now(timezone.utc).isoformat()
             new_items.append(it)
         time.sleep(0.4)

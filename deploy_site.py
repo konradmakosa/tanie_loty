@@ -77,12 +77,15 @@ def main():
     # config.php panelu radaru — generowany z env, poza Gitem.
     radar_pw = env.get("PANEL_HASLO", "")
     ingest = env.get("TL_INGEST_KEY", "")
+    or_key = env.get("OPENROUTER_API_KEY", "")
     if radar_pw and ingest:
         cfg = ("<?php\n// generowany przez deploy_site.py — nie commitować\n"
                "return [\n"
                "    'PANEL_HASLO' => %s,\n"
                "    'INGEST_KEY' => %s,\n"
-               "];\n" % (_php_str(radar_pw), _php_str(ingest)))
+               "    'OPENROUTER_API_KEY' => %s,\n"
+               "];\n" % (_php_str(radar_pw), _php_str(ingest),
+                       _php_str(or_key)))
         remote = target + "/panel-radar/config.php"
         mkdirs(ftp, remote.rsplit("/", 1)[0])
         ftp.storbinary("STOR " + remote, __import__("io")

@@ -68,6 +68,8 @@ case 'items':               // widok dla panelu: items + status
         $st = $state[$id] ?? [];
         $i['status'] = $st['status'] ?? 'new';
         if (!empty($st['reply'])) $i['reply'] = $st['reply'];
+        if (empty($i['variants']) && !empty($st['variants']))
+            $i['variants'] = $st['variants'];
     }
     out(['items' => $items, 'count' => count($items)]);
 
@@ -94,6 +96,8 @@ case 'upload':              // skaner → pełny zapis items.json
             'score' => (int)($i['score'] ?? 0),
             'summary' => substr($i['summary'] ?? '', 0, 300),
             'reply' => substr($i['reply'] ?? '', 0, 900),
+            'variants' => is_array($i['variants'] ?? null)
+                ? array_slice($i['variants'], 0, 3) : [],
             'found_at' => substr($i['found_at'] ?? '', 0, 40),
         ];
     }
@@ -162,6 +166,77 @@ case 'request_scan':        // flaga „Szukaj teraz"
 case 'scan_flag':           // dla timera flagowego na VPS
     if (!$machine) out(['error' => 'brak autoryzacji'], 401);
     out(['pending' => is_file($flag_p)]);
+
+case 'gen_variants':        // AI: 3 warianty komentarza dla wątku
+    if (!$session || $_SERVER['REQUEST_METHOD'] !== 'POST')
+        out(['error' => 'brak autoryzacji'], 401);
+    $b = body();
+    $id = preg_replace('/[^a-f0-9]/', '', (string)($b['id'] ?? ''));
+    if (strlen($id) !== 40) out(['error' => 'nieprawidłowe dane'], 400);
+    $state = rfile($state_p, []);
+    if (empty($b['fresh']) && !empty($state[$id]['variants']))
+        out(['variants' => $state[$id]['variants'], 'cached' => true]);
+    $item = null;
+    foreach (rfile($items_p, []) as $i) {
+        if (sha1($i['url'] ?? '') === $id) { $item = $i; break; }
+    }
+    if (!$item) out(['error' => 'nie znaleziono wątku'], 404);
+    $key = $CFG['OPENROUTER_API_KEY'] ?? '';
+    if (!$key) out(['error' => 'brak klucza AI (OPENROUTER_API_KEY)'], 500);
+
+    $prompt = "Masz publiczny wątek z polskiego forum/grupy:\n"
+        . "Tytuł: " . ($item['title'] ?? '') . "\n"
+        . "Treść: " . ($item['snippet'] ?? '') . "\n\n"
+        . "Napisz 3 RÓŻNE wersje krótkiego, naturalnego komentarza po polsku "
+        . "z linkiem do polataj.se (polski skaner tanich lotów z polskich "
+        . "lotnisk), każda w innym stylu:\n"
+        . "1. \"koleżeńska\" — 1-2 zdania, luźno, jak znajomy "
+        . "(styl np. „Wyszukasz tu polataj.se — sam sprawdzają co 6h "
+        . "tanie loty z polskich lotnisk\").\n"
+        . "2. \"merytoryczna\" — 2-3 zdania, najpierw konkretna pomoc "
+        . "z pytaniem, potem nienachalny link jako narzędzie.\n"
+        . "3. \"konkretna\" — wplata pasującą podstronę: porty "
+        . "/zwarszawy/ /zkrakowa/ /zgdanska/ /zpoznania/ /zwroclawia/ "
+        . "/zkatowic/ albo stronę trasy /loty/<miasto>-<miasto>/ "
+        . "(użyj tylko jeśli miasto wylotu pasuje do listy portów, "
+        . "inaczej samo polataj.se).\n"
+        . "Bez marketingowego żargonu, bez „jako AI\", bez wymyślania "
+        . "faktów o wątku. Odpowiedz WYŁĄCZNIE JSON-em: "
+        . "{\"variants\":[{\"style\":\"koleżeńska\",\"text\":\"...\"},"
+        . "{\"style\":\"merytoryczna\",\"text\":\"...\"},"
+        . "{\"style\":\"konkretna\",\"text\":\"...\"}]}";
+
+    $payload = json_encode([
+        'model' => 'google/gemini-2.5-flash',
+        'messages' => [['role' => 'user', 'content' => $prompt]],
+        'max_tokens' => 800, 'temperature' => 0.9]);
+    $ch = curl_init('https://openrouter.ai/api/v1/chat/completions');
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $payload, CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json',
+            'Authorization: Bearer ' . $key]]);
+    $res = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+    if ($res === false || $code !== 200)
+        out(['error' => 'błąd AI (' . $code . ')'], 502);
+    $msg = json_decode($res, true);
+    $text = trim($msg['choices'][0]['message']['content'] ?? '');
+    if (!preg_match('/\{.*\}/s', $text, $m)
+        || !($j = json_decode($m[0], true)) || empty($j['variants']))
+        out(['error' => 'AI zwróciło nieparsowalną odpowiedź'], 502);
+    $variants = [];
+    foreach (array_slice($j['variants'], 0, 3) as $v) {
+        $t = substr(trim((string)($v['text'] ?? '')), 0, 600);
+        if ($t === '') continue;
+        $variants[] = ['style' => substr((string)($v['style'] ?? 'wariant'),
+            0, 30), 'text' => $t];
+    }
+    if (!$variants) out(['error' => 'puste warianty'], 502);
+    $state[$id]['variants'] = $variants;
+    wfile($state_p, $state);
+    out(['variants' => $variants]);
 
 case 'logout':
     setcookie('radar_auth', '', time() - 3600, '/panel-radar/', '', true, true);

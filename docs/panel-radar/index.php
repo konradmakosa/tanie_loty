@@ -84,6 +84,14 @@ header('Cache-Control: no-store');
     padding:10px; font:inherit; font-size:.88rem; resize:vertical;
     margin-bottom:8px; }
   .row { display:flex; gap:8px; flex-wrap:wrap; }
+  .variants { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .variant { flex:1 1 200px; background:#12182a;
+    border:1px solid var(--line); border-radius:10px; padding:10px;
+    font-size:.85rem; }
+  .variant b { display:block; color:var(--accent); font-size:.72rem;
+    text-transform:uppercase; letter-spacing:.4px; margin-bottom:4px; }
+  .variant p { margin:0 0 8px; }
+  .variant button { font-size:.75rem; padding:4px 10px; }
   details { margin-top:24px; }
   summary { cursor:pointer; color:var(--muted); }
   .qrow { display:flex; gap:8px; margin-bottom:8px; }
@@ -164,7 +172,42 @@ function card(i) {
     + '<button onclick="saveReply(this)">Zapisz edycję</button>'
     + '<button onclick="setStatus(this,\'done\')">Skomentowane ✓</button>'
     + '<button onclick="setStatus(this,\'hidden\')">Odrzuć</button>'
+    + '</div>'
+    + '<div class="variants">'
+    + (i.variants && i.variants.length
+        ? i.variants.map(variantHtml).join('')
+        : '<button onclick="genVariants(this)">Warianty AI</button>')
     + '</div></div>';
+}
+function variantHtml(v) {
+  return '<div class="variant"><b>' + esc(v.style) + '</b>'
+    + '<p>' + esc(v.text) + '</p>'
+    + '<button onclick="insertVariant(this)">Wstaw</button> '
+    + '<button onclick="copyVariant(this)">Kopiuj</button></div>';
+}
+async function genVariants(b, fresh) {
+  const c = b.closest('.card');
+  b.disabled = true; b.textContent = 'Generuję…';
+  const r = await post('gen_variants', {id: c.dataset.id, fresh: !!fresh});
+  const box = c.querySelector('.variants');
+  if (r.variants && r.variants.length) {
+    box.innerHTML = r.variants.map(variantHtml).join('')
+      + '<button onclick="genVariants(this,true)" '
+      + 'style="align-self:center;background:none;border:none;'
+      + 'color:var(--muted);font-size:.75rem">↻ jeszcze raz</button>';
+  } else {
+    b.disabled = false; b.textContent = r.error || 'Błąd — spróbuj ponownie';
+  }
+}
+function insertVariant(b) {
+  const c = b.closest('.card');
+  c.querySelector('textarea').value =
+    b.closest('.variant').querySelector('p').textContent;
+}
+function copyVariant(b) {
+  const t = b.closest('.variant').querySelector('p').textContent;
+  navigator.clipboard.writeText(t);
+  b.textContent = '✓'; setTimeout(() => b.textContent = 'Kopiuj', 1500);
 }
 async function setStatus(b, st) {
   const c = b.closest('.card');
