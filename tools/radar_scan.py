@@ -371,10 +371,14 @@ def rejected_examples(key):
         return ""
     if not rej:
         return ""
-    lines = "\n".join("- „%s" % r["title"][:110]
-                      for r in rej[-10:])
+    lines = []
+    for r in rej[-10:]:
+        line = "- „%s" % r["title"][:110]
+        if r.get("reason"):
+            line += "\" — powód: „%s" % r["reason"][:150]
+        lines.append(line)
     return ("\nWątki, które użytkownik ODRZUCIŁ (podobne → "
-            "is_relevant=false, score ≤3):\n" + lines + "\n")
+            "is_relevant=false, score ≤3):\n" + "\n".join(lines) + "\n")
 
 
 def _clean(o):

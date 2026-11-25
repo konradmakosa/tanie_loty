@@ -79,7 +79,11 @@ header('Cache-Control: no-store');
   .snippet, .summary { color:var(--muted); font-size:.86rem;
     margin-bottom:8px; }
   .summary { color:var(--text); }
-  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  .rej { flex:1 1 160px; max-width:260px; background:#12182a;
+    color:var(--text); border:1px solid var(--line); border-radius:8px;
+    padding:6px 10px; font:inherit; font-size:.82rem; }
+  .rej::placeholder { color:var(--muted); }
   .variants { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
   .variant { flex:1 1 200px; background:#12182a;
     border:1px solid var(--line); border-radius:10px; padding:10px;
@@ -163,6 +167,7 @@ function card(i) {
     + '<div class="snippet">' + esc(i.snippet) + '</div>'
     + '<div class="row">'
     + '<button onclick="setStatus(this,\'done\')">Skomentowane ✓</button>'
+    + '<input class="rej" placeholder="powód odrzucenia…">'
     + '<button onclick="setStatus(this,\'hidden\')">Odrzuć</button>'
     + '</div>'
     + '<div class="variants">'
@@ -197,7 +202,9 @@ function copyVariant(b) {
 }
 async function setStatus(b, st) {
   const c = b.closest('.card');
-  await post('set_status', {id: c.dataset.id, status: st});
+  const reason = st === 'hidden'
+    ? ((c.querySelector('.rej') || {}).value || '') : '';
+  await post('set_status', {id: c.dataset.id, status: st, reason: reason});
   c.classList.add(st === 'done' ? 'done' : 'hidden');
   if (!document.getElementById('showAll').checked) c.remove();
 }

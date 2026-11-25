@@ -92,6 +92,7 @@ case 'rejected':            // wątki odrzucone z panelu — negatywne
         $id = sha1($i['url'] ?? '');
         if (($state[$id]['status'] ?? '') === 'hidden')
             $rej[] = ['title' => substr($i['title'] ?? '', 0, 150),
+                      'reason' => substr($state[$id]['reason'] ?? '', 0, 200),
                       'snippet' => substr($i['snippet'] ?? '', 0, 400)];
     }
     out(['rejected' => array_slice($rej, -10)]);
@@ -148,6 +149,8 @@ case 'set_status':          // now|done|hidden
     $state = rfile($state_p, []);
     $state[$id]['status'] = $st;
     $state[$id]['at'] = gmdate('c');
+    $reason = substr(trim((string)($b['reason'] ?? '')), 0, 200);
+    if ($reason !== '') $state[$id]['reason'] = $reason;
     wfile($state_p, $state);
     out(['ok' => true]);
 
