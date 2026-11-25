@@ -270,6 +270,10 @@ post konkurencyjnego serwisu okazji, ref-link, treść niezwiązana \
 z podróżami lotniczymi, język inny niż polski (chyba że wyraźnie Polak), \
 ODSPRZEDAŻ/PRZEPISANIE biletów lub ogłoszenie „sprzedam/odstąpię/ \
 przepiszę bilety" (to nie prośba o poradę — autor już ma bilety). \
+UWAGA na artefakt Google/Reddit: snippet często cytuje POWIĄZANE wątki \
+z paska bocznego, nie sam post — jeśli TYTUŁ wyraźnie dotyczy innego \
+tematu niż podróże/loty (jedzenie, kościoły, sport, lokalne sprawy, \
+muzea, randki), odrzuć NIEZALEŻNIE od treści snippetu. \
 is_relevant=true tylko gdy realna osoba prosi o poradę/inspirację \
 dotyczącą lotów.
 
