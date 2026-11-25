@@ -73,12 +73,17 @@ def env_get(key):
     return os.environ.get(key) or load_env(ENV_PATH).get(key)
 
 
-def http_json(url, payload=None, headers=None, method=None, timeout=HTTP_TIMEOUT):
+def http_json(url, payload=None, headers=None, method=None,
+              timeout=HTTP_TIMEOUT, gz=False):
     data = None
     if payload is not None:
         data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         headers = dict(headers or {})
         headers.setdefault("Content-Type", "application/json")
+        if gz:
+            import gzip as gz_mod
+            data = gz_mod.compress(data)
+            headers["Content-Encoding"] = "gzip"
     req = urllib.request.Request(url, data=data, method=method,
                                  headers=headers or {})
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -292,10 +297,10 @@ def score_item(item, key, routes_text=""):
 
 # ---------- panel API ----------
 
-def api_call(action, key, payload=None, method=None):
+def api_call(action, key, payload=None, method=None, gz=False):
     """Zapytanie do panel-radar/api.php (X-Ingest-Key)."""
     url = RADAR_API + "?action=" + action
-    return http_json(url, payload, method=method,
+    return http_json(url, payload, method=method, gz=gz,
                      headers={"X-Ingest-Key": key})
 
 
@@ -334,7 +339,9 @@ def _clean(o):
 def upload(items, key, routes=None):
     payload = _clean({"items": items, "routes": routes or {}})
     try:
-        return api_call("upload", key, payload=payload, method="POST")
+        # gzip: home.pl obcina php://input przy 16 KB
+        return api_call("upload", key, payload=payload, method="POST",
+                        gz=True)
     except urllib.error.HTTPError as e:
         print("radar: upload HTTP %s: %s"
               % (e.code, e.read()[:300]), file=sys.stderr)

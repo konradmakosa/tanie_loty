@@ -23,6 +23,9 @@ function out($x, $code = 200) {
 function body() {
     $raw = file_get_contents('php://input', false, null, 0, 512 * 1024 + 1);
     if (!$raw) return [];
+    if (($_SERVER['HTTP_CONTENT_ENCODING'] ?? '') === 'gzip'
+        && function_exists('gzdecode'))
+        $raw = (string)gzdecode($raw);   // home.pl tnie php://input przy 16KB
     $d = json_decode($raw, true);
     if ($d === null)  // niewłaściwe UTF-8 (np. samotny surogat) → napraw
         $d = json_decode(iconv('UTF-8', 'UTF-8//IGNORE', $raw), true);
