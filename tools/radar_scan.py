@@ -21,6 +21,7 @@ fallback na tools/radar_queries.json w repo.
 Env: SERPER_API_KEY (google.serper.dev), OPENROUTER_API_KEY,
      TL_INGEST_KEY, opcjonalnie RADAR_API_URL.
 """
+import hashlib
 import json
 import os
 import re
@@ -57,7 +58,7 @@ MAX_ITEM_AGE_DAYS = 14
 RESALE_RE = re.compile(
     r"sprzedam|odsprzedam|odst\w*pi|przepisz\w*|przepisani\w*|"
     r"zmian\w*\s+nazwisk\w*|na inne nazwisk\w*|"
-    r"bilet\w*\s+na\s+sprzeda", re.I)
+    r"bilet\w*\s+na\s+sprzeda|na stronie przew\w*znika", re.I)
 
 
 def is_resale(text):
@@ -83,6 +84,13 @@ def is_promo(text):
 def skip_post(item):
     t = (item.get("title") or "") + " " + (item.get("snippet") or "")
     return is_resale(t) or is_promo(t)
+
+
+def ck(item):
+    """Klucz treści do deduplikacji — ten sam post wraca pod
+    różnymi owijkami google.com/goto, więc URL nie wystarcza."""
+    t = re.sub(r"\W+", " ", (item.get("title") or "").lower()).strip()
+    return "title:" + hashlib.sha1(t.encode("utf-8")).hexdigest()[:16]
 
 
 # ---------- pomocnicze ----------
@@ -420,7 +428,12 @@ def run(dry=False, only_if_requested=False):
 
     conn = db()
     known = seen_urls(conn)
-    fresh = [i for i in found if i["url"] not in known]
+    fresh, batch_cks = [], set()
+    for i in found:
+        if i["url"] in known or ck(i) in known or ck(i) in batch_cks:
+            continue
+        batch_cks.add(ck(i))
+        fresh.append(i)
     print("radar: %d nowych URL-i" % len(fresh))
 
     routes = collect_routes()
@@ -431,10 +444,13 @@ def run(dry=False, only_if_requested=False):
     scored = 0
     new_items = []
     for it in fresh[:MAX_GEMINI_PER_SCAN]:
+        now = datetime.now(timezone.utc).isoformat()
         conn.execute(
             "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
-            " VALUES(?,?,?,1)", (it["url"], it["source"],
-                                datetime.now(timezone.utc).isoformat()))
+            " VALUES(?,?,?,1)", (it["url"], it["source"], now))
+        conn.execute(
+            "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
+            " VALUES(?,?,?,1)", (ck(it), it["source"], now))
         if skip_post(it):
             continue        # odsprzedaż/promo — bez scoringu
         j = score_item(it, or_key, routes_text) if or_key else None
@@ -455,10 +471,13 @@ def run(dry=False, only_if_requested=False):
     # reszta nowych URL-i też idzie do bazy seen (bez oceny —
     # nie chcemy ich re-skanować ani palić na nie Gemini)
     for it in fresh[MAX_GEMINI_PER_SCAN:]:
+        now = datetime.now(timezone.utc).isoformat()
         conn.execute(
             "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
-            " VALUES(?,?,?,0)", (it["url"], it["source"],
-                                datetime.now(timezone.utc).isoformat()))
+            " VALUES(?,?,?,0)", (it["url"], it["source"], now))
+        conn.execute(
+            "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
+            " VALUES(?,?,?,0)", (ck(it), it["source"], now))
     conn.commit()
 
     # scal z istniejącymi items (fetch aktualnych z panelu)
@@ -471,9 +490,11 @@ def run(dry=False, only_if_requested=False):
             existing = []
     cutoff = (datetime.now(timezone.utc).timestamp()
               - MAX_ITEM_AGE_DAYS * 86400)
+    new_urls = {n["url"] for n in new_items}
+    new_cks = {ck(n) for n in new_items}
     keep = []
     for i in existing:
-        if i.get("url") in {n["url"] for n in new_items}:
+        if i.get("url") in new_urls or ck(i) in new_cks:
             continue
         if skip_post(i):
             continue            # wywal stare odsprzedaże/promo z panelu
