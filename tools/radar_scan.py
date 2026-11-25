@@ -73,8 +73,10 @@ def is_resale(text):
 PROMO_RE = re.compile(
     r"ostatnie wolne miejsca|dost\w*pne terminy|w komentarzu r\w*nie\w*|"
     r"biuro podr\w*|zapraszam\w*\s+(do\s+)?(rezerw|kontakt|priv|"
-    r"wsp\w*prac)|oferta wa\w*na", re.I)
+    r"wsp\w*prac)|oferta wa\w*na|przew\w*z\s+os\w*b|"
+    r"miejsca\s+na\s+inne\s+termin|odkupieni", re.I)
 EMOJI_RE = re.compile("[\U0001F000-\U0001FAFF☀-➿⬅-⯿️]")
+TITLE_JUNK = {"other posts", "posty", "ogłoszenia"}
 
 
 def is_promo(text):
@@ -82,6 +84,8 @@ def is_promo(text):
 
 
 def skip_post(item):
+    if (item.get("title") or "").strip().lower() in TITLE_JUNK:
+        return True             # artefakt Serpera — brak właściwego tytułu
     t = (item.get("title") or "") + " " + (item.get("snippet") or "")
     return is_resale(t) or is_promo(t)
 
@@ -456,7 +460,7 @@ def run(dry=False, only_if_requested=False):
         j = score_item(it, or_key, routes_text) if or_key else None
         scored += 1
         if j and j.get("is_relevant") and \
-                (j.get("relevance_score") or 0) >= 5 and \
+                (j.get("relevance_score") or 0) >= 6 and \
                 not skip_post(it):
             it["score"] = j.get("relevance_score")
             it["reply"] = (j.get("suggested_reply") or "")[:800]
