@@ -118,6 +118,27 @@ def source_from_url(url):
     return "forum/www"
 
 
+def collect_routes():
+    """Trasy z własnymi stronami /loty/<port>-<dest>/ — faktyczne
+    pokrycie serwisu (ground truth do relewancji i linków)."""
+    m = {}
+    loty = ROOT / "docs" / "loty"
+    if not loty.is_dir():
+        return m
+    for d in loty.iterdir():
+        if not d.is_dir() or "-" not in d.name:
+            continue
+        port, dest = d.name.split("-", 1)
+        m.setdefault(port, []).append(dest)
+    return {p: sorted(v) for p, v in m.items()}
+
+
+def coverage_text(routes):
+    """'warszawa: teneryfa, malaga; krakow: …' — zwarty opis pokrycia."""
+    return "; ".join("%s: %s" % (p, ", ".join(ds))
+                     for p, ds in sorted(routes.items()))
+
+
 def reddit_token(cid, secret):
     """OAuth client_credentials — apka 'script' z reddit.com/prefs/apps."""
     import base64
@@ -169,7 +190,12 @@ def search_reddit(sub, q, token=None):
 
 SCORE_PROMPT = """Oceniasz publiczny wątek internetowy pod kątem naturalnego, \
 pomocnego komentarza z linkiem do polataj.se (polski skaner tanich lotów \
-z polskich lotnisk: Warszawa, Kraków, Gdańsk, Poznań, Wrocław, Katowice).
+z polskich lotnisk: Warszawa, Kraków, Gdańsk, Poznań, Wrocław, Katowice). \
+Serwis pokrywa głównie EUROPĘ (Ryanair, Wizz, easyJet, LOT) + wybrane \
+dalekie okazje.
+
+Aktualne strony tras serwisu (slugi /loty/<port>-<dest>/):
+{routes}
 
 Wątek:
 Tytuł: {title}
@@ -196,6 +222,12 @@ z podróżami lotniczymi, język inny niż polski (chyba że wyraźnie Polak). \
 is_relevant=true tylko gdy realna osoba prosi o poradę/inspirację \
 dotyczącą lotów.
 
+relevance_score oceń pod kątem dopasowania do pokrycia serwisu: \
+kierunek z listy tras lub ogólne „tanie loty z Polski/w Europie" \
+→ wysoki score (7-10); kierunek egzotyczny/daleki SPOZA listy \
+(Azja, USA, Australia, Ameryki) → max 4 — serwis rzadko tam pomoże, \
+chyba że pytanie jest ogólne o metodę szukania okazji.
+
 suggested_reply: najpierw konkretnie odpowiedz na pytanie autora, \
 potem nienachalnie podsuń polataj.se (https://polataj.se lub pasującą \
 podstronę jak /loty/<miasto>-<miasto>/ albo /<port>/) jako narzędzie \
@@ -207,22 +239,24 @@ variants: trzy RÓŻNE wersje tego samego komentarza w linkiem do \
 polataj.se. „koleżeńska" — 1-2 zdania, bardzo krótka (styl np. \
 „Wyszukasz tu polataj.se — skanują tanie loty z polskich lotnisk"). \
 „merytoryczna" — jak suggested_reply, ale inaczej sformułowana. \
-„konkretna" — wplata podstronę polataj.se pasującą do wątku: port \
+„konkretna" — wplata podstronę polataj.se pasującą do wątku: \
+trasę /loty/<port>-<dest>/ WYŁĄCZNIE gdy para port-dest jest \
+na liście tras powyżej (użyj dokładnego sluga), port \
 /zwarszawy/ /zkrakowa/ /zgdanska/ /zpoznania/ /zwroclawia/ /zkatowic/ \
-albo trasę /loty/<miasto>-<miasto>/ (użyj tylko gdy miasto wylotu \
-pasuje do portów, inaczej samo polataj.se). Każda max 3 zdania."""
+albo samo polataj.se. Każda max 3 zdania."""
 
 
-def score_item(item, key):
-    """Gemini: is_relevant/score/summary/reply albo None przy błędzie."""
+def score_item(item, key, routes_text=""):
+    """Gemini: is_relevant/score/summary/reply/variants albo None."""
     prompt = SCORE_PROMPT.format(
+        routes=routes_text or "(brak danych o trasach)",
         title=item["title"][:300], source=item["source"],
         snippet=item["snippet"][:900])
     try:
         d = http_json(OPENROUTER_URL, {
             "model": GEMINI_MODEL,
             "messages": [{"role": "user", "content": prompt}],
-            "max_tokens": 700, "temperature": 0.4},
+            "max_tokens": 1100, "temperature": 0.4},
             headers={"Authorization": "Bearer " + key})
         text = (d["choices"][0]["message"].get("content") or "").strip()
     except Exception as e:
@@ -269,8 +303,10 @@ def scan_requested(key):
         return False
 
 
-def upload(items, key):
-    return api_call("upload", key, payload={"items": items}, method="POST")
+def upload(items, key, routes=None):
+    return api_call("upload", key,
+                    payload={"items": items, "routes": routes or {}},
+                    method="POST")
 
 
 # ---------- główna pętla ----------
@@ -322,6 +358,11 @@ def run(dry=False, only_if_requested=False):
     fresh = [i for i in found if i["url"] not in known]
     print("radar: %d nowych URL-i" % len(fresh))
 
+    routes = collect_routes()
+    routes_text = coverage_text(routes)
+    print("radar: pokrycie — %d tras (%d portów)"
+          % (sum(len(v) for v in routes.values()), len(routes)))
+
     scored = 0
     new_items = []
     for it in fresh[:MAX_GEMINI_PER_SCAN]:
@@ -329,7 +370,7 @@ def run(dry=False, only_if_requested=False):
             "INSERT OR IGNORE INTO seen(url, source, first_seen, scored)"
             " VALUES(?,?,?,1)", (it["url"], it["source"],
                                 datetime.now(timezone.utc).isoformat()))
-        j = score_item(it, or_key) if or_key else None
+        j = score_item(it, or_key, routes_text) if or_key else None
         scored += 1
         if j and j.get("is_relevant") and \
                 (j.get("relevance_score") or 0) >= 5:
@@ -378,7 +419,7 @@ def run(dry=False, only_if_requested=False):
             print("   ", (i.get("reply") or "")[:120])
         return 0
     if key:
-        r = upload(items, key)
+        r = upload(items, key, routes)
         print("radar: upload → %s" % r)
     else:
         print("radar: brak TL_INGEST_KEY — pomijam upload",

@@ -55,6 +55,7 @@ if (!$session && !($machine && in_array($action, $machine_ok, true))) {
 $items_p = "$DATA/items.json";
 $state_p = "$DATA/state.json";
 $queries_p = "$DATA/queries.json";
+$routes_p = "$DATA/routes.json";   // pokrycie tras ze skanera (docs/loty)
 $flag_p = "$DATA/scan.flag";
 
 switch ($action) {
@@ -102,6 +103,21 @@ case 'upload':              // skaner → pełny zapis items.json
         ];
     }
     wfile($items_p, $clean);
+    // pokrycie tras: {port_slug: [dest_slug, …]} — sanityzowane
+    if (is_array($b['routes'] ?? null) && count($b['routes']) <= 20) {
+        $routes = [];
+        foreach ($b['routes'] as $port => $dests) {
+            $port = substr(preg_replace('/[^a-z-]/', '',
+                (string)$port), 0, 30);
+            if (!$port || !is_array($dests)) continue;
+            $routes[$port] = array_slice(array_filter(array_map(
+                function ($d) {
+                    return substr(preg_replace('/[^a-z-]/', '',
+                        (string)$d), 0, 60);
+                }, $dests)), 0, 400);
+        }
+        wfile($routes_p, $routes);
+    }
     @unlink($flag_p);
     out(['ok' => true, 'count' => count($clean)]);
 
@@ -184,22 +200,30 @@ case 'gen_variants':        // AI: 3 warianty komentarza dla wątku
     $key = $CFG['OPENROUTER_API_KEY'] ?? '';
     if (!$key) out(['error' => 'brak klucza AI (OPENROUTER_API_KEY)'], 500);
 
+    // pokrycie tras ze skanera: 'warszawa: teneryfa, malaga; …'
+    $routes_txt = '';
+    foreach (rfile($routes_p, []) as $port => $dests) {
+        $routes_txt .= ($routes_txt === '' ? '' : '; ')
+            . $port . ': ' . implode(', ', array_slice($dests, 0, 400));
+    }
+
     $prompt = "Masz publiczny wątek z polskiego forum/grupy:\n"
         . "Tytuł: " . ($item['title'] ?? '') . "\n"
         . "Treść: " . ($item['snippet'] ?? '') . "\n\n"
+        . "polataj.se to polski skaner tanich lotów z polskich lotnisk — "
+        . "głównie Europa + wybrane dalekie okazje. Aktualne strony tras "
+        . "(slugi /loty/<port>-<dest>/):\n" . $routes_txt . "\n\n"
         . "Napisz 3 RÓŻNE wersje krótkiego, naturalnego komentarza po polsku "
-        . "z linkiem do polataj.se (polski skaner tanich lotów z polskich "
-        . "lotnisk), każda w innym stylu:\n"
+        . "z linkiem do polataj.se, każda w innym stylu:\n"
         . "1. \"koleżeńska\" — 1-2 zdania, luźno, jak znajomy "
         . "(styl np. „Wyszukasz tu polataj.se — sam sprawdzają co 6h "
         . "tanie loty z polskich lotnisk\").\n"
         . "2. \"merytoryczna\" — 2-3 zdania, najpierw konkretna pomoc "
         . "z pytaniem, potem nienachalny link jako narzędzie.\n"
-        . "3. \"konkretna\" — wplata pasującą podstronę: porty "
-        . "/zwarszawy/ /zkrakowa/ /zgdanska/ /zpoznania/ /zwroclawia/ "
-        . "/zkatowic/ albo stronę trasy /loty/<miasto>-<miasto>/ "
-        . "(użyj tylko jeśli miasto wylotu pasuje do listy portów, "
-        . "inaczej samo polataj.se).\n"
+        . "3. \"konkretna\" — wplata pasującą podstronę: trasę "
+        . "/loty/<port>-<dest>/ WYŁĄCZNIE gdy para port-dest jest "
+        . "na liście powyżej (użyj dokładnego sluga), stronę portu "
+        . "/z<miasto>/ dla portów z listy, albo samo polataj.se.\n"
         . "Bez marketingowego żargonu, bez „jako AI\", bez wymyślania "
         . "faktów o wątku. Odpowiedz WYŁĄCZNIE JSON-em: "
         . "{\"variants\":[{\"style\":\"koleżeńska\",\"text\":\"...\"},"

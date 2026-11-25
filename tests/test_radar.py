@@ -85,6 +85,23 @@ class TestSources(unittest.TestCase):
             "https://forum.example.pl/t"), "forum/www")
 
 
+class TestCoverage(unittest.TestCase):
+    def test_collect_routes_and_text(self):
+        with tempfile.TemporaryDirectory() as td:
+            loty = Path(td) / "docs" / "loty"
+            (loty / "warszawa-teneryfa").mkdir(parents=True)
+            (loty / "warszawa-malaga").mkdir()
+            (loty / "krakow-oslo").mkdir()
+            (loty / "index").mkdir()          # bez '-' → pomijany
+            with patch.object(radar, "ROOT", Path(td)):
+                routes = radar.collect_routes()
+            self.assertEqual(routes, {"warszawa": ["malaga", "teneryfa"],
+                                      "krakow": ["oslo"]})
+            txt = radar.coverage_text(routes)
+            self.assertIn("warszawa: malaga, teneryfa", txt)
+            self.assertIn("krakow: oslo", txt)
+
+
 class TestMergeSort(unittest.TestCase):
     def test_sort_desc_by_score(self):
         items = [{"url": "u1", "score": 5, "found_at": "a"},
