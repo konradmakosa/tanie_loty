@@ -61,7 +61,7 @@ def env_get(key):
 def http_json(url, payload=None, headers=None, method=None, timeout=HTTP_TIMEOUT):
     data = None
     if payload is not None:
-        data = json.dumps(payload).encode("utf-8")
+        data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
         headers = dict(headers or {})
         headers.setdefault("Content-Type", "application/json")
     req = urllib.request.Request(url, data=data, method=method,
@@ -323,6 +323,14 @@ def upload(items, key, routes=None):
     except urllib.error.HTTPError as e:
         print("radar: upload HTTP %s: %s"
               % (e.code, e.read()[:300]), file=sys.stderr)
+        try:
+            (ROOT / "data" / "cache" / "radar_payload_fail.json").write_text(
+                json.dumps(payload, ensure_ascii=False, indent=1),
+                encoding="utf-8")
+            print("radar: payload zapisany w data/cache/"
+                  "radar_payload_fail.json", file=sys.stderr)
+        except Exception:
+            pass
         raise
 
 
