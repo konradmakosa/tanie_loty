@@ -74,7 +74,8 @@ PROMO_RE = re.compile(
     r"ostatnie wolne miejsca|dost\w*pne terminy|w komentarzu r\w*nie\w*|"
     r"biuro podr\w*|zapraszam\w*\s+(do\s+)?(rezerw|kontakt|priv|"
     r"wsp\w*prac)|oferta wa\w*na|przew\w*z\s+os\w*b|"
-    r"miejsca\s+na\s+inne\s+termin|odkupieni", re.I)
+    r"miejsca\s+na\s+inne\s+termin|odkupieni|"
+    r"powitajmy|nowych cz\w*onk\w*|do\w*cz do naszej grupy", re.I)
 EMOJI_RE = re.compile("[\U0001F000-\U0001FAFF☀-➿⬅-⯿️]")
 TITLE_JUNK = {"other posts", "posty", "ogłoszenia"}
 
@@ -500,8 +501,8 @@ def run(dry=False, only_if_requested=False):
     for i in existing:
         if i.get("url") in new_urls or ck(i) in new_cks:
             continue
-        if skip_post(i):
-            continue            # wywal stare odsprzedaże/promo z panelu
+        if skip_post(i) or (i.get("score") or 0) < 6:
+            continue            # stare odsprzedaże/promo/słabe — precz
         try:
             ts = datetime.fromisoformat(
                 i.get("found_at") or "").timestamp()
