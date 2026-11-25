@@ -51,7 +51,7 @@ REDDIT_UA = "polataj.se radar (kontakt: kontakt@polataj.se)"
 MAX_RESULTS_PER_QUERY = 10
 MAX_GEMINI_PER_SCAN = 15
 HTTP_TIMEOUT = 25
-MAX_ITEM_AGE_DAYS = 14
+MAX_ITEM_AGE_DAYS = 30
 
 # Deterministyczny filtr odsprzedaży biletów — LLM przepuszczał takie
 # posty z wysokim score („sprzedam", „przepiszę" to NIE prośba o poradę).
@@ -538,7 +538,7 @@ def run(dry=False, only_if_requested=False):
         except ValueError:
             ts = 0
         if ts and ts < cutoff:
-            continue            # starsze niż 14 dni — odpadają
+            continue            # starsze niż 30 dni — odpadają
         if ck(i) in {ck(k) for k in keep}:
             continue            # duplikat treści w istniejących
         keep.append(i)
